@@ -1,4 +1,4 @@
-/* global beforeEach, describe, it */
+/* global before, beforeEach, describe, it, afterEach */
 
 require('chai').should()
 
@@ -6,6 +6,7 @@ var expect = require('chai').expect
 var fs = require('fs')
 var parser = require('../')
 var path = require('path')
+var rimraf = require('rimraf')
 
 describe('yargs-parser', function () {
   it('should parse a "short boolean"', function () {
@@ -1407,6 +1408,86 @@ describe('yargs-parser', function () {
       result.should.have.property('version')
       result.should.have.property('truthy')
       result.z.should.equal(55)
+    })
+  })
+
+  describe('configuration', function () {
+    var cwd = null
+
+    before(function () {
+      cwd = process.cwd()
+    })
+
+    beforeEach(function () {
+      rimraf.sync('./test/fixtures/package.json')
+    })
+
+    afterEach(function () {
+      process.chdir(cwd)
+      rimraf.sync('./test/fixtures/package.json')
+    })
+
+    it('reads configuration from parent package.json', function () {
+      fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
+        yargs: {
+          'short-option-groups': false
+        }
+      }), 'utf-8')
+      process.chdir('./test/fixtures/inner')
+
+      var result = parser.detailed([])
+      result.configuration['short-option-groups'].should.equal(false)
+    })
+
+    describe('short option groups', function () {
+      it('allows short-option-groups to be disabled', function () {
+        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
+          yargs: {
+            'short-option-groups': false
+          }
+        }), 'utf-8')
+        process.chdir('./test/fixtures/inner')
+
+        var parse = parser(['-cats=meow'])
+        parse.cats.should.equal('meow')
+        parse = parser(['-cats', 'meow'])
+        parse.cats.should.equal('meow')
+      })
+    })
+
+    describe('camel-case expansion', function () {
+      beforeEach(function () {
+        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
+          yargs: {
+            'camel-case-expansion': false
+          }
+        }), 'utf-8')
+        process.chdir('./test/fixtures/inner')
+      })
+
+      it('does not expand camel-case aliases', function () {
+        var parsed = parser.detailed([], {
+          alias: {
+            'foo-bar': ['x']
+          }
+        })
+
+        expect(parsed.newAliases.fooBar).to.equal(undefined)
+        expect(parsed.aliases.fooBar).to.equal(undefined)
+      })
+
+      it('does not expand camel-case keys', function () {
+        var parsed = parser.detailed(['--foo-bar=apple'], {
+          alias: {
+            'foo-bar': ['cool-stuff']
+          }
+        })
+
+        expect(parsed.argv.fooBar).to.equal(undefined)
+        expect(parsed.argv.coolStuff).to.equal(undefined)
+        expect(parsed.argv['foo-bar']).to.equal('apple')
+        expect(parsed.argv['cool-stuff']).to.equal('apple')
+      })
     })
   })
 })

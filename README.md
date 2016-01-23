@@ -81,6 +81,7 @@ yargs engine.
 * `error`: populated with an error object if an exception occurred during parsing.
 * `aliases`: the inferred list of aliases built by combining lists in `opts.alias`.
 * `newAliases`: any new aliases added via camel-case expansion.
+* `configuration`: the configuration loaded from the `yargs` stanza in package.json.
 
 ### Configuration
 
@@ -119,7 +120,7 @@ node example.js -abc
 ### camel-case expansion
 
 * default: `true`.
-* key: `camel-case`.
+* key: `camel-case-expansion`.
 
 Should hyphenated arguments be expanded into camel-case aliases?
 
