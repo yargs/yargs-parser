@@ -8,6 +8,9 @@
     "test": "nyc mocha test/*.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
+  "repository": {
+    "url": "git@github.com:yargs/yargs-parser.git"
+  },
   "keywords": [
     "argument",
     "parser",
