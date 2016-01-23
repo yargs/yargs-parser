@@ -1483,5 +1483,33 @@ describe('yargs-parser', function () {
         expect(parsed.argv['foo-bar']).to.equal('apple')
       })
     })
+
+    describe('dot notation', function () {
+      beforeEach(function () {
+        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
+          yargs: {
+            'dot-notation': false
+          }
+        }), 'utf-8')
+        process.chdir('./test/fixtures/inner')
+      })
+
+      it('does not expand dot notation defaults', function () {
+        var parsed = parser([], {
+          default: {
+            'foo.bar': 'x'
+          }
+        })
+
+        expect(parsed['foo.bar']).to.equal('x')
+      })
+
+      it('does not expand dot notation arguments', function () {
+        var parsed = parser(['--foo.bar', 'banana'])
+        expect(parsed['foo.bar']).to.equal('banana')
+        parsed = parser(['--foo.bar=banana'])
+        expect(parsed['foo.bar']).to.equal('banana')
+      })
+    })
   })
 })

@@ -443,6 +443,9 @@ function parse (args, opts) {
 
   function setKey (obj, keys, value) {
     var o = obj
+
+    if (!configuration['dot-notation']) keys = [keys.join('.')]
+
     keys.slice(0, -1).forEach(function (key) {
       if (o[key] === undefined) o[key] = {}
       o = o[key]
@@ -555,7 +558,8 @@ function loadConfiguration () {
   var pkg = readPkgUp.sync({cwd: path.dirname(parentModule)}).pkg
   return assign({
     'short-option-groups': true,
-    'camel-case-expansion': true
+    'camel-case-expansion': true,
+    'dot-notation': true
   }, pkg.yargs)
 }
 

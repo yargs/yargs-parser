@@ -5,7 +5,9 @@
 [![NPM version](https://img.shields.io/npm/v/yargs-parser.svg)](https://www.npmjs.com/package/yargs-parser)
 [![Windows Tests](https://img.shields.io/appveyor/ci/bcoe/yargs-parser/master.svg?label=Windows%20Tests)](https://ci.appveyor.com/project/bcoe/yargs-parser)
 
-The mighty option parser used by yargs.
+The mighty option parser used by [yargs](https://github.com/bcoe/yargs).
+
+visit the [yargs website](http://yargs.js.org/) for more examples, and thorough usage instructions.
 
 <img width="250" src="yargs-logo.png">
 
