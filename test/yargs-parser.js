@@ -1477,16 +1477,10 @@ describe('yargs-parser', function () {
       })
 
       it('does not expand camel-case keys', function () {
-        var parsed = parser.detailed(['--foo-bar=apple'], {
-          alias: {
-            'foo-bar': ['cool-stuff']
-          }
-        })
+        var parsed = parser.detailed(['--foo-bar=apple'])
 
         expect(parsed.argv.fooBar).to.equal(undefined)
-        expect(parsed.argv.coolStuff).to.equal(undefined)
         expect(parsed.argv['foo-bar']).to.equal('apple')
-        expect(parsed.argv['cool-stuff']).to.equal('apple')
       })
     })
   })

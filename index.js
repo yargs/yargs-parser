@@ -302,7 +302,7 @@ function parse (args, opts) {
       if (typeof val === 'string') val = val === 'true'
     }
 
-    if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length)) {
+    if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length) && configuration['camel-case-expansion']) {
       var c = camelCase(key)
       flags.aliases[key] = [c]
       newAliases[c] = true
