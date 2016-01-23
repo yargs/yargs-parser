@@ -7,7 +7,7 @@
 
 The mighty option parser used by yargs.
 
-<img width="500" src="yargs-logo.png">
+<img width="250" src="yargs-logo.png">
 
 ## Example
 
