@@ -1,8 +1,7 @@
-var assign = require('lodash.assign')
 var camelCase = require('camelcase')
+var pkgConf = require('pkg-conf')
 var path = require('path')
 var parentModule = require('parent-module')
-var readPkgUp = require('read-pkg-up')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
 var util = require('util')
 
@@ -555,12 +554,14 @@ function parse (args, opts) {
 }
 
 function loadConfiguration () {
-  var pkg = readPkgUp.sync({cwd: path.dirname(parentModule)}).pkg
-  return assign({
-    'short-option-groups': true,
-    'camel-case-expansion': true,
-    'dot-notation': true
-  }, pkg.yargs)
+  return pkgConf.sync('yargs', {
+    defaults: {
+      'short-option-groups': true,
+      'camel-case-expansion': true,
+      'dot-notation': true
+    },
+    cwd: path.dirname(parentModule)
+  })
 }
 
 // if any aliases reference each other, we should
