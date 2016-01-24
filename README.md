@@ -3,9 +3,11 @@
 [![Build Status](https://travis-ci.org/yargs/yargs-parser.png)](https://travis-ci.org/yargs/yargs-parser)
 [![Coverage Status](https://coveralls.io/repos/yargs/yargs-parser/badge.svg?branch=)](https://coveralls.io/r/yargs/yargs-parser?branch=master)
 [![NPM version](https://img.shields.io/npm/v/yargs-parser.svg)](https://www.npmjs.com/package/yargs-parser)
-[![Windows Tests](https://img.shields.io/appveyor/ci/yargs/yargs-parser/master.svg?label=Windows%20Tests)](https://ci.appveyor.com/project/yargs/yargs-parser)
+[![Windows Tests](https://img.shields.io/appveyor/ci/bcoe/yargs-parser/master.svg?label=Windows%20Tests)](https://ci.appveyor.com/project/bcoe/yargs-parser)
 
-The mighty option parser used by yargs.
+The mighty option parser used by [yargs](https://github.com/bcoe/yargs).
+
+visit the [yargs website](http://yargs.js.org/) for more examples, and thorough usage instructions.
 
 <img width="250" src="yargs-logo.png">
 
@@ -81,6 +83,7 @@ yargs engine.
 * `error`: populated with an error object if an exception occurred during parsing.
 * `aliases`: the inferred list of aliases built by combining lists in `opts.alias`.
 * `newAliases`: any new aliases added via camel-case expansion.
+* `configuration`: the configuration loaded from the `yargs` stanza in package.json.
 
 ### Configuration
 
@@ -119,7 +122,7 @@ node example.js -abc
 ### camel-case expansion
 
 * default: `true`.
-* key: `camel-case`.
+* key: `camel-case-expansion`.
 
 Should hyphenated arguments be expanded into camel-case aliases?
 

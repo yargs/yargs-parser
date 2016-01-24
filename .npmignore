@@ -2,3 +2,4 @@
 node_modules
 .DS_Store
 yargs-logo.png
+./test/fixtures/package.json

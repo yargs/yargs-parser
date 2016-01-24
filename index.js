@@ -1,4 +1,6 @@
 var camelCase = require('camelcase')
+var findUp = require('find-up')
+var pkgConf = require('pkg-conf')
 var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
 var util = require('util')
@@ -10,6 +12,7 @@ function parse (args, opts) {
   args = tokenizeArgString(args)
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
+  var configuration = loadConfiguration(opts.cwd || path.resolve(path.dirname(__filename), '../'))
   var defaults = opts.default || {}
   var envPrefix = opts.envPrefix
   var newAliases = {}
@@ -98,11 +101,13 @@ function parse (args, opts) {
     var value
 
     // -- seperated by =
-    if (arg.match(/^--.+=/)) {
+    if (arg.match(/^--.+=/) || (
+      !configuration['short-option-groups'] && arg.match(/^-.+=/)
+    )) {
       // Using [\s\S] instead of . because js doesn't support the
       // 'dotall' regex modifier. See:
       // http://stackoverflow.com/a/1068308/13216
-      m = arg.match(/^--([^=]+)=([\s\S]*)$/)
+      m = arg.match(/^--?([^=]+)=([\s\S]*)$/)
 
       // nargs format = '--f=monkey washing cat'
       if (checkAllAliases(m[1], flags.nargs)) {
@@ -115,13 +120,15 @@ function parse (args, opts) {
       } else {
         setArg(m[1], m[2])
       }
-    } else if (arg.match(/^--no-.+/)) {
+    } else if (arg.match(/^--no-.+/) && configuration['boolean-negation']) {
       key = arg.match(/^--no-(.+)/)[1]
       setArg(key, false)
 
     // -- seperated by space.
-    } else if (arg.match(/^--.+/)) {
-      key = arg.match(/^--(.+)/)[1]
+    } else if (arg.match(/^--.+/) || (
+      !configuration['short-option-groups'] && arg.match(/^-.+/)
+    )) {
+      key = arg.match(/^--?(.+)/)[1]
 
       // nargs format = '--foo a b c'
       if (checkAllAliases(key, flags.nargs)) {
@@ -294,7 +301,7 @@ function parse (args, opts) {
       if (typeof val === 'string') val = val === 'true'
     }
 
-    if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length)) {
+    if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length) && configuration['camel-case-expansion']) {
       var c = camelCase(key)
       flags.aliases[key] = [c]
       newAliases[c] = true
@@ -435,6 +442,9 @@ function parse (args, opts) {
 
   function setKey (obj, keys, value) {
     var o = obj
+
+    if (!configuration['dot-notation']) keys = [keys.join('.')]
+
     keys.slice(0, -1).forEach(function (key) {
       if (o[key] === undefined) o[key] = {}
       o = o[key]
@@ -467,7 +477,7 @@ function parse (args, opts) {
         flags.aliases[key] = [].concat(aliases[key] || [])
         // For "--option-name", also set argv.optionName
         flags.aliases[key].concat(key).forEach(function (x) {
-          if (/-/.test(x)) {
+          if (/-/.test(x) && configuration['camel-case-expansion']) {
             var c = camelCase(x)
             flags.aliases[key].push(c)
             newAliases[c] = true
@@ -529,6 +539,7 @@ function parse (args, opts) {
   }
 
   function isNumber (x) {
+    if (!configuration['parse-numbers']) return false
     if (typeof x === 'number') return true
     if (/^0x[0-9a-f]+$/i.test(x)) return true
     return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
@@ -538,8 +549,22 @@ function parse (args, opts) {
     argv: argv,
     error: error,
     aliases: flags.aliases,
-    newAliases: newAliases
+    newAliases: newAliases,
+    configuration: configuration
   }
+}
+
+function loadConfiguration (cwd) {
+  return pkgConf.sync('yargs', {
+    defaults: {
+      'short-option-groups': true,
+      'camel-case-expansion': true,
+      'dot-notation': true,
+      'parse-numbers': true,
+      'boolean-negation': true
+    },
+    cwd: findUp.sync('package.json', {cwd: cwd})
+  })
 }
 
 // if any aliases reference each other, we should
