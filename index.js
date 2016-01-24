@@ -1,7 +1,7 @@
 var camelCase = require('camelcase')
+var findUp = require('find-up')
 var pkgConf = require('pkg-conf')
 var path = require('path')
-var parentModule = require('parent-module')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
 var util = require('util')
 
@@ -12,7 +12,7 @@ function parse (args, opts) {
   args = tokenizeArgString(args)
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
-  var configuration = loadConfiguration()
+  var configuration = loadConfiguration(opts.cwd || path.resolve(path.dirname(__filename), '../'))
   var defaults = opts.default || {}
   var envPrefix = opts.envPrefix
   var newAliases = {}
@@ -553,15 +553,18 @@ function parse (args, opts) {
   }
 }
 
-function loadConfiguration () {
-  return pkgConf.sync('yargs', {
-    defaults: {
-      'short-option-groups': true,
-      'camel-case-expansion': true,
-      'dot-notation': true
-    },
-    cwd: path.dirname(parentModule)
+function loadConfiguration (cwd) {
+  var defaults = {
+    'short-option-groups': true,
+    'camel-case-expansion': true,
+    'dot-notation': true
+  }
+  var conf = pkgConf.sync('yargs', {
+    defaults: defaults,
+    cwd: findUp.sync('package.json', {cwd: cwd})
   })
+  if (!Object.keys(conf).length) return defaults
+  else return conf
 }
 
 // if any aliases reference each other, we should

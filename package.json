@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "camelcase": "^2.0.1",
-    "parent-module": "^0.1.0",
+    "find-up": "^1.1.0",
     "pkg-conf": "^1.1.0"
   }
 }

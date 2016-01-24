@@ -1,4 +1,4 @@
-/* global before, beforeEach, describe, it, afterEach */
+/* global beforeEach, describe, it, afterEach */
 
 require('chai').should()
 
@@ -1412,18 +1412,11 @@ describe('yargs-parser', function () {
   })
 
   describe('configuration', function () {
-    var cwd = null
-
-    before(function () {
-      cwd = process.cwd()
-    })
-
     beforeEach(function () {
       rimraf.sync('./test/fixtures/package.json')
     })
 
     afterEach(function () {
-      process.chdir(cwd)
       rimraf.sync('./test/fixtures/package.json')
     })
 
@@ -1433,9 +1426,10 @@ describe('yargs-parser', function () {
           'short-option-groups': false
         }
       }), 'utf-8')
-      process.chdir('./test/fixtures/inner')
 
-      var result = parser.detailed([])
+      var result = parser.detailed([], {
+        cwd: './test/fixtures/inner'
+      })
       result.configuration['short-option-groups'].should.equal(false)
     })
 
@@ -1446,11 +1440,14 @@ describe('yargs-parser', function () {
             'short-option-groups': false
           }
         }), 'utf-8')
-        process.chdir('./test/fixtures/inner')
 
-        var parse = parser(['-cats=meow'])
+        var parse = parser(['-cats=meow'], {
+          cwd: './test/fixtures/inner'
+        })
         parse.cats.should.equal('meow')
-        parse = parser(['-cats', 'meow'])
+        parse = parser(['-cats', 'meow'], {
+          cwd: './test/fixtures/inner'
+        })
         parse.cats.should.equal('meow')
       })
     })
@@ -1462,14 +1459,14 @@ describe('yargs-parser', function () {
             'camel-case-expansion': false
           }
         }), 'utf-8')
-        process.chdir('./test/fixtures/inner')
       })
 
       it('does not expand camel-case aliases', function () {
         var parsed = parser.detailed([], {
           alias: {
             'foo-bar': ['x']
-          }
+          },
+          cwd: './test/fixtures/inner'
         })
 
         expect(parsed.newAliases.fooBar).to.equal(undefined)
@@ -1477,7 +1474,9 @@ describe('yargs-parser', function () {
       })
 
       it('does not expand camel-case keys', function () {
-        var parsed = parser.detailed(['--foo-bar=apple'])
+        var parsed = parser.detailed(['--foo-bar=apple'], {
+          cwd: './test/fixtures/inner'
+        })
 
         expect(parsed.argv.fooBar).to.equal(undefined)
         expect(parsed.argv['foo-bar']).to.equal('apple')
@@ -1491,23 +1490,27 @@ describe('yargs-parser', function () {
             'dot-notation': false
           }
         }), 'utf-8')
-        process.chdir('./test/fixtures/inner')
       })
 
       it('does not expand dot notation defaults', function () {
         var parsed = parser([], {
           default: {
             'foo.bar': 'x'
-          }
+          },
+          cwd: './test/fixtures/inner'
         })
 
         expect(parsed['foo.bar']).to.equal('x')
       })
 
       it('does not expand dot notation arguments', function () {
-        var parsed = parser(['--foo.bar', 'banana'])
+        var parsed = parser(['--foo.bar', 'banana'], {
+          cwd: './test/fixtures/inner'
+        })
         expect(parsed['foo.bar']).to.equal('banana')
-        parsed = parser(['--foo.bar=banana'])
+        parsed = parser(['--foo.bar=banana'], {
+          cwd: './test/fixtures/inner'
+        })
         expect(parsed['foo.bar']).to.equal('banana')
       })
     })
