@@ -120,7 +120,7 @@ function parse (args, opts) {
       } else {
         setArg(m[1], m[2])
       }
-    } else if (arg.match(/^--no-.+/)) {
+    } else if (arg.match(/^--no-.+/) && configuration['boolean-negation']) {
       key = arg.match(/^--no-(.+)/)[1]
       setArg(key, false)
 
@@ -539,6 +539,7 @@ function parse (args, opts) {
   }
 
   function isNumber (x) {
+    if (!configuration['parse-numbers']) return false
     if (typeof x === 'number') return true
     if (/^0x[0-9a-f]+$/i.test(x)) return true
     return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
@@ -554,17 +555,16 @@ function parse (args, opts) {
 }
 
 function loadConfiguration (cwd) {
-  var defaults = {
-    'short-option-groups': true,
-    'camel-case-expansion': true,
-    'dot-notation': true
-  }
-  var conf = pkgConf.sync('yargs', {
-    defaults: defaults,
+  return pkgConf.sync('yargs', {
+    defaults: {
+      'short-option-groups': true,
+      'camel-case-expansion': true,
+      'dot-notation': true,
+      'parse-numbers': true,
+      'boolean-negation': true
+    },
     cwd: findUp.sync('package.json', {cwd: cwd})
   })
-  if (!Object.keys(conf).length) return defaults
-  else return conf
 }
 
 // if any aliases reference each other, we should

@@ -1514,5 +1514,59 @@ describe('yargs-parser', function () {
         expect(parsed['foo.bar']).to.equal('banana')
       })
     })
+
+    describe('parse numbers', function () {
+      beforeEach(function () {
+        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
+          yargs: {
+            'parse-numbers': false
+          }
+        }), 'utf-8')
+      })
+
+      it('does not coerce defaults into numbers', function () {
+        var parsed = parser([], {
+          default: {
+            'foo': '5'
+          },
+          cwd: './test/fixtures/inner'
+        })
+
+        expect(parsed['foo']).to.equal('5')
+      })
+
+      it('does not coerce arguments into numbers', function () {
+        var parsed = parser(['--foo', '5'], {
+          cwd: './test/fixtures/inner'
+        })
+        expect(parsed['foo']).to.equal('5')
+      })
+
+      it('does not coerce positional arguments into numbers', function () {
+        var parsed = parser(['5'], {
+          cwd: './test/fixtures/inner'
+        })
+        expect(parsed._[0]).to.equal('5')
+      })
+    })
+
+    describe('boolean negation', function () {
+      beforeEach(function () {
+        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
+          yargs: {
+            'boolean-negation': false
+          }
+        }), 'utf-8')
+      })
+
+      it('does not negate arguments prefixed with --no-', function () {
+        var parsed = parser(['--no-dice'], {
+          cwd: './test/fixtures/inner'
+        })
+
+        parsed['no-dice'].should.equal(true)
+        expect(parsed.dice).to.equal(undefined)
+      })
+    })
   })
 })
