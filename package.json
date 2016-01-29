@@ -33,8 +33,8 @@
     "standard": "^5.4.1"
   },
   "dependencies": {
+    "app-root-path": "^1.0.0",
     "camelcase": "^2.0.1",
-    "find-up": "^1.1.0",
     "pkg-conf": "^1.1.1"
   }
 }
