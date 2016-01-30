@@ -1,5 +1,4 @@
 var camelCase = require('camelcase')
-var findUp = require('find-up')
 var pkgConf = require('pkg-conf')
 var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
@@ -12,7 +11,7 @@ function parse (args, opts) {
   args = tokenizeArgString(args)
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
-  var configuration = loadConfiguration(opts.cwd || path.resolve(path.dirname(__filename), '../'))
+  var configuration = loadConfiguration(opts.cwd || path.dirname(require.main.filename))
   var defaults = opts.default || {}
   var envPrefix = opts.envPrefix
   var newAliases = {}
@@ -563,7 +562,7 @@ function loadConfiguration (cwd) {
       'parse-numbers': true,
       'boolean-negation': true
     },
-    cwd: findUp.sync('package.json', {cwd: cwd})
+    cwd: cwd
   })
 }
 
