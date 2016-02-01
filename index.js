@@ -1,5 +1,6 @@
 var camelCase = require('camelcase')
 var pkgConf = require('pkg-conf')
+var requireMainFilename = require('require-main-filename')
 var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
 var util = require('util')
@@ -11,7 +12,7 @@ function parse (args, opts) {
   args = tokenizeArgString(args)
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
-  var configuration = loadConfiguration(opts.cwd || path.dirname(require.main.filename))
+  var configuration = loadConfiguration(opts.cwd || requireMainFilename())
   var defaults = opts.default || {}
   var envPrefix = opts.envPrefix
   var newAliases = {}
