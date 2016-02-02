@@ -58,6 +58,7 @@ Parses command line arguments returning a simple mapping of keys and values.
   * `opts.narg`: specify that a key requires `n` arguments: `{narg: {x: 2}}`.
   * `opts.normalize`: `path.normalize()` will be applied to values set to this key.
   * `opts.string`: keys should be treated as strings (even if they resemble a number `-x 33`).
+  * `opts.number`: keys should be treated as numbers.
 
 **returns:**
 
