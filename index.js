@@ -26,6 +26,7 @@ function parse (args, opts) {
     arrays: {},
     bools: {},
     strings: {},
+    numbers: {},
     counts: {},
     normalize: {},
     configs: {},
@@ -43,6 +44,10 @@ function parse (args, opts) {
 
   ;[].concat(opts.string).filter(Boolean).forEach(function (key) {
     flags.strings[key] = true
+  })
+
+  ;[].concat(opts.number).filter(Boolean).forEach(function (key) {
+    flags.numbers[key] = true
   })
 
   ;[].concat(opts.count).filter(Boolean).forEach(function (key) {
@@ -522,6 +527,7 @@ function parse (args, opts) {
     var def = {
       boolean: true,
       string: '',
+      number: undefined,
       array: []
     }
 
@@ -533,6 +539,7 @@ function parse (args, opts) {
     var type = 'boolean'
 
     if (flags.strings && flags.strings[key]) type = 'string'
+    else if (flags.numbers && flags.numbers[key]) type = 'number'
     else if (flags.arrays && flags.arrays[key]) type = 'array'
 
     return type
