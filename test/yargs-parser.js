@@ -1,4 +1,4 @@
-/* global beforeEach, describe, it, afterEach */
+/* global beforeEach, describe, it */
 
 require('chai').should()
 
@@ -6,7 +6,6 @@ var expect = require('chai').expect
 var fs = require('fs')
 var parser = require('../')
 var path = require('path')
-var rimraf = require('rimraf')
 
 describe('yargs-parser', function () {
   it('should parse a "short boolean"', function () {
@@ -1412,61 +1411,32 @@ describe('yargs-parser', function () {
   })
 
   describe('configuration', function () {
-    beforeEach(function () {
-      rimraf.sync('./test/fixtures/package.json')
-    })
-
-    afterEach(function () {
-      rimraf.sync('./test/fixtures/package.json')
-    })
-
-    it('reads configuration from parent package.json', function () {
-      fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
-        yargs: {
-          'short-option-groups': false
-        }
-      }), 'utf-8')
-
-      var result = parser.detailed([], {
-        cwd: './test/fixtures/inner'
-      })
-      result.configuration['short-option-groups'].should.equal(false)
-    })
-
     describe('short option groups', function () {
       it('allows short-option-groups to be disabled', function () {
-        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
-          yargs: {
+        var parse = parser(['-cats=meow'], {
+          configuration: {
             'short-option-groups': false
           }
-        }), 'utf-8')
-
-        var parse = parser(['-cats=meow'], {
-          cwd: './test/fixtures/inner'
         })
         parse.cats.should.equal('meow')
         parse = parser(['-cats', 'meow'], {
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'short-option-groups': false
+          }
         })
         parse.cats.should.equal('meow')
       })
     })
 
     describe('camel-case expansion', function () {
-      beforeEach(function () {
-        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
-          yargs: {
-            'camel-case-expansion': false
-          }
-        }), 'utf-8')
-      })
-
       it('does not expand camel-case aliases', function () {
         var parsed = parser.detailed([], {
           alias: {
             'foo-bar': ['x']
           },
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'camel-case-expansion': false
+          }
         })
 
         expect(parsed.newAliases.fooBar).to.equal(undefined)
@@ -1475,7 +1445,9 @@ describe('yargs-parser', function () {
 
       it('does not expand camel-case keys', function () {
         var parsed = parser.detailed(['--foo-bar=apple'], {
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'camel-case-expansion': false
+          }
         })
 
         expect(parsed.argv.fooBar).to.equal(undefined)
@@ -1484,20 +1456,14 @@ describe('yargs-parser', function () {
     })
 
     describe('dot notation', function () {
-      beforeEach(function () {
-        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
-          yargs: {
-            'dot-notation': false
-          }
-        }), 'utf-8')
-      })
-
       it('does not expand dot notation defaults', function () {
         var parsed = parser([], {
           default: {
             'foo.bar': 'x'
           },
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'dot-notation': false
+          }
         })
 
         expect(parsed['foo.bar']).to.equal('x')
@@ -1505,31 +1471,29 @@ describe('yargs-parser', function () {
 
       it('does not expand dot notation arguments', function () {
         var parsed = parser(['--foo.bar', 'banana'], {
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'dot-notation': false
+          }
         })
         expect(parsed['foo.bar']).to.equal('banana')
         parsed = parser(['--foo.bar=banana'], {
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'dot-notation': false
+          }
         })
         expect(parsed['foo.bar']).to.equal('banana')
       })
     })
 
     describe('parse numbers', function () {
-      beforeEach(function () {
-        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
-          yargs: {
-            'parse-numbers': false
-          }
-        }), 'utf-8')
-      })
-
       it('does not coerce defaults into numbers', function () {
         var parsed = parser([], {
           default: {
             'foo': '5'
           },
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'parse-numbers': false
+          }
         })
 
         expect(parsed['foo']).to.equal('5')
@@ -1537,31 +1501,29 @@ describe('yargs-parser', function () {
 
       it('does not coerce arguments into numbers', function () {
         var parsed = parser(['--foo', '5'], {
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'parse-numbers': false
+          }
         })
         expect(parsed['foo']).to.equal('5')
       })
 
       it('does not coerce positional arguments into numbers', function () {
         var parsed = parser(['5'], {
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'parse-numbers': false
+          }
         })
         expect(parsed._[0]).to.equal('5')
       })
     })
 
     describe('boolean negation', function () {
-      beforeEach(function () {
-        fs.writeFileSync('./test/fixtures/package.json', JSON.stringify({
-          yargs: {
-            'boolean-negation': false
-          }
-        }), 'utf-8')
-      })
-
       it('does not negate arguments prefixed with --no-', function () {
         var parsed = parser(['--no-dice'], {
-          cwd: './test/fixtures/inner'
+          configuration: {
+            'boolean-negation': false
+          }
         })
 
         parsed['no-dice'].should.equal(true)
