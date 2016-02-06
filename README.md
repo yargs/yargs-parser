@@ -58,6 +58,7 @@ Parses command line arguments returning a simple mapping of keys and values.
   * `opts.narg`: specify that a key requires `n` arguments: `{narg: {x: 2}}`.
   * `opts.normalize`: `path.normalize()` will be applied to values set to this key.
   * `opts.string`: keys should be treated as strings (even if they resemble a number `-x 33`).
+  * `opts.configuration`: provide configuration options to the yargs-parser (see: [configuration](#configuration)).
 
 **returns:**
 
@@ -85,19 +86,19 @@ yargs engine.
 * `newAliases`: any new aliases added via camel-case expansion.
 * `configuration`: the configuration loaded from the `yargs` stanza in package.json.
 
+<a name="configuration"></a>
 ### Configuration
 
 The yargs-parser applies several automated transformations on the keys provided
-in `args`. These features can be turned on and off by using the `yargs`
-configuration stanza in your package.json:
+in `args`. These features can be turned on and off using the `configuration` field
+of `opts`.
 
-```json
-{
-  "name": "my-awesome-module",
-  "yargs": {
-    "dot-notation": false
+```js
+var parsed = parser(['--no-dice'], {
+  configuration: {
+    'boolean-negation': false
   }
-}
+})
 ```
 
 ### short option groups
