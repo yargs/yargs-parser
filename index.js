@@ -546,6 +546,7 @@ function parse (args, opts) {
   }
 
   function isNumber (x) {
+    if (flags.numbers && flags.numbers[x] && Number(x) === NaN) return true
     if (!configuration['parse-numbers']) return false
     if (typeof x === 'number') return true
     if (/^0x[0-9a-f]+$/i.test(x)) return true
