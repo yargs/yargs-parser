@@ -31,6 +31,7 @@ function parse (args, opts) {
     arrays: {},
     bools: {},
     strings: {},
+    numbers: {},
     counts: {},
     normalize: {},
     configs: {},
@@ -48,6 +49,10 @@ function parse (args, opts) {
 
   ;[].concat(opts.string).filter(Boolean).forEach(function (key) {
     flags.strings[key] = true
+  })
+
+  ;[].concat(opts.number).filter(Boolean).forEach(function (key) {
+    flags.numbers[key] = true
   })
 
   ;[].concat(opts.count).filter(Boolean).forEach(function (key) {
@@ -312,7 +317,11 @@ function parse (args, opts) {
       newAliases[c] = true
     }
 
-    var value = !checkAllAliases(key, flags.strings) && isNumber(val) ? Number(val) : val
+    var value = val
+    if (!checkAllAliases(key, flags.strings)) {
+      if (isNumber(val)) value = Number(val)
+      if (!isUndefined(val) && !isNumber(val) && checkAllAliases(key, flags.numbers)) value = NaN
+    }
 
     if (checkAllAliases(key, flags.counts)) {
       value = increment
@@ -527,6 +536,7 @@ function parse (args, opts) {
     var def = {
       boolean: true,
       string: '',
+      number: undefined,
       array: []
     }
 
@@ -538,6 +548,7 @@ function parse (args, opts) {
     var type = 'boolean'
 
     if (flags.strings && flags.strings[key]) type = 'string'
+    else if (flags.numbers && flags.numbers[key]) type = 'number'
     else if (flags.arrays && flags.arrays[key]) type = 'array'
 
     return type
@@ -548,6 +559,10 @@ function parse (args, opts) {
     if (typeof x === 'number') return true
     if (/^0x[0-9a-f]+$/i.test(x)) return true
     return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
+  }
+
+  function isUndefined (num) {
+    return num === undefined
   }
 
   return {
