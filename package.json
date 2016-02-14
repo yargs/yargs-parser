@@ -1,6 +1,6 @@
 {
   "name": "yargs-parser",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "the mighty option parser used by yargs",
   "main": "index.js",
   "scripts": {
