@@ -175,6 +175,20 @@ describe('yargs-parser', function () {
     x.should.be.a('string').and.equal('56')
   })
 
+  it('should default numbers to undefined', function () {
+    var n = parser([ '-n' ], {
+      number: ['n']
+    }).n
+    expect(n).to.equal(undefined)
+  })
+
+  it('should default number to NaN if value is not a valid number', function () {
+    var n = parser([ '-n', 'string' ], {
+      number: ['n']
+    }).n
+    expect(n).to.deep.equal(NaN)
+  })
+
   // Fixes: https://github.com/bcoe/yargs/issues/68
   it('should parse flag arguments with no right-hand-value as strings, if defined as strings', function () {
     var s = parser([ '-s' ], {

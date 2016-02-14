@@ -59,6 +59,7 @@ Parses command line arguments returning a simple mapping of keys and values.
   * `opts.normalize`: `path.normalize()` will be applied to values set to this key.
   * `opts.string`: keys should be treated as strings (even if they resemble a number `-x 33`).
   * `opts.configuration`: provide configuration options to the yargs-parser (see: [configuration](#configuration)).
+  * `opts.number`: keys should be treated as numbers.
 
 **returns:**
 
