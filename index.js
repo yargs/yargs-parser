@@ -290,7 +290,12 @@ function parse (args, opts) {
   // e.g., --foo apple banana cat becomes ["apple", "banana", "cat"]
   function eatArray (i, key, args) {
     for (var ii = i + 1; ii < args.length; ii++) {
-      if (/^-/.test(args[ii])) break
+      if (/^-/.test(args[ii])) {
+        if (args[ii - 1].replace('-', '') === key) {
+          setArg(key, defaultForType('array'))
+        }
+        break
+      }
       i = ii
       setArg(key, args[ii])
     }

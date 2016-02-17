@@ -1110,6 +1110,13 @@ describe('yargs-parser', function () {
       parse.should.have.property('_').with.length(0)
     })
 
+    it('should default an array to an empty array if passed as first option followed by another', function () {
+      var result = parser(['-a', '-b'], {
+        array: 'a'
+      })
+      result.should.have.property('a').and.deep.equal([])
+    })
+
     it('should default argument to empty array if no value given', function () {
       var result = parser(['-b'], {
         array: 'b'
