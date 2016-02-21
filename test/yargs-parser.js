@@ -1270,6 +1270,26 @@ describe('yargs-parser', function () {
       result._[1].should.equal('cat')
     })
 
+    it('should not modify the input args if an = was used', function () {
+      var expected = ['-f=apple', 'bar', 'blerg', '--bar=monkey', 'washing', 'cat']
+      var args = expected.slice()
+      parser(args, {
+        narg: {
+          f: 2,
+          bar: 2
+        }
+      })
+      args.should.deep.equal(expected)
+
+      parser.detailed(args, {
+        narg: {
+          f: 2,
+          bar: 2
+        }
+      })
+      args.should.deep.equal(expected)
+    })
+
     it('allows multiple nargs to be set at the same time', function () {
       var result = parser([ '--foo', 'apple', 'bar', '--bar', 'banana', '-f' ], {
         narg: {

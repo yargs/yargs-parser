@@ -626,7 +626,7 @@ function increment (orig) {
 }
 
 function Parser (args, opts) {
-  var result = parse(args, opts)
+  var result = parse(args.slice(), opts)
 
   return result.argv
 }
@@ -634,7 +634,7 @@ function Parser (args, opts) {
 // parse arguments and return detailed
 // meta information, aliases, etc.
 Parser.detailed = function (args, opts) {
-  return parse(args, opts)
+  return parse(args.slice(), opts)
 }
 
 module.exports = Parser
