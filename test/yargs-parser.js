@@ -1117,6 +1117,13 @@ describe('yargs-parser', function () {
       result.should.have.property('a').and.deep.equal([])
     })
 
+    it('should not attempt to default array if an element has already been populated', function () {
+      var result = parser(['-a', 'foo', 'bar', '-b'], {
+        array: 'a'
+      })
+      result.should.have.property('a').and.deep.equal(['foo', 'bar'])
+    })
+
     it('should default argument to empty array if no value given', function () {
       var result = parser(['-b'], {
         array: 'b'
