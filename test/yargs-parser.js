@@ -1128,7 +1128,7 @@ describe('yargs-parser', function () {
       var result = parser(['-b'], {
         array: 'b'
       })
-      Array.isArray(result.b).should.equal(true)
+      result.should.have.property('b').and.deep.equal([])
     })
 
     it('should place value of argument in array, when one argument provided', function () {
