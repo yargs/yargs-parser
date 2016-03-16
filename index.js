@@ -450,6 +450,9 @@ function parse (args, opts) {
 
   function hasKey (obj, keys) {
     var o = obj
+
+    if (!configuration['dot-notation']) keys = [keys.join('.')]
+
     keys.slice(0, -1).forEach(function (key) {
       o = (o[key] || {})
     })

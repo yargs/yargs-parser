@@ -1531,6 +1531,35 @@ describe('yargs-parser', function () {
         })
         expect(parsed['foo.bar']).to.equal('banana')
       })
+
+      it('should use value from cli, if cli overrides dot notation default', function () {
+        var parsed = parser(['--foo.bar', 'abc'], {
+          default: {
+            'foo.bar': 'default'
+          },
+          configuration: {
+            'dot-notation': false
+          }
+        })
+
+        expect(parsed['foo.bar']).to.equal('abc')
+      })
+
+      it('should also override dot notation alias', function () {
+        var parsed = parser(['--foo.bar', 'abc'], {
+          alias: {
+            'foo.bar': ['alias.bar']
+          },
+          default: {
+            'foo.bar': 'default'
+          },
+          configuration: {
+            'dot-notation': false
+          }
+        })
+
+        expect(parsed['alias.bar']).to.equal('abc')
+      })
     })
 
     describe('parse numbers', function () {
