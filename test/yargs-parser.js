@@ -1217,6 +1217,17 @@ describe('yargs-parser', function () {
       result.bar.should.include('cat')
       result.bar.should.include('dog')
     })
+
+    // see: https://github.com/yargs/yargs-parser/pull/13
+    it('should support array for --foo= format when the key is a number', function () {
+      var result = parser(['--1=a', 'b'], {
+        array: ['1']
+      })
+
+      Array.isArray(result['1']).should.equal(true)
+      result['1'][0].should.equal('a')
+      result['1'][1].should.equal('b')
+    })
   })
 
   describe('nargs', function () {
@@ -1317,6 +1328,19 @@ describe('yargs-parser', function () {
       result.foo[1].should.equal('bar')
       result.bar.should.equal('banana')
       result.f.should.equal(true)
+    })
+
+    // see: https://github.com/yargs/yargs-parser/pull/13
+    it('should support nargs for --foo= format when the key is a number', function () {
+      var result = parser(['--1=a', 'b'], {
+        narg: {
+          1: 2
+        }
+      })
+
+      Array.isArray(result['1']).should.equal(true)
+      result['1'][0].should.equal('a')
+      result['1'][1].should.equal('b')
     })
   })
 
