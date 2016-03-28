@@ -121,11 +121,11 @@ function parse (args, opts) {
 
       // nargs format = '--f=monkey washing cat'
       if (checkAllAliases(m[1], flags.nargs)) {
-        args.splice(i + 1, m[1], m[2])
+        args.splice(i + 1, 0, m[2])
         i = eatNargs(i, m[1], args)
       // arrays format = '--f=a b c'
       } else if (checkAllAliases(m[1], flags.arrays) && args.length > i + 1) {
-        args.splice(i + 1, m[1], m[2])
+        args.splice(i + 1, 0, m[2])
         i = eatArray(i, m[1], args)
       } else {
         setArg(m[1], m[2])
