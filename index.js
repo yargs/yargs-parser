@@ -192,7 +192,7 @@ function parse (args, opts) {
           key = letters[j]
 
           // nargs format = '-f=monkey washing cat'
-          if (checkAllAliases(letters[j], flags.nargs)) {
+          if (checkAllAliases(key, flags.nargs)) {
             args.splice(i + 1, 0, value)
             i = eatNargs(i, key, args)
           // array format = '-f=a b c'
@@ -220,7 +220,7 @@ function parse (args, opts) {
         }
 
         if (letters[j + 1] && letters[j + 1].match(/\W/)) {
-          setArg(letters[j], arg.slice(j + 2))
+          setArg(letters[j], next)
           broken = true
           break
         } else {
@@ -238,13 +238,15 @@ function parse (args, opts) {
         } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
           i = eatArray(i, key, args)
         } else {
-          if (args[i + 1] && !/^(-|--)[^-]/.test(args[i + 1]) &&
+          next = args[i + 1]
+
+          if (next && !/^(-|--)[^-]/.test(next) &&
             !checkAllAliases(key, flags.bools) &&
             !checkAllAliases(key, flags.counts)) {
-            setArg(key, args[i + 1])
+            setArg(key, next)
             i++
-          } else if (args[i + 1] && /true|false/.test(args[i + 1])) {
-            setArg(key, args[i + 1])
+          } else if (next && /true|false/.test(next)) {
+            setArg(key, next)
             i++
           } else {
             setArg(key, defaultForType(guessType(key, flags)))
