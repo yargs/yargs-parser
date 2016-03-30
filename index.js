@@ -406,16 +406,29 @@ function parse (args, opts) {
             config = require(resolvedConfigPath)
           }
 
-          Object.keys(config).forEach(function (key) {
-            // setting arguments via CLI takes precedence over
-            // values within the config file.
-            if (argv[key] === undefined || (flags.defaulted[key])) {
-              delete argv[key]
-              setArg(key, config[key])
-            }
-          })
+          setConfigObject(config)
         } catch (ex) {
           if (argv[configKey]) error = Error(__('Invalid JSON config file: %s', configPath))
+        }
+      }
+    })
+  }
+
+  // set args from config object.
+  // it recursively checks nested objects.
+  function setConfigObject (config, prev) {
+    Object.keys(config).forEach(function (key) {
+      var value = config[key]
+      var fullKey = prev ? prev + '.' + key : key
+
+      if (Object.prototype.toString.call(value) === '[object Object]') {
+        // if the value is an object but not an array, check nested object
+        setConfigObject(value, fullKey)
+      } else {
+        // setting arguments via CLI takes precedence over
+        // values within the config file.
+        if (!hasKey(argv, fullKey.split('.')) || (flags.defaulted[fullKey])) {
+          setArg(fullKey, value)
         }
       }
     })

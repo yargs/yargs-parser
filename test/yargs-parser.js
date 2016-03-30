@@ -473,6 +473,37 @@ describe('yargs-parser', function () {
       expect(argv.error).to.equal(null)
     })
 
+    it('should load nested options from config file', function () {
+      var jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
+      var argv = parser(['--settings', jsonPath, '--nested.foo', 'bar'], {
+        config: ['settings']
+      })
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('b', 'b')
+      argv.should.have.property('nested').and.deep.equal({
+        foo: 'bar',
+        bar: 'bar'
+      })
+    })
+
+    it('should use nested value from config file, if argv value is using default value', function () {
+      var jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
+      var argv = parser(['--settings', jsonPath], {
+        config: ['settings'],
+        default: {
+          'nested.foo': 'banana'
+        }
+      })
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('b', 'b')
+      argv.should.have.property('nested').and.deep.equal({
+        foo: 'baz',
+        bar: 'bar'
+      })
+    })
+
     it('allows a custom parsing function to be provided', function () {
       var jsPath = path.resolve(__dirname, './fixtures/config.txt')
       var argv = parser([ '--settings', jsPath, '--foo', 'bar' ], {
