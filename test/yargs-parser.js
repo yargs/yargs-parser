@@ -153,6 +153,15 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').and.deep.equal(['moo'])
   })
 
+  it('should not set boolean options values if the next value only contains the words "true" or "false"', function () {
+    var parse = parser(['--verbose', 'aaatrueaaa', 'moo', '-t', 'aaafalseaaa'], {
+      boolean: ['t', 'verbose']
+    })
+    parse.should.have.property('verbose', true).and.be.a('boolean')
+    parse.should.have.property('t', true).and.be.a('boolean')
+    parse.should.have.property('_').and.deep.equal(['aaatrueaaa', 'moo', 'aaafalseaaa'])
+  })
+
   it('should allow defining options as boolean in groups', function () {
     var parse = parser([ '-x', '-z', 'one', 'two', 'three' ], {
       boolean: ['x', 'y', 'z']
