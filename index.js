@@ -212,8 +212,9 @@ function parse (args, opts) {
           continue
         }
 
+        // current letter is an alphabetic character and next value is a number
         if (/[A-Za-z]/.test(letters[j]) &&
-          /-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) {
+          /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) {
           setArg(letters[j], next)
           broken = true
           break

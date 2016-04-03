@@ -762,6 +762,29 @@ describe('yargs-parser', function () {
       argv.should.have.property('n', 123)
     })
 
+    it('should set n to the numeric value 123, with n at the end of a group', function () {
+      var argv = parser([ '-ab5n123' ])
+      argv.should.have.property('a', true)
+      argv.should.have.property('b', true)
+      argv.should.have.property('5', true)
+      argv.should.have.property('n', 123)
+      argv.should.have.property('_').with.length(0)
+    })
+
+    it('should set n to the numeric value 123, with = as separator', function () {
+      var argv = parser([ '-n=123' ])
+      argv.should.have.property('n', 123)
+    })
+
+    it('should set n to the numeric value 123, with n at the end of a group and = as separator', function () {
+      var argv = parser([ '-ab5n=123' ])
+      argv.should.have.property('a', true)
+      argv.should.have.property('b', true)
+      argv.should.have.property('5', true)
+      argv.should.have.property('n', 123)
+      argv.should.have.property('_').with.length(0)
+    })
+
     it('should set option "1" to true, option "2" to true, and option "3" to numeric value 456', function () {
       var argv = parser([ '-123', '456' ])
       argv.should.have.property('1', true)
