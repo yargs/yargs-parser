@@ -866,7 +866,7 @@ describe('yargs-parser', function () {
     })
 
     describe('for boolean options', function () {
-      [true, false, undefined].forEach(function (def) {
+      [true, false, undefined, null].forEach(function (def) {
         describe('with explicit ' + def + ' default', function () {
           var opts = {
             default: {
