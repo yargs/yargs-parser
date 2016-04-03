@@ -240,12 +240,12 @@ function parse (args, opts) {
         } else {
           next = args[i + 1]
 
-          if (next && !/^(-|--)[^-]/.test(next) &&
+          if (next !== undefined && !/^(-|--)[^-]/.test(next) &&
             !checkAllAliases(key, flags.bools) &&
             !checkAllAliases(key, flags.counts)) {
             setArg(key, next)
             i++
-          } else if (next && /true|false/.test(next)) {
+          } else if (/true|false/.test(next)) {
             setArg(key, next)
             i++
           } else {
