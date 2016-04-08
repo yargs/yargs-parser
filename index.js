@@ -19,6 +19,7 @@ function parse (args, opts) {
     'boolean-negation': true
   }, opts.configuration)
   var defaults = opts.default || {}
+  var configObjects = opts.configObjects || []
   var envPrefix = opts.envPrefix
   var newAliases = {}
   // allow a i18n handler to be passed in, default to a fake one (util.format).
@@ -263,10 +264,12 @@ function parse (args, opts) {
   // order of precedence:
   // 1. command line arg
   // 2. value from config file
-  // 3. value from env var
-  // 4. configured default value
+  // 3. value from config objects
+  // 4. value from env var
+  // 5. configured default value
   applyEnvVars(argv, true) // special case: check env vars that point to config file
   setConfig(argv)
+  setConfigObjects()
   applyEnvVars(argv, false)
   applyDefaultsAndAliases(argv, flags.aliases, defaults)
 
@@ -433,6 +436,14 @@ function parse (args, opts) {
           setArg(fullKey, value)
         }
       }
+    })
+  }
+
+  // set all config objects passed in opts
+  function setConfigObjects () {
+    if (typeof configObjects === 'undefined') return
+    configObjects.forEach(function (configObject) {
+      setConfigObject(configObject)
     })
   }
 
