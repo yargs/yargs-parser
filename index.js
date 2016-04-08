@@ -335,6 +335,11 @@ function parse (args, opts) {
       value = increment
     }
 
+    // Set normalized value when key is in 'normalize' and in 'arrays'
+    if (checkAllAliases(key, flags.normalize) && checkAllAliases(key, flags.arrays)) {
+      value = path.normalize(val)
+    }
+
     var splitKey = key.split('.')
     setKey(argv, splitKey, value)
 
@@ -361,20 +366,18 @@ function parse (args, opts) {
       setKey(argv, x, value)
     })
 
-    var keys = [key].concat(flags.aliases[key] || [])
-    for (var i = 0, l = keys.length; i < l; i++) {
-      if (flags.normalize[keys[i]]) {
-        keys.forEach(function (key) {
-          argv.__defineSetter__(key, function (v) {
-            val = path.normalize(v)
-          })
-
-          argv.__defineGetter__(key, function () {
-            return typeof val === 'string' ? path.normalize(val) : val
-          })
+    // Set normalize getter and setter when key is in 'normalize' but isn't an array
+    if (checkAllAliases(key, flags.normalize) && !checkAllAliases(key, flags.arrays)) {
+      var keys = [key].concat(flags.aliases[key] || [])
+      keys.forEach(function (key) {
+        argv.__defineSetter__(key, function (v) {
+          val = path.normalize(v)
         })
-        break
-      }
+
+        argv.__defineGetter__(key, function () {
+          return typeof val === 'string' ? path.normalize(val) : val
+        })
+      })
     }
   }
 

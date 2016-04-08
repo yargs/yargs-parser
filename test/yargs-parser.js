@@ -236,6 +236,19 @@ describe('yargs-parser', function () {
       a.s = ['', 'path', 'to', 'new', 'dir', '..', '..', ''].join(path.sep)
       a.s.should.equal(['', 'path', 'to', ''].join(path.sep))
     })
+
+    it('should normalize when key is also an array', function () {
+      var a = parser([ '-s', ['', 'tmp', '..', ''].join(path.sep), ['', 'path', 'to', 'new', 'dir', '..', '..', ''].join(path.sep) ], {
+        alias: {
+          s: ['save']
+        },
+        normalize: 's',
+        array: 's'
+      })
+      var expected = [path.sep, ['', 'path', 'to', ''].join(path.sep)]
+      a.should.have.property('s').and.deep.equal(expected)
+      a.should.have.property('save').and.deep.equal(expected)
+    })
   })
 
   describe('alias', function () {
