@@ -497,7 +497,7 @@ function parse (args, opts) {
       o[key] = increment(o[key])
     } else if (o[key] === undefined && checkAllAliases(key, flags.arrays)) {
       o[key] = Array.isArray(value) ? value : [value]
-    } else if (o[key] === undefined || typeof o[key] === 'boolean') {
+    } else if (o[key] === undefined || checkAllAliases(key, flags.bools)) {
       o[key] = value
     } else if (Array.isArray(o[key])) {
       o[key].push(value)
