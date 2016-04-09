@@ -444,9 +444,16 @@ function parse (args, opts) {
     var prefix = typeof envPrefix === 'string' ? envPrefix : ''
     Object.keys(process.env).forEach(function (envVar) {
       if (prefix === '' || envVar.lastIndexOf(prefix, 0) === 0) {
-        var key = camelCase(envVar.substring(prefix.length))
-        if (((configOnly && flags.configs[key]) || !configOnly) && (!(key in argv) || flags.defaulted[key])) {
-          setArg(key, process.env[envVar])
+        // get array of nested keys and convert them to camel case
+        var keys = envVar.split('__').map(function (key, i) {
+          if (i === 0) {
+            key = key.substring(prefix.length)
+          }
+          return camelCase(key)
+        })
+
+        if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && (!hasKey(argv, keys) || flags.defaulted[keys.join('.')])) {
+          setArg(keys.join('.'), process.env[envVar])
         }
       }
     })
