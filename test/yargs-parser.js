@@ -1640,6 +1640,19 @@ describe('yargs-parser', function () {
 
         expect(parsed['alias.bar']).to.equal('abc')
       })
+
+      it('does not expand alias of first element of dot notation arguments', function () {
+        var parsed = parser(['--foo.bar', 'banana'], {
+          alias: {
+            'foo': ['f']
+          },
+          configuration: {
+            'dot-notation': false
+          }
+        })
+        expect(parsed['foo.bar']).to.equal('banana')
+        expect(parsed).not.to.include.keys('f.bar')
+      })
     })
 
     describe('parse numbers', function () {

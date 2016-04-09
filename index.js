@@ -343,28 +343,27 @@ function parse (args, opts) {
     var splitKey = key.split('.')
     setKey(argv, splitKey, value)
 
-    // alias references an inner-value within
-    // a dot-notation object. see #279.
-    if (~key.indexOf('.') && flags.aliases[key]) {
+    // handle populating aliases of the full key
+    if (flags.aliases[key]) {
       flags.aliases[key].forEach(function (x) {
         x = x.split('.')
         setKey(argv, x, value)
       })
     }
 
-    ;(flags.aliases[splitKey[0]] || []).forEach(function (x) {
-      x = x.split('.')
+    // handle populating aliases of the first element of the dot-notation key
+    if (splitKey.length > 1 && configuration['dot-notation']) {
+      ;(flags.aliases[splitKey[0]] || []).forEach(function (x) {
+        x = x.split('.')
 
-      // handle populating dot notation for both
-      // the key and its aliases.
-      if (splitKey.length > 1) {
+        // expand alias with nested objects in key
         var a = [].concat(splitKey)
         a.shift() // nuke the old key.
         x = x.concat(a)
-      }
 
-      setKey(argv, x, value)
-    })
+        setKey(argv, x, value)
+      })
+    }
 
     // Set normalize getter and setter when key is in 'normalize' but isn't an array
     if (checkAllAliases(key, flags.normalize) && !checkAllAliases(key, flags.arrays)) {
