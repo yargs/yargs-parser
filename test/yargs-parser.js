@@ -40,6 +40,12 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').with.length(0)
   })
 
+  it('should set the value of a single long option to the next supplied value, even if the value is empty', function () {
+    var parse = parser(['--pow', ''])
+    parse.should.have.property('pow', '')
+    parse.should.have.property('_').with.length(0)
+  })
+
   it('should set the value of a single long option if an = was used', function () {
     var parse = parser(['--pow=xixxle'])
     parse.should.have.property('pow', 'xixxle')
@@ -119,6 +125,12 @@ describe('yargs-parser', function () {
     argv.should.have.property('hex', 0xdeadbeef).and.be.a('number')
     argv.should.have.property('_').and.deep.equal([789])
     argv._[0].should.be.a('number')
+  })
+
+  it('should set the value of a single short option to the next supplied value, even if the value is empty', function () {
+    var parse = parser(['-p', ''])
+    parse.should.have.property('p', '')
+    parse.should.have.property('_').with.length(0)
   })
 
   it('should not set the next value as the value of a short option if that option is explicitly defined as a boolean', function () {
