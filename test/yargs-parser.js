@@ -605,6 +605,102 @@ describe('yargs-parser', function () {
     })
   })
 
+  describe('config objects', function () {
+    it('should load options from config object', function () {
+      var argv = parser([ '--foo', 'bar' ], {
+        configObjects: [{
+          apple: 'apple',
+          banana: 42,
+          foo: 'baz'
+        }]
+      })
+
+      argv.should.have.property('apple', 'apple')
+      argv.should.have.property('banana', 42)
+      argv.should.have.property('foo', 'bar')
+    })
+
+    it('should use value from config object, if argv value is using default value', function () {
+      var argv = parser([], {
+        configObjects: [{
+          apple: 'apple',
+          banana: 42,
+          foo: 'baz'
+        }],
+        default: {
+          foo: 'banana'
+        }
+      })
+
+      argv.should.have.property('apple', 'apple')
+      argv.should.have.property('banana', 42)
+      argv.should.have.property('foo', 'baz')
+    })
+
+    it('should use value from config object to all aliases', function () {
+      var argv = parser([], {
+        configObjects: [{
+          apple: 'apple',
+          banana: 42,
+          foo: 'baz'
+        }],
+        alias: {
+          a: ['apple'],
+          banana: ['b']
+        }
+      })
+
+      argv.should.have.property('apple', 'apple')
+      argv.should.have.property('a', 'apple')
+      argv.should.have.property('banana', 42)
+      argv.should.have.property('b', 42)
+      argv.should.have.property('foo', 'baz')
+    })
+
+    it('should load nested options from config object', function () {
+      var argv = parser(['--nested.foo', 'bar'], {
+        configObjects: [{
+          a: 'a',
+          nested: {
+            foo: 'baz',
+            bar: 'bar'
+          },
+          b: 'b'
+        }]
+      })
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('b', 'b')
+      argv.should.have.property('nested').and.deep.equal({
+        foo: 'bar',
+        bar: 'bar'
+      })
+    })
+
+    it('should use nested value from config object, if argv value is using default value', function () {
+      var argv = parser([], {
+        configObjects: [{
+          a: 'a',
+          nested: {
+            foo: 'baz',
+            bar: 'bar'
+          },
+          b: 'b'
+        }],
+        default: {
+          'nested.foo': 'banana'
+        }
+      })
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('b', 'b')
+      argv.should.have.property('nested').and.deep.equal({
+        foo: 'baz',
+        bar: 'bar'
+      })
+    })
+  })
+
   describe('dot notation', function () {
     it('should allow object graph traversal via dot notation', function () {
       var argv = parser([
