@@ -245,7 +245,7 @@ function parse (args, opts) {
             !checkAllAliases(key, flags.counts)) {
             setArg(key, next)
             i++
-          } else if (/true|false/.test(next)) {
+          } else if (/^(true|false)$/.test(next)) {
             setArg(key, next)
             i++
           } else {
