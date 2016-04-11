@@ -1641,6 +1641,39 @@ describe('yargs-parser', function () {
       result.should.have.property('truthy')
       result.z.should.equal(55)
     })
+
+    it('should apply all nested env vars', function () {
+      process.env.TEST_A = 'a'
+      process.env.TEST_NESTED_OPTION__FOO = 'baz'
+      process.env.TEST_NESTED_OPTION__BAR = 'bar'
+      var result = parser(['--nestedOption.foo', 'bar'], {
+        envPrefix: 'TEST'
+      })
+
+      result.should.have.property('a', 'a')
+      result.should.have.property('nestedOption').and.deep.equal({
+        foo: 'bar',
+        bar: 'bar'
+      })
+    })
+
+    it('should apply nested env var if argv value is using default value', function () {
+      process.env.TEST_A = 'a'
+      process.env.TEST_NESTED_OPTION__FOO = 'baz'
+      process.env.TEST_NESTED_OPTION__BAR = 'bar'
+      var result = parser([], {
+        envPrefix: 'TEST',
+        default: {
+          'nestedOption.foo': 'banana'
+        }
+      })
+
+      result.should.have.property('a', 'a')
+      result.should.have.property('nestedOption').and.deep.equal({
+        foo: 'baz',
+        bar: 'bar'
+      })
+    })
   })
 
   describe('configuration', function () {
