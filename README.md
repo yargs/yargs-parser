@@ -4,6 +4,8 @@
 [![Coverage Status](https://coveralls.io/repos/yargs/yargs-parser/badge.svg?branch=)](https://coveralls.io/r/yargs/yargs-parser?branch=master)
 [![NPM version](https://img.shields.io/npm/v/yargs-parser.svg)](https://www.npmjs.com/package/yargs-parser)
 [![Windows Tests](https://img.shields.io/appveyor/ci/bcoe/yargs-parser/master.svg?label=Windows%20Tests)](https://ci.appveyor.com/project/bcoe/yargs-parser)
+[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
+
 
 The mighty option parser used by [yargs](https://github.com/bcoe/yargs).
 
