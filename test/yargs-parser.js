@@ -447,19 +447,6 @@ describe('yargs-parser', function () {
       argv.should.have.property('foo').and.deep.equal('banana')
     })
 
-    it('should load options and values from a file when config is used', function () {
-      var argv = parser([ '--settings', jsonPath, '--foo', 'bar' ], {
-        alias: {
-          z: 'zoom'
-        },
-        config: ['settings']
-      })
-
-      argv.should.have.property('herp', 'derp')
-      argv.should.have.property('zoom', 55)
-      argv.should.have.property('foo').and.deep.equal('bar')
-    })
-
     it("should allow config to be set as flag in 'option'", function () {
       var argv = parser([ '--settings', jsonPath, '--foo', 'bar' ], {
         alias: {
