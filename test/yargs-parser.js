@@ -185,6 +185,11 @@ describe('yargs-parser', function () {
     args.should.have.property('s', 'X\nX')
   })
 
+  it('should preserve numbers that evaluate to infinity as strings', function () {
+    var args = parser(['-n', '87e3202'])
+    args.should.have.property('n', '87e3202').and.be.a('string')
+  })
+
   it('should not convert numbers to type number if explicitly defined as strings', function () {
     var s = parser([ '-s', '0001234' ], {
       string: 's'
