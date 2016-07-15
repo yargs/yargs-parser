@@ -1263,6 +1263,60 @@ describe('yargs-parser', function () {
       parsed.verbose.should.equal(2)
       parsed.should.have.property('_').and.deep.equal(['moomoo'])
     })
+
+    it('should use a default value as is when no arg given', function () {
+      var parsed = parser([], {
+        count: 'v',
+        default: { v: 3 }
+      })
+      parsed.v.should.equal(3)
+
+      parsed = parser([], {
+        count: 'v',
+        default: { v: undefined }
+      })
+      expect(parsed.v).to.be.undefined
+
+      parsed = parser([], {
+        count: 'v',
+        default: { v: null }
+      })
+      expect(parsed.v).to.be.null
+
+      parsed = parser([], {
+        count: 'v',
+        default: { v: false }
+      })
+      parsed.v.should.equal(false)
+
+      parsed = parser([], {
+        count: 'v',
+        default: { v: 'hello' }
+      })
+      parsed.v.should.equal('hello')
+    })
+
+    it('should ignore a default value when arg given', function () {
+      var parsed = parser(['-vv', '-v', '-v'], {
+        count: 'v',
+        default: { v: 1 }
+      })
+      parsed.v.should.equal(4)
+    })
+
+    it('should increment regardless of arg value', function () {
+      var parsed = parser([
+        '-v',
+        '-v=true',
+        '-v', 'true',
+        '-v=false',
+        '-v', 'false',
+        '--no-v',
+        '-v=999',
+        '-v=foobar'
+      ], { count: 'v' })
+      parsed.v.should.equal(8)
+    })
   })
 
   describe('array', function () {
