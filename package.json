@@ -28,7 +28,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "coveralls": "^2.11.8",
-    "mocha": "^2.4.5",
+    "mocha": "^3.0.0",
     "nyc": "^7.0.0",
     "standard": "^7.1.0",
     "standard-version": "^2.1.2"
