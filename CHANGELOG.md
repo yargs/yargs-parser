@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/yargs/yargs-parser/compare/v2.4.1...v3.0.0) (2016-08-07)
+
+
+### Bug Fixes
+
+* parsing issue with numeric character in group of options ([#19](https://github.com/yargs/yargs-parser/issues/19)) ([f743236](https://github.com/yargs/yargs-parser/commit/f743236))
+* upgraded lodash.assign ([5d7fdf4](https://github.com/yargs/yargs-parser/commit/5d7fdf4))
+
+
+### BREAKING CHANGES
+
+* subtle change to how values are parsed in a group of single-character arguments.
+
+
+
 <a name="2.4.1"></a>
 ## [2.4.1](https://github.com/yargs/yargs-parser/compare/v2.4.0...v2.4.1) (2016-07-16)
 
