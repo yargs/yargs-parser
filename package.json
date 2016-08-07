@@ -7,7 +7,7 @@
     "pretest": "standard",
     "test": "nyc mocha test/*.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "version": "standard-version"
+    "release": "standard-version"
   },
   "repository": {
     "url": "git@github.com:yargs/yargs-parser.git"
