@@ -27,9 +27,9 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^3.5.0",
-    "coveralls": "^2.11.8",
-    "mocha": "^3.0.0",
-    "nyc": "^7.0.0",
+    "coveralls": "^2.11.12",
+    "mocha": "^3.0.1",
+    "nyc": "^7.1.0",
     "standard": "^7.1.0",
     "standard-version": "^2.1.2"
   },
