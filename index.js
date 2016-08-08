@@ -40,6 +40,7 @@ function parse (args, opts) {
     nargs: {},
     coercions: {}
   }
+  var negative = /^-[0-9]+(\.[0-9]+)?/
 
   ;[].concat(opts.array).filter(Boolean).forEach(function (key) {
     flags.arrays[key] = true
@@ -155,7 +156,8 @@ function parse (args, opts) {
       } else {
         next = args[i + 1]
 
-        if (next !== undefined && !next.match(/^-/) &&
+        if (next !== undefined && (!next.match(/^-/) ||
+          next.match(negative)) &&
           !checkAllAliases(key, flags.bools) &&
           !checkAllAliases(key, flags.counts)) {
           setArg(key, next)
@@ -186,7 +188,7 @@ function parse (args, opts) {
       } else {
         setArg(key, defaultForType(guessType(key, flags)))
       }
-    } else if (arg.match(/^-[^-]+/)) {
+    } else if (arg.match(/^-[^-]+/) && !arg.match(negative)) {
       letters = arg.slice(1, -1).split('')
       broken = false
 
@@ -247,7 +249,8 @@ function parse (args, opts) {
         } else {
           next = args[i + 1]
 
-          if (next !== undefined && !/^(-|--)[^-]/.test(next) &&
+          if (next !== undefined && (!/^(-|--)[^-]/.test(next) ||
+            next.match(negative)) &&
             !checkAllAliases(key, flags.bools) &&
             !checkAllAliases(key, flags.counts)) {
             setArg(key, next)
@@ -308,7 +311,7 @@ function parse (args, opts) {
   function eatArray (i, key, args) {
     var start = i + 1
     for (var ii = i + 1; ii < args.length; ii++) {
-      if (/^-/.test(args[ii])) {
+      if (/^-/.test(args[ii]) && !negative.test(args[ii])) {
         if (ii === start) {
           setArg(key, defaultForType('array'))
         }

@@ -127,6 +127,32 @@ describe('yargs-parser', function () {
     argv._[0].should.be.a('number')
   })
 
+  // addresses: https://github.com/yargs/yargs-parser/issues/33
+  it('should handle parsing negative #s', function () {
+    var argv = parser([
+      '-33', '-177', '33',
+      '--n1', '-33',
+      '-n', '-44',
+      '--n2=-55',
+      '--foo.bar', '-33',
+      '-o=-55',
+      '--bounds', '-180', '99', '-180', '90',
+      '--other', '-99', '-220'
+    ], {
+      array: 'bounds',
+      narg: {'other': 2}
+    })
+
+    argv._.should.deep.equal([-33, -177, 33])
+    argv.n1.should.equal(-33)
+    argv.n.should.equal(-44)
+    argv.n2.should.equal(-55)
+    argv.foo.bar.should.equal(-33)
+    argv.o.should.equal(-55)
+    argv.bounds.should.deep.equal([-180, 99, -180, 90])
+    argv.other.should.deep.equal([-99, -220])
+  })
+
   it('should set the value of a single short option to the next supplied value, even if the value is empty', function () {
     var parse = parser(['-p', ''])
     parse.should.have.property('p', '')
@@ -900,13 +926,6 @@ describe('yargs-parser', function () {
       argv.should.have.property('5', true)
       argv.should.have.property('n', 123)
       argv.should.have.property('_').with.length(0)
-    })
-
-    it('should set option "1" to true, option "2" to true, and option "3" to numeric value 456', function () {
-      var argv = parser([ '-123', '456' ])
-      argv.should.have.property('1', true)
-      argv.should.have.property('2', true)
-      argv.should.have.property('3', 456)
     })
   })
 
