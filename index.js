@@ -37,7 +37,8 @@ function parse (args, opts) {
     normalize: {},
     configs: {},
     defaulted: {},
-    nargs: {}
+    nargs: {},
+    coercions: {}
   }
 
   ;[].concat(opts.array).filter(Boolean).forEach(function (key) {
@@ -66,6 +67,10 @@ function parse (args, opts) {
 
   Object.keys(opts.narg || {}).forEach(function (k) {
     flags.nargs[k] = opts.narg[k]
+  })
+
+  Object.keys(opts.coerce || {}).forEach(function (k) {
+    flags.coercions[k] = opts.coerce[k]
   })
 
   if (Array.isArray(opts.config) || typeof opts.config === 'string') {
@@ -331,7 +336,7 @@ function parse (args, opts) {
     }
 
     var value = val
-    if (!checkAllAliases(key, flags.strings)) {
+    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
       if (isNumber(val)) value = Number(val)
       if (!isUndefined(val) && !isNumber(val) && checkAllAliases(key, flags.numbers)) value = NaN
     }
@@ -512,6 +517,13 @@ function parse (args, opts) {
     })
 
     var key = keys[keys.length - 1]
+    var coerce = checkAllAliases(key, flags.coercions)
+    if (coerce) {
+      coerce(value, function (err, val) {
+        error = err
+        value = val
+      })
+    }
 
     if (value === increment) {
       o[key] = increment(o[key])
