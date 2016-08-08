@@ -2025,4 +2025,14 @@ describe('yargs-parser', function () {
       parsed.error.message.should.equal('banana')
     })
   })
+
+  // see: https://github.com/yargs/yargs-parser/issues/37
+  it('normalizes all paths in array when provided via config object', function () {
+    var argv = parser([ '--foo', 'bar' ], {
+      array: ['a'],
+      normalize: ['a'],
+      configObjects: [{'a': ['bin/../a.txt', 'bin/../b.txt']}]
+    })
+    argv.a.should.deep.equal(['a.txt', 'b.txt'])
+  })
 })
