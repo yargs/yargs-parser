@@ -1933,4 +1933,77 @@ describe('yargs-parser', function () {
     parsed.f.should.deep.equal([])
     parsed.files.should.deep.equal([])
   })
+
+  describe('coerce', function () {
+    it('applies coercion function to simple arguments', function () {
+      var parsed = parser(['--foo', '99'], {
+        coerce: {
+          foo: function (arg, cb) {
+            return cb(null, arg * -1)
+          }
+        }
+      })
+      parsed.foo.should.equal(-99)
+    })
+
+    it('applies coercion function to aliases', function () {
+      var parsed = parser(['--foo', '99'], {
+        coerce: {
+          f: function (arg, cb) {
+            return cb(null, arg * -1)
+          }
+        },
+        alias: {
+          f: ['foo']
+        }
+      })
+      parsed.foo.should.equal(-99)
+      parsed.f.should.equal(-99)
+    })
+
+    it('applies coercion function to an array', function () {
+      var parsed = parser(['--foo', '99', '-f', '33'], {
+        coerce: {
+          f: function (arg, cb) {
+            return cb(null, arg * -1)
+          }
+        },
+        array: ['foo'],
+        alias: {
+          f: ['foo']
+        }
+      })
+      parsed.f.should.deep.equal([-99, -33])
+      parsed.foo.should.deep.equal([-99, -33])
+    })
+
+    // see: https://github.com/yargs/yargs/issues/550
+    it('coercion function can be used to parse large #s', function () {
+      var fancyNumberParser = function (arg, cb) {
+        if (arg.length > 10) return cb(null, arg)
+        else return cb(null, parseInt(arg))
+      }
+      var parsed = parser(['--foo', '88888889999990000998989898989898', '--bar', '998'], {
+        coerce: {
+          foo: fancyNumberParser,
+          bar: fancyNumberParser
+        }
+      })
+      ;(typeof parsed.foo).should.equal('string')
+      parsed.foo.should.equal('88888889999990000998989898989898')
+      ;(typeof parsed.bar).should.equal('number')
+      parsed.bar.should.equal(998)
+    })
+
+    it('populates argv.error, if an error is returned', function () {
+      var parsed = parser.detailed(['--foo', '99'], {
+        coerce: {
+          foo: function (arg, cb) {
+            return cb(Error('banana'), arg * -1)
+          }
+        }
+      })
+      parsed.error.message.should.equal('banana')
+    })
+  })
 })
