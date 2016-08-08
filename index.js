@@ -594,9 +594,9 @@ function parse (args, opts) {
   function guessType (key, flags) {
     var type = 'boolean'
 
-    if (flags.strings && flags.strings[key]) type = 'string'
-    else if (flags.numbers && flags.numbers[key]) type = 'number'
-    else if (flags.arrays && flags.arrays[key]) type = 'array'
+    if (checkAllAliases(key, flags.strings)) type = 'string'
+    else if (checkAllAliases(key, flags.numbers)) type = 'number'
+    else if (checkAllAliases(key, flags.arrays)) type = 'array'
 
     return type
   }

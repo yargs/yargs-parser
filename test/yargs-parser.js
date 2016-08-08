@@ -1903,4 +1903,34 @@ describe('yargs-parser', function () {
       })
     })
   })
+
+  // addresses: https://github.com/yargs/yargs-parser/issues/41
+  it('defaults to empty array if array option is provided no values', function () {
+    var parsed = parser(['-f'], {
+      'alias': {
+        'f': 'files'
+      },
+      'array': ['files']
+    })
+    parsed.f.should.deep.equal([])
+    parsed.files.should.deep.equal([])
+
+    parsed = parser(['--files'], {
+      'alias': {
+        'f': 'files'
+      },
+      'array': ['files']
+    })
+    parsed.f.should.deep.equal([])
+    parsed.files.should.deep.equal([])
+
+    parsed = parser(['-f', '-y'], {
+      'alias': {
+        'f': 'files'
+      },
+      'array': ['files']
+    })
+    parsed.f.should.deep.equal([])
+    parsed.files.should.deep.equal([])
+  })
 })
