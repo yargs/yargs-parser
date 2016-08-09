@@ -28,10 +28,10 @@ All notable changes to this project will be documented in this file. See [standa
 * parsing issue with numeric character in group of options ([#19](https://github.com/yargs/yargs-parser/issues/19)) ([f743236](https://github.com/yargs/yargs-parser/commit/f743236))
 * upgraded lodash.assign ([5d7fdf4](https://github.com/yargs/yargs-parser/commit/5d7fdf4))
 
-
 ### BREAKING CHANGES
 
 * subtle change to how values are parsed in a group of single-character arguments.
+* _first released in 3.1.0, better handling of negative values should be considered a breaking change._
 
 
 
