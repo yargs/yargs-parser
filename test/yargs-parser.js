@@ -1957,8 +1957,8 @@ describe('yargs-parser', function () {
     it('applies coercion function to simple arguments', function () {
       var parsed = parser(['--foo', '99'], {
         coerce: {
-          foo: function (arg, cb) {
-            return cb(null, arg * -1)
+          foo: function (arg) {
+            return arg * -1
           }
         }
       })
@@ -1968,8 +1968,8 @@ describe('yargs-parser', function () {
     it('applies coercion function to aliases', function () {
       var parsed = parser(['--foo', '99'], {
         coerce: {
-          f: function (arg, cb) {
-            return cb(null, arg * -1)
+          f: function (arg) {
+            return arg * -1
           }
         },
         alias: {
@@ -1983,8 +1983,8 @@ describe('yargs-parser', function () {
     it('applies coercion function to an array', function () {
       var parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
-          f: function (arg, cb) {
-            return cb(null, arg * -1)
+          f: function (arg) {
+            return arg * -1
           }
         },
         array: ['foo'],
@@ -1998,9 +1998,9 @@ describe('yargs-parser', function () {
 
     // see: https://github.com/yargs/yargs/issues/550
     it('coercion function can be used to parse large #s', function () {
-      var fancyNumberParser = function (arg, cb) {
-        if (arg.length > 10) return cb(null, arg)
-        else return cb(null, parseInt(arg))
+      var fancyNumberParser = function (arg) {
+        if (arg.length > 10) return arg
+        else return parseInt(arg)
       }
       var parsed = parser(['--foo', '88888889999990000998989898989898', '--bar', '998'], {
         coerce: {
@@ -2017,8 +2017,8 @@ describe('yargs-parser', function () {
     it('populates argv.error, if an error is returned', function () {
       var parsed = parser.detailed(['--foo', '99'], {
         coerce: {
-          foo: function (arg, cb) {
-            return cb(Error('banana'), arg * -1)
+          foo: function (arg) {
+            throw Error('banana')
           }
         }
       })

@@ -54,8 +54,8 @@ Parses command line arguments returning a simple mapping of keys and values.
   * `opts.array`: indicate that keys should be parsed as an array: `{array: ['foo', 'bar']}`.
   * `opts.boolean`: arguments should be parsed as booleans: `{boolean: ['x', 'y']}`.
   * `opts.config`: indicate a key that represents a path to a configuration file (this file will be loaded and parsed).
-  * `opts.coerce`: provide a custom function to coerce a value from the argument provided,
-    e.g., `{coerce: {foo: function (arg, cb) {return cb(err, modifiedArg)}}}`.
+  * `opts.coerce`: provide a custom synchronous function that returns a coerced value from the argument provided
+    (or throws an error), e.g. `{coerce: {foo: function (arg) {return modifiedArg}}}`.
   * `opts.count`: indicate a key that should be used as a counter, e.g., `-vvv` = `{v: 3}`.
   * `opts.default`: provide default values for keys: `{default: {x: 33, y: 'hello world!'}}`.
   * `opts.envPrefix`: environment variables (`process.env`) with the prefix provided should be parsed.

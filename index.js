@@ -521,11 +521,12 @@ function parse (args, opts) {
 
     var key = keys[keys.length - 1]
     var coerce = checkAllAliases(key, flags.coercions)
-    if (coerce) {
-      coerce(value, function (err, val) {
+    if (typeof coerce === 'function') {
+      try {
+        value = coerce(value)
+      } catch (err) {
         error = err
-        value = val
-      })
+      }
     }
 
     if (value === increment) {
