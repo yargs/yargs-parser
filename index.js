@@ -351,7 +351,8 @@ function parse (args, opts) {
 
     // Set normalized value when key is in 'normalize' and in 'arrays'
     if (checkAllAliases(key, flags.normalize) && checkAllAliases(key, flags.arrays)) {
-      value = path.normalize(val)
+      if (Array.isArray(val)) value = val.map(path.normalize)
+      else value = path.normalize(val)
     }
 
     var splitKey = key.split('.')
