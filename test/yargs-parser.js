@@ -1980,11 +1980,28 @@ describe('yargs-parser', function () {
       parsed.f.should.equal(-99)
     })
 
-    it('applies coercion function to an array', function () {
+    it('applies coercion function to an implicit array', function () {
       var parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
           f: function (arg) {
             return arg * -1
+          }
+        },
+        alias: {
+          f: ['foo']
+        }
+      })
+      parsed.f.should.deep.equal([-99, -33])
+      parsed.foo.should.deep.equal([-99, -33])
+    })
+
+    it('applies coercion function to an explicit array', function () {
+      var parsed = parser(['--foo', '99', '-f', '33'], {
+        coerce: {
+          f: function (arg) {
+            return arg.map(function (a) {
+              return a * -1
+            })
           }
         },
         array: ['foo'],
@@ -2014,7 +2031,7 @@ describe('yargs-parser', function () {
       parsed.bar.should.equal(998)
     })
 
-    it('populates argv.error, if an error is returned', function () {
+    it('populates argv.error, if an error is thrown', function () {
       var parsed = parser.detailed(['--foo', '99'], {
         coerce: {
           foo: function (arg) {
@@ -2023,6 +2040,18 @@ describe('yargs-parser', function () {
         }
       })
       parsed.error.message.should.equal('banana')
+    })
+
+    it('populates argv.error, if an error is thrown for an explicit array', function () {
+      var parsed = parser.detailed(['--foo', '99'], {
+        array: ['foo'],
+        coerce: {
+          foo: function (arg) {
+            throw Error('foo is array: ' + Array.isArray(arg))
+          }
+        }
+      })
+      parsed.error.message.should.equal('foo is array: true')
     })
   })
 
