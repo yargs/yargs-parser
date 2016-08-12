@@ -2013,6 +2013,19 @@ describe('yargs-parser', function () {
       parsed.foo.should.deep.equal([-99, -33])
     })
 
+    it('applies coercion function to _', function () {
+      var parsed = parser(['99', '33'], {
+        coerce: {
+          _: function (arg) {
+            return arg.map(function (a) {
+              return a * -1
+            })
+          }
+        }
+      })
+      parsed._.should.deep.equal([-99, -33])
+    })
+
     // see: https://github.com/yargs/yargs/issues/550
     it('coercion function can be used to parse large #s', function () {
       var fancyNumberParser = function (arg) {

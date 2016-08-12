@@ -486,7 +486,7 @@ function parse (args, opts) {
   function applyArrayCoercions (argv) {
     var coerce
     Object.keys(argv).filter(function (key) {
-      return checkAllAliases(key, flags.arrays)
+      return key === '_' || checkAllAliases(key, flags.arrays)
     }).forEach(function (key) {
       coerce = checkAllAliases(key, flags.coercions)
       if (typeof coerce === 'function') {
