@@ -280,6 +280,7 @@ function parse (args, opts) {
   setConfig(argv)
   setConfigObjects()
   applyEnvVars(argv, false)
+  applyArrayCoercions(argv)
   applyDefaultsAndAliases(argv, flags.aliases, defaults)
 
   // for any counts either not in args or without an explicit default, set to 0
@@ -482,6 +483,22 @@ function parse (args, opts) {
     })
   }
 
+  function applyArrayCoercions (argv) {
+    var coerce
+    Object.keys(argv).filter(function (key) {
+      return key === '_' || checkAllAliases(key, flags.arrays)
+    }).forEach(function (key) {
+      coerce = checkAllAliases(key, flags.coercions)
+      if (typeof coerce === 'function') {
+        try {
+          argv[key] = coerce(argv[key])
+        } catch (err) {
+          error = err
+        }
+      }
+    })
+  }
+
   function applyDefaultsAndAliases (obj, aliases, defaults) {
     Object.keys(defaults).forEach(function (key) {
       if (!hasKey(obj, key.split('.'))) {
@@ -521,7 +538,7 @@ function parse (args, opts) {
     })
 
     var key = keys[keys.length - 1]
-    var coerce = checkAllAliases(key, flags.coercions)
+    var coerce = !checkAllAliases(key, flags.arrays) && checkAllAliases(key, flags.coercions)
     if (typeof coerce === 'function') {
       try {
         value = coerce(value)
