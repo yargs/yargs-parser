@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.2.0"></a>
+# [3.2.0](https://github.com/yargs/yargs-parser/compare/v3.1.0...v3.2.0) (2016-08-13)
+
+
+### Features
+
+* coerce full array instead of each element ([#51](https://github.com/yargs/yargs-parser/issues/51)) ([cc4dc56](https://github.com/yargs/yargs-parser/commit/cc4dc56))
+
+
+
 <a name="3.1.0"></a>
 # [3.1.0](https://github.com/yargs/yargs-parser/compare/v3.0.0...v3.1.0) (2016-08-09)
 
