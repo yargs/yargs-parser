@@ -1984,7 +1984,8 @@ describe('yargs-parser', function () {
       var parsed = parser(['--foo.bar', 'nananana'], {
         coerce: {
           foo: function (val) {
-            return val + ', batman!'
+            val.bar += ', batman!'
+            return val
           }
         }
       })
@@ -1995,7 +1996,9 @@ describe('yargs-parser', function () {
       var parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
           f: function (arg) {
-            return arg * -1
+            return arg.map(function (a) {
+              return a * -1
+            })
           }
         },
         alias: {
