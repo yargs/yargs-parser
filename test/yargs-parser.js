@@ -1980,11 +1980,25 @@ describe('yargs-parser', function () {
       parsed.f.should.equal(-99)
     })
 
+    it('applies coercion function to all dot options', function () {
+      var parsed = parser(['--foo.bar', 'nananana'], {
+        coerce: {
+          foo: function (val) {
+            val.bar += ', batman!'
+            return val
+          }
+        }
+      })
+      parsed.foo.bar.should.equal('nananana, batman!')
+    })
+
     it('applies coercion function to an implicit array', function () {
       var parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
           f: function (arg) {
-            return arg * -1
+            return arg.map(function (a) {
+              return a * -1
+            })
           }
         },
         alias: {
