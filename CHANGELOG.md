@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/yargs/yargs-parser/compare/v3.2.0...v4.0.0) (2016-09-26)
+
+
+### Bug Fixes
+
+* coerce should be applied to the final objects and arrays created ([#57](https://github.com/yargs/yargs-parser/issues/57)) ([4ca69da](https://github.com/yargs/yargs-parser/commit/4ca69da))
+
+
+### BREAKING CHANGES
+
+* coerce is no longer applied to individual arguments in an implicit array.
+
+
+
 <a name="3.2.0"></a>
 # [3.2.0](https://github.com/yargs/yargs-parser/compare/v3.1.0...v3.2.0) (2016-08-13)
 
