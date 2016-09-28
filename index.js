@@ -1,4 +1,4 @@
-var assign = require('lodash.assign')
+var assign = require('object-assign')
 var camelCase = require('camelcase')
 var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
@@ -11,7 +11,7 @@ function parse (args, opts) {
   args = tokenizeArgString(args)
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
-  var configuration = assign({}, {
+  var configuration = assign({
     'short-option-groups': true,
     'camel-case-expansion': true,
     'dot-notation': true,
