@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.1"></a>
+## [4.0.1](https://github.com/yargs/yargs-parser/compare/v4.0.0...v4.0.1) (2016-09-30)
+
+
+### Bug Fixes
+
+* lodash.assign was deprecated ([#59](https://github.com/yargs/yargs-parser/issues/59)) ([5e7eb11](https://github.com/yargs/yargs-parser/commit/5e7eb11))
+
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/yargs/yargs-parser/compare/v3.2.0...v4.0.0) (2016-09-26)
 
