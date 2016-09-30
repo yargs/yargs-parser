@@ -1,4 +1,3 @@
-var assign = require('lodash.assign')
 var camelCase = require('camelcase')
 var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
@@ -11,7 +10,7 @@ function parse (args, opts) {
   args = tokenizeArgString(args)
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
-  var configuration = assign({}, {
+  var configuration = assign({
     'short-option-groups': true,
     'camel-case-expansion': true,
     'dot-notation': true,
@@ -690,6 +689,20 @@ function combineAliases (aliases) {
   })
 
   return combined
+}
+
+function assign (defaults, configuration) {
+  var o = {}
+  configuration = configuration || {}
+
+  Object.keys(configuration).forEach(function (k) {
+    o[k] = configuration[k]
+  })
+  Object.keys(defaults).forEach(function (k) {
+    if (o[k] === undefined) o[k] = defaults[k]
+  })
+
+  return o
 }
 
 // this function should only be called when a count is given as an arg
