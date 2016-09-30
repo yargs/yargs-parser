@@ -34,8 +34,7 @@
     "standard-version": "^2.1.2"
   },
   "dependencies": {
-    "camelcase": "^3.0.0",
-    "lodash.assign": "^4.1.0"
+    "camelcase": "^3.0.0"
   },
   "files": [
     "lib",
