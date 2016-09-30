@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.2"></a>
+## [4.0.2](https://github.com/yargs/yargs-parser/compare/v4.0.1...v4.0.2) (2016-09-30)
+
+
+### Bug Fixes
+
+* whoops, let's make the assign not change the Object key order ([29d069a](https://github.com/yargs/yargs-parser/commit/29d069a))
+
+
+
 <a name="4.0.1"></a>
 ## [4.0.1](https://github.com/yargs/yargs-parser/compare/v4.0.0...v4.0.1) (2016-09-30)
 
