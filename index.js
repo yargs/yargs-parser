@@ -695,11 +695,11 @@ function assign (defaults, configuration) {
   var o = {}
   configuration = configuration || {}
 
+  Object.keys(defaults).forEach(function (k) {
+    o[k] = defaults[k]
+  })
   Object.keys(configuration).forEach(function (k) {
     o[k] = configuration[k]
-  })
-  Object.keys(defaults).forEach(function (k) {
-    if (o[k] === undefined) o[k] = defaults[k]
   })
 
   return o
