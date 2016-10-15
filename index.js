@@ -540,7 +540,7 @@ function parse (args, opts) {
       o[key] = increment(o[key])
     } else if (o[key] === undefined && checkAllAliases(key, flags.arrays)) {
       o[key] = Array.isArray(value) ? value : [value]
-    } else if (o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
+    } else if (o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts)) {
       o[key] = value
     } else if (Array.isArray(o[key])) {
       o[key].push(value)

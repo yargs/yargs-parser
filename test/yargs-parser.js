@@ -198,6 +198,18 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').and.deep.equal(['one', 'two', 'three'])
   })
 
+  it('should correctly parse dot-notation boolean flags', function () {
+    var parse = parser(['--nested', '--n.v', '--n.y', 'foo'], {
+      boolean: ['nested', 'n.v']
+    })
+
+    parse.should.have.property('nested', true).and.be.a('boolean')
+    parse.should.have.property('n').and.deep.equal({
+      v: true,
+      y: 'foo'
+    })
+  })
+
   it('should preserve newlines in option values', function () {
     var args = parser(['-s', 'X\nX'])
     args.should.have.property('_').with.length(0)
