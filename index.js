@@ -279,8 +279,8 @@ function parse (args, opts) {
   setConfig(argv)
   setConfigObjects()
   applyEnvVars(argv, false)
-  applyCoercions(argv)
   applyDefaultsAndAliases(argv, flags.aliases, defaults)
+  applyCoercions(argv)
 
   // for any counts either not in args or without an explicit default, set to 0
   Object.keys(flags.counts).forEach(function (key) {
