@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.1.0"></a>
+# [4.1.0](https://github.com/yargs/yargs-parser/compare/v4.0.2...v4.1.0) (2016-11-07)
+
+
+### Features
+
+* apply coercions to default options ([#65](https://github.com/yargs/yargs-parser/issues/65)) ([c79052b](https://github.com/yargs/yargs-parser/commit/c79052b))
+* handle dot notation boolean options ([#63](https://github.com/yargs/yargs-parser/issues/63)) ([02c3545](https://github.com/yargs/yargs-parser/commit/02c3545))
+
+
+
 <a name="4.0.2"></a>
 ## [4.0.2](https://github.com/yargs/yargs-parser/compare/v4.0.1...v4.0.2) (2016-09-30)
 
