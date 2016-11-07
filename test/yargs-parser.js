@@ -2004,6 +2004,18 @@ describe('yargs-parser', function () {
       parsed.foo.bar.should.equal('nananana, batman!')
     })
 
+    it('applies coercion to defaults', function () {
+      var parsed = parser([], {
+        default: { foo: 'bar' },
+        coerce: {
+          foo: function (val) {
+            return val.toUpperCase()
+          }
+        }
+      })
+      parsed.foo.should.equal('BAR')
+    })
+
     it('applies coercion function to an implicit array', function () {
       var parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
