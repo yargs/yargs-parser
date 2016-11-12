@@ -1933,6 +1933,27 @@ describe('yargs-parser', function () {
         expect(parsed.dice).to.equal(undefined)
       })
     })
+
+    describe('duplicate arguments array', function () {
+      it('adds duplicate argument to array', function () {
+        var parsed = parser('-x a -x b', {
+          configuration: {
+            'duplicate-arguments-array': true
+          }
+        })
+
+        parsed['x'].should.deep.equal(['a', 'b'])
+      })
+      it('keeps only last argument', function () {
+        var parsed = parser('-x a -x b', {
+          configuration: {
+            'duplicate-arguments-array': false
+          }
+        })
+
+        parsed['x'].should.equal('b')
+      })
+    })
   })
 
   // addresses: https://github.com/yargs/yargs-parser/issues/41

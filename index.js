@@ -15,7 +15,8 @@ function parse (args, opts) {
     'camel-case-expansion': true,
     'dot-notation': true,
     'parse-numbers': true,
-    'boolean-negation': true
+    'boolean-negation': true,
+    'duplicate-arguments-array': true
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -544,8 +545,10 @@ function parse (args, opts) {
       o[key] = value
     } else if (Array.isArray(o[key])) {
       o[key].push(value)
-    } else {
+    } else if (configuration['duplicate-arguments-array']) {
       o[key] = [ o[key], value ]
+    } else {
+      o[key] = value
     }
   }
 
