@@ -1954,6 +1954,39 @@ describe('yargs-parser', function () {
         parsed['x'].should.equal('b')
       })
     })
+
+    describe('flatten duplicate arrays', function () {
+      it('flattens duplicate array type', function () {
+        var parsed = parser('-x a b -x c d', {
+          array: ['x'],
+          configuration: {
+            'flatten-duplicate-arrays': true
+          }
+        })
+
+        parsed['x'].should.deep.equal(['a', 'b', 'c', 'd'])
+      })
+      it('nests duplicate array types', function () {
+        var parsed = parser('-x a b -x c d', {
+          array: ['x'],
+          configuration: {
+            'flatten-duplicate-arrays': false
+          }
+        })
+
+        parsed['x'].should.deep.equal([['a', 'b'], ['c', 'd']])
+      })
+      it('doesn\'t nests single arrays', function () {
+        var parsed = parser('-x a b', {
+          array: ['x'],
+          configuration: {
+            'flatten-duplicate-arrays': false
+          }
+        })
+
+        parsed['x'].should.deep.equal(['a', 'b'])
+      })
+    })
   })
 
   // addresses: https://github.com/yargs/yargs-parser/issues/41

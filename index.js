@@ -16,7 +16,8 @@ function parse (args, opts) {
     'dot-notation': true,
     'parse-numbers': true,
     'boolean-negation': true,
-    'duplicate-arguments-array': true
+    'duplicate-arguments-array': true,
+    'flatten-duplicate-arrays': true
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -311,15 +312,25 @@ function parse (args, opts) {
   // e.g., --foo apple banana cat becomes ["apple", "banana", "cat"]
   function eatArray (i, key, args) {
     var start = i + 1
+    var argsToSet = []
+    var multipleArrayFlag = i > 0
     for (var ii = i + 1; ii < args.length; ii++) {
       if (/^-/.test(args[ii]) && !negative.test(args[ii])) {
         if (ii === start) {
           setArg(key, defaultForType('array'))
         }
+        multipleArrayFlag = true
         break
       }
       i = ii
-      setArg(key, args[ii])
+      argsToSet.push(args[ii])
+    }
+    if (multipleArrayFlag && !configuration['flatten-duplicate-arrays']) {
+      setArg(key, argsToSet)
+    } else {
+      argsToSet.forEach(function (arg) {
+        setArg(key, arg)
+      })
     }
 
     return i
@@ -540,7 +551,7 @@ function parse (args, opts) {
     if (value === increment) {
       o[key] = increment(o[key])
     } else if (o[key] === undefined && checkAllAliases(key, flags.arrays)) {
-      o[key] = Array.isArray(value) ? value : [value]
+      o[key] = Array.isArray(value) && configuration['flatten-duplicate-arrays'] ? value : [value]
     } else if (o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts)) {
       o[key] = value
     } else if (Array.isArray(o[key])) {
