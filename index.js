@@ -440,7 +440,10 @@ function parse (args, opts) {
       var value = config[key]
       var fullKey = prev ? prev + '.' + key : key
 
-      if (Object.prototype.toString.call(value) === '[object Object]') {
+      // if the value is an inner object and we have dot-notation
+      // enabled, treat inner objects in config the same as
+      // heavily nested dot notations (foo.bar.apple).
+      if (typeof value === 'object' && !Array.isArray(value) && configuration['dot-notation']) {
         // if the value is an object but not an array, check nested object
         setConfigObject(value, fullKey)
       } else {
