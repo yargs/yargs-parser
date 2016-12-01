@@ -243,7 +243,7 @@ node example.js -x 1 2 -x 3 4
 _if disabled:_
 
 ```sh
-node example.js -x 1 -x 2
+node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
 ```
 
