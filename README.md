@@ -174,7 +174,7 @@ node example.js --foo.bar
 ### parse numbers
 
 * default: `true`
-* key: 'parse-numbers'
+* key: `parse-numbers`
 
 Should keys that look like numbers be treated as such?
 
@@ -193,7 +193,7 @@ node example.js --foo=99.3
 ### boolean negation
 
 * default: `true`
-* key: 'boolean-negation'
+* key: `boolean-negation`
 
 Should variables prefixed with `--no` be treated as negations?
 
@@ -212,7 +212,7 @@ node example.js --no-foo
 ### duplicate arguments array
 
 * default: `true`
-* key: 'duplicate-arguments-array'
+* key: `duplicate-arguments-array`
 
 Should arguments be coerced into an array when duplicated:
 
@@ -231,7 +231,7 @@ node example.js -x 1 -x 2
 ### flatten duplicate arrays
 
 * default: `true`
-* key: 'flatten-duplicate-arrays'
+* key: `flatten-duplicate-arrays`
 
 Should array arguments be coerced into a single array when duplicated:
 
