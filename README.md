@@ -209,6 +209,44 @@ node example.js --no-foo
 { _: [], "no-foo": true }
 ```
 
+### duplicate arguments array
+
+* default: `true`
+* key: 'duplicate-arguments-array'
+
+Should arguments be coerced into an array when duplicated:
+
+```sh
+node example.js -x 1 -x 2
+{ _: [], x: [1, 2] }
+```
+
+_if disabled:_
+
+```sh
+node example.js -x 1 -x 2
+{ _: [], x: 2 }
+```
+
+### flatten duplicate arrays
+
+* default: `true`
+* key: 'flatten-duplicate-arrays'
+
+Should array arguments be coerced into a single array when duplicated:
+
+```sh
+node example.js -x 1 2 -x 3 4
+{ _: [], x: [1, 2, 3, 4] }
+```
+
+_if disabled:_
+
+```sh
+node example.js -x 1 -x 2
+{ _: [], x: [[1, 2], [3, 4]] }
+```
+
 ## Special Thanks
 
 The yargs project evolves from optimist and minimist. It owes its
