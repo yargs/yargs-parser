@@ -1886,6 +1886,31 @@ describe('yargs-parser', function () {
         expect(parsed['foo.bar']).to.equal('banana')
         expect(parsed).not.to.include.keys('f.bar')
       })
+
+      // addresses https://github.com/yargs/yargs/issues/716
+      it('does not append nested-object keys from config to top-level key', function () {
+        var parsed = parser([], {
+          alias: {
+            'foo': ['f']
+          },
+          configuration: {
+            'dot-notation': false
+          },
+          configObjects: [
+            {
+              'website.com': {
+                a: 'b',
+                b: 'c'
+              }
+            }
+          ]
+        })
+
+        parsed['website.com'].should.deep.equal({
+          a: 'b',
+          b: 'c'
+        })
+      })
     })
 
     describe('parse numbers', function () {
