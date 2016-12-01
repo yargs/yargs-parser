@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/yargs/yargs-parser/compare/v4.1.0...v4.2.0) (2016-12-01)
+
+
+### Bug Fixes
+
+* inner objects in configs had their keys appended to top-level key when dot-notation was disabled ([#72](https://github.com/yargs/yargs-parser/issues/72)) ([0b1b5f9](https://github.com/yargs/yargs-parser/commit/0b1b5f9))
+
+
+### Features
+
+* allow multiple arrays to be provided, rather than always combining ([#71](https://github.com/yargs/yargs-parser/issues/71)) ([0f0fb2d](https://github.com/yargs/yargs-parser/commit/0f0fb2d))
+
+
+
 <a name="4.1.0"></a>
 # [4.1.0](https://github.com/yargs/yargs-parser/compare/v4.0.2...v4.1.0) (2016-11-07)
 
