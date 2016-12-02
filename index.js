@@ -326,7 +326,9 @@ function parse (args, opts) {
       argsToSet.push(args[ii])
     }
     if (multipleArrayFlag) {
-      setArg(key, argsToSet.map(arg => processValue(key, arg)))
+      setArg(key, argsToSet.map(function (arg) {
+        return processValue(key, arg)
+      }))
     } else {
       argsToSet.forEach(function (arg) {
         setArg(key, arg)
@@ -557,142 +559,22 @@ function parse (args, opts) {
     var key = keys[keys.length - 1]
 
     var isTypeArray = checkAllAliases(key, flags.arrays)
-    var isOldValueArray = Array.isArray(o[key])
-    var isNewValueArray = Array.isArray(value)
+    var isValueArray = Array.isArray(value)
     var duplicate = configuration['duplicate-arguments-array']
-    var flatten = configuration['flatten-duplicate-arrays']
 
     if (value === increment) {
       o[key] = increment(o[key])
-    } else if (o[key] === undefined && checkAllAliases(key, flags.arrays)) {
-      o[key] = Array.isArray(value) ? value : [value]
-    } else if (o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts)) {
-      o[key] = value
     } else if (Array.isArray(o[key])) {
-      if (!duplicate && !flatten) {
-        if (isTypeArray) {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              o[key] = value
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              throw new Error('this should not happen')
-            }
-          }
-        } else {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              throw new Error('this should not happen')
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              o[key] = value
-            }
-          }
-        }
-      } else if (!duplicate && flatten) {
-        if (isTypeArray) {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              o[key] = value
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              throw new Error('this should not happen')
-            }
-          }
-        } else {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              o[key] = value
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              o[key] = value
-            }
-          }
-        }
-      } else if (duplicate && flatten) {
-        if (isTypeArray) {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              o[key] = o[key].concat(value)
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              throw new Error('this should not happen')
-            }
-          }
-        } else {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          }
-        }
-      } else if (duplicate && !flatten) {
-        if (isTypeArray) {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              o[key] = [o[key]].concat([value])
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              throw new Error('this should not happen')
-            }
-          }
-        } else {
-          if (isOldValueArray) {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          } else {
-            if (isNewValueArray) {
-              throw new Error('this should not happen')
-            } else {
-              o[key] = o[key].concat([value])
-            }
-          }
-        }
+      if (duplicate && isTypeArray && isValueArray) {
+        o[key] = configuration['flatten-duplicate-arrays'] ? o[key].concat(value) : [o[key]].concat([value])
+      } else if (!duplicate && Boolean(isTypeArray) === Boolean(isValueArray)) {
+        o[key] = value
       } else {
-        throw new Error('this should not happen')
+        o[key] = o[key].concat([value])
       }
-    } else if (configuration['duplicate-arguments-array']) {
+    } else if (o[key] === undefined && isTypeArray) {
+      o[key] = isValueArray ? value : [value]
+    } else if (duplicate && !(o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts))) {
       o[key] = [ o[key], value ]
     } else {
       o[key] = value
