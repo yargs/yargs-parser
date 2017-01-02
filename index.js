@@ -325,8 +325,10 @@ function parse (args, opts) {
       i = ii
       argsToSet.push(args[ii])
     }
-    if (multipleArrayFlag && !configuration['flatten-duplicate-arrays']) {
-      setArg(key, argsToSet)
+    if (multipleArrayFlag) {
+      setArg(key, argsToSet.map(function (arg) {
+        return processValue(key, arg)
+      }))
     } else {
       argsToSet.forEach(function (arg) {
         setArg(key, arg)
@@ -339,33 +341,13 @@ function parse (args, opts) {
   function setArg (key, val) {
     unsetDefaulted(key)
 
-    // handle parsing boolean arguments --foo=true --bar false.
-    if (checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
-      if (typeof val === 'string') val = val === 'true'
-    }
-
     if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length) && configuration['camel-case-expansion']) {
       var c = camelCase(key)
       flags.aliases[key] = [c]
       newAliases[c] = true
     }
 
-    var value = val
-    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
-      if (isNumber(val)) value = Number(val)
-      if (!isUndefined(val) && !isNumber(val) && checkAllAliases(key, flags.numbers)) value = NaN
-    }
-
-    // increment a count given as arg (either no value or value parsed as boolean)
-    if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
-      value = increment
-    }
-
-    // Set normalized value when key is in 'normalize' and in 'arrays'
-    if (checkAllAliases(key, flags.normalize) && checkAllAliases(key, flags.arrays)) {
-      if (Array.isArray(val)) value = val.map(path.normalize)
-      else value = path.normalize(val)
-    }
+    var value = processValue(key, val)
 
     var splitKey = key.split('.')
     setKey(argv, splitKey, value)
@@ -405,6 +387,31 @@ function parse (args, opts) {
         })
       })
     }
+  }
+
+  function processValue (key, val) {
+    // handle parsing boolean arguments --foo=true --bar false.
+    if (checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
+      if (typeof val === 'string') val = val === 'true'
+    }
+
+    var value = val
+    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
+      if (isNumber(val)) value = Number(val)
+      if (!isUndefined(val) && !isNumber(val) && checkAllAliases(key, flags.numbers)) value = NaN
+    }
+
+    // increment a count given as arg (either no value or value parsed as boolean)
+    if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
+      value = increment
+    }
+
+    // Set normalized value when key is in 'normalize' and in 'arrays'
+    if (checkAllAliases(key, flags.normalize) && checkAllAliases(key, flags.arrays)) {
+      if (Array.isArray(val)) value = val.map(path.normalize)
+      else value = path.normalize(val)
+    }
+    return value
   }
 
   // set args from config.json file, this should be
@@ -551,15 +558,23 @@ function parse (args, opts) {
 
     var key = keys[keys.length - 1]
 
+    var isTypeArray = checkAllAliases(key, flags.arrays)
+    var isValueArray = Array.isArray(value)
+    var duplicate = configuration['duplicate-arguments-array']
+
     if (value === increment) {
       o[key] = increment(o[key])
-    } else if (o[key] === undefined && checkAllAliases(key, flags.arrays)) {
-      o[key] = Array.isArray(value) && configuration['flatten-duplicate-arrays'] ? value : [value]
-    } else if (o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts)) {
-      o[key] = value
     } else if (Array.isArray(o[key])) {
-      o[key].push(value)
-    } else if (configuration['duplicate-arguments-array']) {
+      if (duplicate && isTypeArray && isValueArray) {
+        o[key] = configuration['flatten-duplicate-arrays'] ? o[key].concat(value) : [o[key]].concat([value])
+      } else if (!duplicate && Boolean(isTypeArray) === Boolean(isValueArray)) {
+        o[key] = value
+      } else {
+        o[key] = o[key].concat([value])
+      }
+    } else if (o[key] === undefined && isTypeArray) {
+      o[key] = isValueArray ? value : [value]
+    } else if (duplicate && !(o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts))) {
       o[key] = [ o[key], value ]
     } else {
       o[key] = value

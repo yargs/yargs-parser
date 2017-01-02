@@ -1374,9 +1374,14 @@ describe('yargs-parser', function () {
   })
 
   describe('array', function () {
-    it('should group values into an array if the same option is specified multiple times', function () {
-      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'])
+    it('should group values into an array if the same option is specified multiple times (duplicate-arguments-array=true)', function () {
+      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], {configuration: {'duplicate-arguments-array': true}})
       parse.should.have.property('v').and.deep.equal(['a', 'b', 'c'])
+      parse.should.have.property('_').with.length(0)
+    })
+    it('should keep only the last value if the same option is specified multiple times (duplicate-arguments-false)', function () {
+      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], {configuration: {'duplicate-arguments-array': false}})
+      parse.should.have.property('v').and.equal('c')
       parse.should.have.property('_').with.length(0)
     })
 
@@ -2010,6 +2015,182 @@ describe('yargs-parser', function () {
         })
 
         parsed['x'].should.deep.equal(['a', 'b'])
+      })
+    })
+
+    describe('duplicate-arguments-array VS flatten-duplicate-arrays', function () {
+      /*
+        duplicate=false, flatten=false
+          type=array
+            [-x 1 2 3]          => [1, 2, 3]
+            [-x 1 2 3 -x 2 3 4] => [2, 3, 4]
+          type=string/number/etc
+            [-x 1 -x 2 -x 3]    => 3
+
+        duplicate=false, flatten=true
+          type=array
+            [-x 1 2 3]          => [1, 2, 3]
+            [-x 1 2 3 -x 2 3 4] => [2, 3, 4]
+          type=string/number/etc
+            [-x 1 -x 2 -x 3]    => 3
+
+        duplicate=true, flatten=true
+          type=array
+            [-x 1 2 3]          => [1, 2, 3]
+            [-x 1 2 3 -x 2 3 4] => [1, 2, 3, 2, 3, 4]
+          type=string/number/etc
+            [-x 1 -x 2 -x 3]    => [1, 2, 3]
+
+        duplicate=true, flatten=false
+          type=array
+            [-x 1 2 3]          => [1, 2, 3]
+            [-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [2, 3, 4]]
+          type=string/number/etc
+            [-x 1 -x 2 -x 3]    => [1, 2, 3]
+      */
+      describe('duplicate=false, flatten=false,', function () {
+        describe('type=array', function () {
+          it('[-x 1 2 3] => [1, 2, 3]', function () {
+            var parsed = parser('-x 1 2 3', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal([1, 2, 3])
+          })
+          it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
+            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal([2, 3, 4])
+          })
+        })
+        describe('type=number', function () {
+          it('[-x 1 -x 2 -x 3] => 3', function () {
+            var parsed = parser('-x 1 -x 2 -x 3', {
+              number: 'x',
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal(3)
+          })
+        })
+      })
+      describe('duplicate=false, flatten=true,', function () {
+        describe('type=array', function () {
+          it('[-x 1 2 3] => [1, 2, 3]', function () {
+            var parsed = parser('-x 1 2 3', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal([1, 2, 3])
+          })
+          it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
+            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal([2, 3, 4])
+          })
+        })
+        describe('type=number', function () {
+          it('[-x 1 -x 2 -x 3] => 3', function () {
+            var parsed = parser('-x 1 -x 2 -x 3', {
+              number: 'x',
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal(3)
+          })
+        })
+      })
+      describe('duplicate=true, flatten=true,', function () {
+        describe('type=array', function () {
+          it('[-x 1 2 3] => [1, 2, 3]', function () {
+            var parsed = parser('-x 1 2 3', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal([1, 2, 3])
+          })
+          it('[-x 1 2 3 -x 2 3 4] => [1, 2, 3, 2, 3, 4]', function () {
+            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal([1, 2, 3, 2, 3, 4])
+          })
+        })
+        describe('type=number', function () {
+          it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
+            var parsed = parser('-x 1 -x 2 -x 3', {
+              number: 'x',
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal([1, 2, 3])
+          })
+        })
+      })
+      describe('duplicate=true, flatten=false,', function () {
+        describe('type=array', function () {
+          it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
+            var parsed = parser('-x 1 -x 2 -x 3', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal([1, 2, 3])
+          })
+          it('[-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [ 2, 3, 4]]', function () {
+            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+              array: ['x'],
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal([[1, 2, 3], [2, 3, 4]])
+          })
+        })
+        describe('type=number', function () {
+          it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
+            var parsed = parser('-x 1 -x 2 -x 3', {
+              number: 'x',
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal([1, 2, 3])
+          })
+        })
       })
     })
   })
