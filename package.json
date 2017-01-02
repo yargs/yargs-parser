@@ -31,7 +31,7 @@
     "mocha": "^3.0.1",
     "nyc": "^10.0.0",
     "standard": "^8.0.0",
-    "standard-version": "^3.0.0"
+    "standard-version": "^4.0.0"
   },
   "dependencies": {
     "camelcase": "^3.0.0"
