@@ -556,9 +556,16 @@ function parse (args, opts) {
       o = o[key]
     })
 
+    var fullKey = []
+    if (configuration['flatten-duplicate-arrays'] && keys.length > 1) {
+      fullKey.push(keys.join('.'))
+    } else {
+      fullKey.push(keys[keys.length - 1])
+    }
+
     var key = keys[keys.length - 1]
 
-    var isTypeArray = checkAllAliases(key, flags.arrays)
+    var isTypeArray = checkAllAliases(fullKey, flags.arrays)
     var isValueArray = Array.isArray(value)
     var duplicate = configuration['duplicate-arguments-array']
 
