@@ -1697,7 +1697,7 @@ describe('yargs-parser', function () {
     })
 
     var jsonPath = path.resolve(__dirname, './fixtures/config.json')
-    it('should prefer config file value over env var', function () {
+    it('should prefer environment variables over config file', function () {
       process.env.CFG_HERP = 'zerp'
       var result = parser(['--cfg', jsonPath], {
         envPrefix: 'CFG',
@@ -1708,7 +1708,7 @@ describe('yargs-parser', function () {
         }
       })
 
-      result.herp.should.equal('derp')
+      result.herp.should.equal('zerp')
     })
 
     it('should support an env var value as config file option', function () {
