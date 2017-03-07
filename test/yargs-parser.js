@@ -444,6 +444,18 @@ describe('yargs-parser', function () {
       argv.should.have.property('foo').and.deep.equal('baz')
     })
 
+    it('should combine values from config file and argv, if argv value is an array', function () {
+      var argv = parser(['--foo', 'bar'], {
+        config: ['settings'],
+        array: ['foo'],
+        default: {
+          settings: jsonPath
+        }
+      })
+
+      argv.should.have.property('foo').and.deep.equal(['bar', 'baz'])
+    })
+
     it('should use value from config file, if argv key is a boolean', function () {
       var argv = parser([], {
         config: ['settings'],
