@@ -2017,7 +2017,7 @@ describe('yargs-parser', function () {
         parsed['x'].should.deep.equal(['a', 'b'])
       })
 
-      it('flattens duplicate array type with dot notations', function () {
+      it('flattens duplicate array type, when argument uses dot notation', function () {
         var parsed = parser('-x.foo a -x.foo b', {
           array: ['x.foo'],
           configuration: {
