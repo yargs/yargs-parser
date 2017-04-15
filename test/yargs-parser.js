@@ -955,7 +955,7 @@ describe('yargs-parser', function () {
         boolean: ['b']
       })
       // Assert
-      result.should.have.property('b').that.is.a('boolean').and.is.true
+      result.should.have.property('b').that.is.a('boolean').and.is.true // eslint-disable-line
       result.should.have.property('_').and.deep.equal([123])
     })
   })
@@ -1047,11 +1047,11 @@ describe('yargs-parser', function () {
           }
 
           it('should set true if --flag in arg', function () {
-            parser(['--flag'], opts).flag.should.be.true
+            parser(['--flag'], opts).flag.should.be.true // eslint-disable-line
           })
 
           it('should set false if --no-flag in arg', function () {
-            parser(['--no-flag'], opts).flag.should.be.false
+            parser(['--no-flag'], opts).flag.should.be.false // eslint-disable-line
           })
 
           it('should set ' + def + ' if no flag in arg', function () {
@@ -1070,15 +1070,15 @@ describe('yargs-parser', function () {
         })
 
         it('should set true if --flag in arg', function () {
-          parser(['--flag'], opts).flag.should.be.true
+          parser(['--flag'], opts).flag.should.be.true // eslint-disable-line
         })
 
         it('should set false if --no-flag in arg', function () {
-          parser(['--no-flag'], opts).flag.should.be.false
+          parser(['--no-flag'], opts).flag.should.be.false // eslint-disable-line
         })
 
         it('should set false if no flag in arg', function () {
-          parser([], opts).flag.should.be.false
+          parser([], opts).flag.should.be.false // eslint-disable-line
         })
       })
 
@@ -1135,8 +1135,8 @@ describe('yargs-parser', function () {
         it('should provide options with dashes as camelCase properties', function () {
           var result = parser(['--some-option'])
 
-          result.should.have.property('some-option').that.is.a('boolean').and.is.true
-          result.should.have.property('someOption').that.is.a('boolean').and.is.true
+          result.should.have.property('some-option').that.is.a('boolean').and.is.true // eslint-disable-line
+          result.should.have.property('someOption').that.is.a('boolean').and.is.true // eslint-disable-line
         })
       }
 
@@ -1156,8 +1156,8 @@ describe('yargs-parser', function () {
           }
         })
 
-        result.should.have.property('some-option').that.is.a('boolean').and.is.true
-        result.should.have.property('someOption').that.is.a('boolean').and.is.true
+        result.should.have.property('some-option').that.is.a('boolean').and.is.true // eslint-disable-line
+        result.should.have.property('someOption').that.is.a('boolean').and.is.true // eslint-disable-line
       })
 
       it('should provide defaults of options with dashes as camelCase properties', function () {
@@ -1369,13 +1369,13 @@ describe('yargs-parser', function () {
         count: 'v',
         default: { v: undefined }
       })
-      expect(parsed.v).to.be.undefined
+      expect(parsed.v).to.be.undefined // eslint-disable-line
 
       parsed = parser([], {
         count: 'v',
         default: { v: null }
       })
-      expect(parsed.v).to.be.null
+      expect(parsed.v).to.be.null // eslint-disable-line
 
       parsed = parser([], {
         count: 'v',
@@ -1668,8 +1668,8 @@ describe('yargs-parser', function () {
 
       result.eggs.should.equal('sam')
       result.ham.should.equal('iam')
-      expect(result.oneFish).to.be.undefined
-      expect(result.redFish).to.be.undefined
+      expect(result.oneFish).to.be.undefined // eslint-disable-line
+      expect(result.redFish).to.be.undefined // eslint-disable-line
     })
 
     it('should set aliases for options defined by env var', function () {
