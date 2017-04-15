@@ -17,12 +17,13 @@ function parse (args, opts) {
     'parse-numbers': true,
     'boolean-negation': true,
     'duplicate-arguments-array': true,
-    'flatten-duplicate-arrays': true
+    'flatten-duplicate-arrays': true,
+    'populate--': true
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
   var envPrefix = opts.envPrefix
-  var notFlagsOption = opts['--']
+  var notFlagsOption = configuration['populate--']
   var notFlagsArgv = notFlagsOption ? '--' : '_'
   var newAliases = {}
   // allow a i18n handler to be passed in, default to a fake one (util.format).

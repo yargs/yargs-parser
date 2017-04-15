@@ -103,23 +103,6 @@ yargs engine.
 
 <a name="configuration"></a>
 
-### Options
-
-#### `--`
-* default: `false`.
-
-_If disabled:_
-```sh
-node example.js a -b -- x y
-{ _: [ 'a', 'x', 'y' ], b: true }
-```
-
-_If enabled:_
-
-```sh
-node example.js a -b -- x y
-{ _: [ 'a' ], '--': [ 'x', 'y' ], b: true }
-```
 ### Configuration
 
 The yargs-parser applies several automated transformations on the keys provided
@@ -265,6 +248,25 @@ _if disabled:_
 ```sh
 node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
+```
+
+### `populate--`
+
+* default: `true`.
+
+Should unparsed flags be stored in `--` or `_`.
+
+_If disabled:_
+```sh
+node example.js a -b -- x y
+{ _: [ 'a', 'x', 'y' ], b: true }
+```
+
+_If enabled:_
+
+```sh
+node example.js a -b -- x y
+{ _: [ 'a' ], '--': [ 'x', 'y' ], b: true }
 ```
 
 ## Special Thanks
