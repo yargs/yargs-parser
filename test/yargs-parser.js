@@ -2463,5 +2463,15 @@ describe('yargs-parser', function () {
       number: ['foo']
     })
     argv.foo.should.equal(9.39404959509494e+22)
+
+  })
+  // see: https://github.com/yargs/yargs-parser/issues/82
+  it('arrifys strings passed in the config when asked to', function () {
+    var argv = parser(['--arr', 'foo bar', '--not-arr', 'foo bar two'], {
+      array: ['arr']
+    })
+    // console.log(argv)
+    argv.arr.should.deep.equal(['foo', 'bar'])
+    argv.notArr.should.equal('foo bar two')
   })
 })
