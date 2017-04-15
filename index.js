@@ -564,7 +564,7 @@ function parse (args, opts) {
 
     var key = keys[keys.length - 1]
 
-    var isTypeArray = checkAllAliases(key, flags.arrays)
+    var isTypeArray = checkAllAliases(keys.join('.'), flags.arrays)
     var isValueArray = Array.isArray(value)
     var duplicate = configuration['duplicate-arguments-array']
 
