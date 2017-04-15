@@ -22,6 +22,8 @@ function parse (args, opts) {
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
   var envPrefix = opts.envPrefix
+  var notFlagsOption = opts['--']
+  var notFlagsArgv = notFlagsOption ? '--' : '_'
   var newAliases = {}
   // allow a i18n handler to be passed in, default to a fake one (util.format).
   var __ = opts.__ || function (str) {
@@ -97,6 +99,10 @@ function parse (args, opts) {
   })
 
   var argv = { _: [] }
+
+  if (notFlagsOption) {
+    argv[notFlagsArgv] = []
+  }
 
   Object.keys(flags.bools).forEach(function (key) {
     setArg(key, !(key in defaults) ? false : defaults[key])
@@ -290,7 +296,7 @@ function parse (args, opts) {
   })
 
   notFlags.forEach(function (key) {
-    argv._.push(key)
+    argv[notFlagsArgv].push(key)
   })
 
   // how many arguments should we consume, based
