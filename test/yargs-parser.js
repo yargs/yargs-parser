@@ -1260,6 +1260,46 @@ describe('yargs-parser', function () {
     })
   })
 
+  describe('option --', function () {
+    describe('when it is not defined', function () {
+      it('should not initialize the \'--\' array', function () {
+        var result = parser([
+          'bare',
+          '--', '-h', 'eek', '--'
+        ])
+        result.should.have.property('_').and.deep.equal(['bare', '-h', 'eek', '--'])
+        result.should.not.have.property('--')
+      })
+    })
+
+    describe('when it is defined', function () {
+      it('should set bare flags to \'_\' array and non-flags to \'--\' array', function () {
+        var result = parser([
+          '--name=meowmers', 'bare', '-cats', 'woo', 'moxy',
+          '-h', 'awesome', '--multi=quux',
+          '--key', 'value',
+          '-b', '--bool', '--no-meep', '--multi=baz',
+          '--', '--not-a-flag', '-', '-h', '-multi', '--', 'eek'
+        ], {
+          '--': true
+        })
+        result.should.have.property('c', true)
+        result.should.have.property('a', true)
+        result.should.have.property('t', true)
+        result.should.have.property('s', 'woo')
+        result.should.have.property('h', 'awesome')
+        result.should.have.property('b', true)
+        result.should.have.property('bool', true)
+        result.should.have.property('key', 'value')
+        result.should.have.property('multi').and.deep.equal(['quux', 'baz'])
+        result.should.have.property('meep', false)
+        result.should.have.property('name', 'meowmers')
+        result.should.have.property('_').and.deep.equal(['bare', 'moxy'])
+        result.should.have.property('--').and.deep.equal(['--not-a-flag', '-', '-h', '-multi', '--', 'eek'])
+      })
+    })
+  })
+
   describe('count', function () {
     it('should count the number of times a boolean is present', function () {
       var parsed
