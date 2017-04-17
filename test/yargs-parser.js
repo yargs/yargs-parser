@@ -275,6 +275,16 @@ describe('yargs-parser', function () {
     s[1].should.be.a('string').and.equal('  ')
   })
 
+  it('should return the keys and aliases of the arguments processed while parsing input', function () {
+    var parsed = parser.detailed([ '-x', '--opt', '--no-blah', '-y' ], {
+      alias: {
+        y: [ 'test' ]
+      }
+    })
+
+    parsed.processedKeys.should.eql([ 'x', 'opt', 'blah', 'y', 'test' ])
+  })
+
   describe('normalize', function () {
     it('should normalize redundant paths', function () {
       var a = parser([ '-s', ['', 'tmp', '..', ''].join(path.sep) ], {

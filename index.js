@@ -25,6 +25,7 @@ function parse (args, opts) {
   var notFlagsOption = opts['--']
   var notFlagsArgv = notFlagsOption ? '--' : '_'
   var newAliases = {}
+  var processedKeys = []
   // allow a i18n handler to be passed in, default to a fake one (util.format).
   var __ = opts.__ || function (str) {
     return util.format.apply(util, Array.prototype.slice.call(arguments))
@@ -132,6 +133,7 @@ function parse (args, opts) {
       // 'dotall' regex modifier. See:
       // http://stackoverflow.com/a/1068308/13216
       m = arg.match(/^--?([^=]+)=([\s\S]*)$/)
+      setProcessedKey(m[1])
 
       // nargs format = '--f=monkey washing cat'
       if (checkAllAliases(m[1], flags.nargs)) {
@@ -146,6 +148,7 @@ function parse (args, opts) {
       }
     } else if (arg.match(/^--no-.+/) && configuration['boolean-negation']) {
       key = arg.match(/^--no-(.+)/)[1]
+      setProcessedKey(key)
       setArg(key, false)
 
     // -- seperated by space.
@@ -153,6 +156,7 @@ function parse (args, opts) {
       !configuration['short-option-groups'] && arg.match(/^-.+/)
     )) {
       key = arg.match(/^--?(.+)/)[1]
+      setProcessedKey(key)
 
       // nargs format = '--foo a b c'
       if (checkAllAliases(key, flags.nargs)) {
@@ -180,12 +184,14 @@ function parse (args, opts) {
     // dot-notation flag seperated by '='.
     } else if (arg.match(/^-.\..+=/)) {
       m = arg.match(/^-([^=]+)=([\s\S]*)$/)
+      setProcessedKey(m[1])
       setArg(m[1], m[2])
 
     // dot-notation flag seperated by space.
     } else if (arg.match(/^-.\..+/)) {
       next = args[i + 1]
       key = arg.match(/^-(.\..+)/)[1]
+      setProcessedKey(key)
 
       if (next !== undefined && !next.match(/^-/) &&
         !checkAllAliases(key, flags.bools) &&
@@ -205,6 +211,7 @@ function parse (args, opts) {
         if (letters[j + 1] && letters[j + 1] === '=') {
           value = arg.slice(j + 3)
           key = letters[j]
+          setProcessedKey(key)
 
           // nargs format = '-f=monkey washing cat'
           if (checkAllAliases(key, flags.nargs)) {
@@ -221,6 +228,8 @@ function parse (args, opts) {
           broken = true
           break
         }
+
+        setProcessedKey(letters[j])
 
         if (next === '-') {
           setArg(letters[j], next)
@@ -245,6 +254,7 @@ function parse (args, opts) {
       }
 
       key = arg.slice(-1)[0]
+      setProcessedKey(key)
 
       if (!broken && key !== '-') {
         // nargs format = '-f a b c'
@@ -587,6 +597,18 @@ function parse (args, opts) {
     }
   }
 
+  function setProcessedKey (key) {
+    var aliases = [].concat(key)
+    ;(flags.aliases[key] || []).forEach(function (key) {
+      aliases.push(key)
+    })
+    aliases.forEach(function (key) {
+      if (processedKeys.indexOf(key) === -1) {
+        processedKeys.push(key)
+      }
+    })
+  }
+
   // extend the aliases list with inferred aliases.
   function extendAliases () {
     Array.prototype.slice.call(arguments).forEach(function (obj) {
@@ -678,6 +700,7 @@ function parse (args, opts) {
     error: error,
     aliases: flags.aliases,
     newAliases: newAliases,
+    processedKeys: processedKeys,
     configuration: configuration
   }
 }
