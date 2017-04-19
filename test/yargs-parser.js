@@ -407,6 +407,13 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').with.length(0)
   })
 
+  it('should accept values that are not string as strings', function () {
+    var argv = parser(['-f', 11, '--zoom', 55])
+
+    argv.should.have.property('zoom', 55)
+    argv.should.have.property('f', 11)
+  })
+
   describe('config', function () {
     var jsonPath = path.resolve(__dirname, './fixtures/config.json')
 

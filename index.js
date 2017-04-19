@@ -122,6 +122,7 @@ function parse (args, opts) {
     var letters
     var m
     var next
+    var nexts
     var value
 
     // -- seperated by =
@@ -162,9 +163,10 @@ function parse (args, opts) {
         i = eatArray(i, key, args)
       } else {
         next = args[i + 1]
+        nexts = next + ''
 
-        if (next !== undefined && (!next.match(/^-/) ||
-          next.match(negative)) &&
+        if (next !== undefined && (!nexts.match(/^-/) ||
+          nexts.match(negative)) &&
           !checkAllAliases(key, flags.bools) &&
           !checkAllAliases(key, flags.counts)) {
           setArg(key, next)
