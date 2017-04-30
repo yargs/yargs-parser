@@ -2228,9 +2228,7 @@ describe('yargs-parser', function () {
           '--key', 'value',
           '-b', '--bool', '--no-meep', '--multi=baz',
           '--', '--not-a-flag', '-', '-h', '-multi', '--', 'eek'
-        ], {
-          '--': true
-        })
+        ])
         result.should.have.property('c', true)
         result.should.have.property('a', true)
         result.should.have.property('t', true)
