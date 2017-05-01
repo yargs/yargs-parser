@@ -10,12 +10,14 @@ var path = require('path')
 describe('yargs-parser', function () {
   it('should parse a "short boolean"', function () {
     var parse = parser([ '-b' ])
+    parse.should.not.have.property('--')
     parse.should.have.property('b').to.be.ok.and.be.a('boolean')
     parse.should.have.property('_').with.length(0)
   })
 
   it('should parse a "long boolean"', function () {
     var parse = parser('--bool')
+    parse.should.not.have.property('--')
     parse.should.have.property('bool', true)
     parse.should.have.property('_').with.length(0)
   })
@@ -111,6 +113,16 @@ describe('yargs-parser', function () {
     parse.should.have.property('meep', false)
     parse.should.have.property('name', 'meowmers')
     parse.should.have.property('_').and.deep.equal(['bare', '--not-a-flag', '-', '-h', '-multi', '--', 'eek'])
+  })
+
+  it('should not populate "--" if parsing was not stopped', function () {
+    var parse = parser([ '-b' ])
+    parse.should.not.have.property('--')
+  })
+
+  it('should populate "--" if parsing is stopped', function () {
+    var parse = parser([ '-b', '--', 'foo bar' ])
+    parse.should.have.property('--')
   })
 
   it('should parse numbers appropriately', function () {

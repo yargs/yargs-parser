@@ -101,10 +101,6 @@ function parse (args, opts) {
 
   var argv = { _: [] }
 
-  if (notFlagsOption) {
-    argv[notFlagsArgv] = []
-  }
-
   Object.keys(flags.bools).forEach(function (key) {
     setArg(key, !(key in defaults) ? false : defaults[key])
     setDefaulted(key)
@@ -296,6 +292,8 @@ function parse (args, opts) {
     if (!hasKey(argv, key.split('.'))) setArg(key, 0)
   })
 
+  // '--' defaults to undefined.
+  if (notFlagsOption && notFlags.length) argv[notFlagsArgv] = []
   notFlags.forEach(function (key) {
     argv[notFlagsArgv].push(key)
   })
