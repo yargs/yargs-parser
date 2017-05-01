@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/yargs/yargs-parser/compare/v4.2.1...v6.0.0) (2017-05-01)
+
+
+### Bug Fixes
+
+* environment variables should take precedence over config file ([#81](https://github.com/yargs/yargs-parser/issues/81)) ([76cee1f](https://github.com/yargs/yargs-parser/commit/76cee1f))
+* parsing hints should apply for dot notation keys ([#86](https://github.com/yargs/yargs-parser/issues/86)) ([3e47d62](https://github.com/yargs/yargs-parser/commit/3e47d62))
+
+
+### Chores
+
+* upgrade to newest version of camelcase ([#87](https://github.com/yargs/yargs-parser/issues/87)) ([f1903aa](https://github.com/yargs/yargs-parser/commit/f1903aa))
+
+
+### Features
+
+* add -- option which allows arguments after the -- flag to be returned separated from positional arguments ([#84](https://github.com/yargs/yargs-parser/issues/84)) ([2572ca8](https://github.com/yargs/yargs-parser/commit/2572ca8))
+* when parsing stops, we now populate "--" by default ([#88](https://github.com/yargs/yargs-parser/issues/88)) ([cd666db](https://github.com/yargs/yargs-parser/commit/cd666db))
+
+
+### BREAKING CHANGES
+
+* rather than placing arguments in "_", when parsing is stopped via "--"; we now populate an array called "--" by default.
+* camelcase now requires Node 4+.
+* environment variables will now override config files (args, env, config-file, config-object)
+
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/yargs/yargs-parser/compare/v4.2.1...v5.0.0) (2017-02-18)
 
