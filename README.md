@@ -250,7 +250,7 @@ node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
 ```
 
-### `populate --`
+### populate --
 
 * default: `false`.
 * key: `populate--`
