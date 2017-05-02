@@ -250,13 +250,15 @@ node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
 ```
 
-### `populate--`
+### `populate --`
 
-* default: `true`.
+* default: `false`.
+* key: `populate--`
 
 Should unparsed flags be stored in `--` or `_`.
 
 _If disabled:_
+
 ```sh
 node example.js a -b -- x y
 { _: [ 'a', 'x', 'y' ], b: true }

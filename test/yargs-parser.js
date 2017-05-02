@@ -115,16 +115,6 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').and.deep.equal(['bare', '--not-a-flag', '-', '-h', '-multi', '--', 'eek'])
   })
 
-  it('should not populate "--" if parsing was not stopped', function () {
-    var parse = parser([ '-b' ])
-    parse.should.not.have.property('--')
-  })
-
-  it('should populate "--" if parsing is stopped', function () {
-    var parse = parser([ '-b', '--', 'foo bar' ])
-    parse.should.have.property('--')
-  })
-
   it('should parse numbers appropriately', function () {
     var argv = parser([
       '-x', '1234',
@@ -2222,25 +2212,27 @@ describe('yargs-parser', function () {
     })
 
     describe('populate--', function () {
-      it('should populate "_" if "populate-- false', function () {
+      it('should populate "_" by default', function () {
         var result = parser([
           'bare',
           '--', '-h', 'eek', '--'
-        ], {
-          configuration: {'populate--': false}
-        })
+        ])
         result.should.have.property('_').and.deep.equal(['bare', '-h', 'eek', '--'])
         result.should.not.have.property('--')
       })
 
-      it('should populate the "--" array by default', function () {
+      it('should populate the "--" if populate-- is "true"', function () {
         var result = parser([
           '--name=meowmers', 'bare', '-cats', 'woo', 'moxy',
           '-h', 'awesome', '--multi=quux',
           '--key', 'value',
           '-b', '--bool', '--no-meep', '--multi=baz',
           '--', '--not-a-flag', '-', '-h', '-multi', '--', 'eek'
-        ])
+        ], {
+          configuration: {
+            'populate--': true
+          }
+        })
         result.should.have.property('c', true)
         result.should.have.property('a', true)
         result.should.have.property('t', true)
