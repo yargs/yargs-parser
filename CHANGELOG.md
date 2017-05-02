@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/yargs/yargs-parser/compare/v6.0.1...v7.0.0) (2017-05-02)
+
+
+### Chores
+
+* revert populate-- logic ([#91](https://github.com/yargs/yargs-parser/issues/91)) ([6003e6d](https://github.com/yargs/yargs-parser/commit/6003e6d))
+
+
+### BREAKING CHANGES
+
+* populate-- now defaults to false.
+
+
+
 <a name="6.0.1"></a>
 ## [6.0.1](https://github.com/yargs/yargs-parser/compare/v6.0.0...v6.0.1) (2017-05-01)
 
