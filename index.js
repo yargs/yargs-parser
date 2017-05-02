@@ -18,7 +18,7 @@ function parse (args, opts) {
     'boolean-negation': true,
     'duplicate-arguments-array': true,
     'flatten-duplicate-arrays': true,
-    'populate--': true
+    'populate--': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
