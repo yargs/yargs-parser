@@ -250,6 +250,25 @@ node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
 ```
 
+### negation prefix
+
+* default: `no-`
+* key: `negation-prefix`
+
+The prefix to use for negated boolean variables.
+
+```sh
+node example.js --no-foo
+{ _: [], foo: false }
+```
+
+_if set to `quux`:_
+
+```sh
+node example.js --quuxfoo
+{ _: [], foo: false }
+```
+
 ### populate --
 
 * default: `false`.
