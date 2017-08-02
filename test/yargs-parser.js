@@ -1968,6 +1968,16 @@ describe('yargs-parser', function () {
         parsed['no-dice'].should.equal(true)
         expect(parsed.dice).to.equal(undefined)
       })
+
+      it('negates boolean arguments with correct prefix', function () {
+        var parsed = parser(['--foodice'], {
+          configuration: {
+            'negation-prefix': 'foo'
+          }
+        })
+
+        expect(parsed['dice']).to.equal(false)
+      })
     })
 
     describe('duplicate arguments array', function () {
