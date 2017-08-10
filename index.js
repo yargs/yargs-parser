@@ -16,6 +16,7 @@ function parse (args, opts) {
     'dot-notation': true,
     'parse-numbers': true,
     'boolean-negation': true,
+    'negation-prefix': 'no-',
     'duplicate-arguments-array': true,
     'flatten-duplicate-arrays': true,
     'populate--': false
@@ -45,6 +46,7 @@ function parse (args, opts) {
     coercions: {}
   }
   var negative = /^-[0-9]+(\.[0-9]+)?/
+  var negatedBoolean = new RegExp('^--' + configuration['negation-prefix'] + '(.+)')
 
   ;[].concat(opts.array).filter(Boolean).forEach(function (key) {
     flags.arrays[key] = true
@@ -141,8 +143,8 @@ function parse (args, opts) {
       } else {
         setArg(m[1], m[2])
       }
-    } else if (arg.match(/^--no-.+/) && configuration['boolean-negation']) {
-      key = arg.match(/^--no-(.+)/)[1]
+    } else if (arg.match(negatedBoolean) && configuration['boolean-negation']) {
+      key = arg.match(negatedBoolean)[1]
       setArg(key, false)
 
     // -- seperated by space.
