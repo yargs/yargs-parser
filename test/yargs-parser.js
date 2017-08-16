@@ -1218,6 +1218,18 @@ describe('yargs-parser', function () {
         result.should.have.property('some-option').that.is.a('string').and.equals('val')
         result.should.have.property('someOption').that.is.a('string').and.equals('val')
       })
+
+      // https://github.com/yargs/yargs-parser/issues/95
+      it('should not duplicate option values when equivalent dashed aliases are provided', function () {
+        var result = parser(['--someOption', 'val'], {
+          alias: {
+            someOption: 'some-option'
+          }
+        })
+
+        result.should.have.property('some-option').that.is.a('string').and.equals('val')
+        result.should.have.property('someOption').that.is.a('string').and.equals('val')
+      })
     }
 
     describe('dashes and camelCase', function () {
