@@ -41,8 +41,7 @@ describe('TokenizeArgString', function () {
   // https://github.com/yargs/yargs-parser/issues/93
   it('does not affect quoted strings when argument is not an option', function () {
     var args = tokenizeArgString('-q sku="invalid"')
-    args[0].should.equal('-q') // passes
-    args[1].should.equal('sku="invalid"') //fails
+    args[0].should.equal('-q')
+    args[1].should.equal('sku="invalid"')
   })
-
 })
