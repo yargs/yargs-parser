@@ -1507,6 +1507,11 @@ describe('yargs-parser', function () {
       result['1'][0].should.equal('a')
       result['1'][1].should.equal('b')
     })
+
+    it('should create an array when passing an argument twice with same value', function () {
+      var result = parser(['-x', 'val1', '-x', 'val1'])
+      result.should.have.property('x').that.is.an('array').and.to.deep.equal(['val1', 'val1'])
+    })
   })
 
   describe('nargs', function () {

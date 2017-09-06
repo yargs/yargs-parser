@@ -581,7 +581,7 @@ function parse (args, opts) {
       }
     } else if (o[key] === undefined && isTypeArray) {
       o[key] = isValueArray ? value : [value]
-    } else if (duplicate && !(o[key] === undefined || o[key] === value || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts))) {
+    } else if (duplicate && !(o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts))) {
       o[key] = [ o[key], value ]
     } else {
       o[key] = value
@@ -602,6 +602,9 @@ function parse (args, opts) {
         flags.aliases[key].concat(key).forEach(function (x) {
           if (/-/.test(x) && configuration['camel-case-expansion']) {
             var c = camelCase(x)
+            if (key === c) {
+              return
+            }
             flags.aliases[key].push(c)
             newAliases[c] = true
           }
