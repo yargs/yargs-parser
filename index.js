@@ -348,10 +348,8 @@ function parse (args, opts) {
   function setArg (key, val) {
     unsetDefaulted(key)
 
-    if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length) && configuration['camel-case-expansion']) {
-      var c = camelCase(key)
-      flags.aliases[key] = [c]
-      newAliases[c] = true
+    if (/-/.test(key) && configuration['camel-case-expansion']) {
+      addNewAlias(key, camelCase(key))
     }
 
     var value = processValue(key, val)
@@ -393,6 +391,16 @@ function parse (args, opts) {
           return typeof val === 'string' ? path.normalize(val) : val
         })
       })
+    }
+  }
+
+  function addNewAlias (key, alias) {
+    if (!(flags.aliases[key] && flags.aliases[key].length)) {
+      flags.aliases[key] = [alias]
+      newAliases[alias] = true
+    }
+    if (!(flags.aliases[alias] && flags.aliases[alias].length)) {
+      addNewAlias(alias, key)
     }
   }
 
@@ -602,7 +610,9 @@ function parse (args, opts) {
         flags.aliases[key].concat(key).forEach(function (x) {
           if (/-/.test(x) && configuration['camel-case-expansion']) {
             var c = camelCase(x)
-            flags.aliases[key].push(c)
+            if (flags.aliases[key].indexOf(c) === -1) {
+              flags.aliases[key].push(c)
+            }
             newAliases[c] = true
           }
         })
