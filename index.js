@@ -271,7 +271,7 @@ function parse (args, opts) {
       }
     } else {
       argv._.push(
-        flags.strings['_'] || !isNumber(arg) ? arg : Number(arg)
+        checkAllAliases('_', flags.numbers) ? maybeCoerceNumber('_', arg) : arg
       )
     }
   }
@@ -400,7 +400,7 @@ function parse (args, opts) {
       newAliases[alias] = true
     }
     if (!(flags.aliases[alias] && flags.aliases[alias].length)) {
-      addNewAlias(alias, key)
+      addNewAlias(alias)
     }
   }
 
@@ -410,11 +410,7 @@ function parse (args, opts) {
       if (typeof val === 'string') val = val === 'true'
     }
 
-    var value = val
-    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
-      if (isNumber(val)) value = Number(val)
-      if (!isUndefined(val) && !isNumber(val) && checkAllAliases(key, flags.numbers)) value = NaN
-    }
+    var value = maybeCoerceNumber(key, val)
 
     // increment a count given as arg (either no value or value parsed as boolean)
     if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
@@ -425,6 +421,14 @@ function parse (args, opts) {
     if (checkAllAliases(key, flags.normalize) && checkAllAliases(key, flags.arrays)) {
       if (Array.isArray(val)) value = val.map(path.normalize)
       else value = path.normalize(val)
+    }
+    return value
+  }
+
+  function maybeCoerceNumber (key, value) {
+    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
+      if (isNumber(value) && (configuration['parse-numbers'] || checkAllAliases(key, flags.numbers))) value = Number(value)
+      if (!isUndefined(value) && !isNumber(value) && checkAllAliases(key, flags.numbers)) value = NaN
     }
     return value
   }
