@@ -270,9 +270,7 @@ function parse (args, opts) {
         }
       }
     } else {
-      argv._.push(
-        checkAllAliases('_', flags.numbers) ? maybeCoerceNumber('_', arg) : arg
-      )
+      argv._.push(maybeCoerceNumber('_', arg))
     }
   }
 
@@ -427,8 +425,8 @@ function parse (args, opts) {
 
   function maybeCoerceNumber (key, value) {
     if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
-      if (isNumber(value) && (configuration['parse-numbers'] || checkAllAliases(key, flags.numbers))) value = Number(value)
-      if (!isUndefined(value) && !isNumber(value) && checkAllAliases(key, flags.numbers)) value = NaN
+      const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (Number(value) <= Number.MAX_SAFE_INTEGER)
+      if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
     }
     return value
   }
@@ -678,7 +676,6 @@ function parse (args, opts) {
   }
 
   function isNumber (x) {
-    if (!configuration['parse-numbers']) return false
     if (typeof x === 'number') return true
     if (/^0x[0-9a-f]+$/i.test(x)) return true
     return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
