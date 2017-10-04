@@ -400,7 +400,7 @@ function parse (args, opts) {
       newAliases[alias] = true
     }
     if (!(flags.aliases[alias] && flags.aliases[alias].length)) {
-      addNewAlias(alias)
+      addNewAlias(alias, key)
     }
   }
 
