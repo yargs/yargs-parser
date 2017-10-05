@@ -270,9 +270,7 @@ function parse (args, opts) {
         }
       }
     } else {
-      argv._.push(
-        flags.strings['_'] || !isNumber(arg) ? arg : Number(arg)
-      )
+      argv._.push(maybeCoerceNumber('_', arg))
     }
   }
 
@@ -348,10 +346,8 @@ function parse (args, opts) {
   function setArg (key, val) {
     unsetDefaulted(key)
 
-    if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length) && configuration['camel-case-expansion']) {
-      var c = camelCase(key)
-      flags.aliases[key] = [c]
-      newAliases[c] = true
+    if (/-/.test(key) && configuration['camel-case-expansion']) {
+      addNewAlias(key, camelCase(key))
     }
 
     var value = processValue(key, val)
@@ -396,17 +392,23 @@ function parse (args, opts) {
     }
   }
 
+  function addNewAlias (key, alias) {
+    if (!(flags.aliases[key] && flags.aliases[key].length)) {
+      flags.aliases[key] = [alias]
+      newAliases[alias] = true
+    }
+    if (!(flags.aliases[alias] && flags.aliases[alias].length)) {
+      addNewAlias(alias, key)
+    }
+  }
+
   function processValue (key, val) {
     // handle parsing boolean arguments --foo=true --bar false.
     if (checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
       if (typeof val === 'string') val = val === 'true'
     }
 
-    var value = val
-    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
-      if (isNumber(val)) value = Number(val)
-      if (!isUndefined(val) && !isNumber(val) && checkAllAliases(key, flags.numbers)) value = NaN
-    }
+    var value = maybeCoerceNumber(key, val)
 
     // increment a count given as arg (either no value or value parsed as boolean)
     if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
@@ -417,6 +419,14 @@ function parse (args, opts) {
     if (checkAllAliases(key, flags.normalize) && checkAllAliases(key, flags.arrays)) {
       if (Array.isArray(val)) value = val.map(path.normalize)
       else value = path.normalize(val)
+    }
+    return value
+  }
+
+  function maybeCoerceNumber (key, value) {
+    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
+      const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (Number.isSafeInteger(parseInt(value)))
+      if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
     }
     return value
   }
@@ -602,7 +612,9 @@ function parse (args, opts) {
         flags.aliases[key].concat(key).forEach(function (x) {
           if (/-/.test(x) && configuration['camel-case-expansion']) {
             var c = camelCase(x)
-            flags.aliases[key].push(c)
+            if (flags.aliases[key].indexOf(c) === -1) {
+              flags.aliases[key].push(c)
+            }
             newAliases[c] = true
           }
         })
@@ -664,7 +676,6 @@ function parse (args, opts) {
   }
 
   function isNumber (x) {
-    if (!configuration['parse-numbers']) return false
     if (typeof x === 'number') return true
     if (/^0x[0-9a-f]+$/i.test(x)) return true
     return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
