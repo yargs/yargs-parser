@@ -425,7 +425,7 @@ function parse (args, opts) {
 
   function maybeCoerceNumber (key, value) {
     if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
-      const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (Number(value) <= Number.MAX_SAFE_INTEGER)
+      const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (Number.isSafeInteger(parseInt(value)))
       if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
     }
     return value
