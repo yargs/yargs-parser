@@ -642,13 +642,15 @@ describe('yargs-parser', function () {
         configObjects: [{
           apple: 'apple',
           banana: 42,
-          foo: 'baz'
+          foo: 'baz',
+          gotcha: null
         }]
       })
 
       argv.should.have.property('apple', 'apple')
       argv.should.have.property('banana', 42)
       argv.should.have.property('foo', 'bar')
+      argv.should.have.property('gotcha', null)
     })
 
     it('should use value from config object, if argv value is using default value', function () {
