@@ -39,8 +39,10 @@ describe('TokenizeArgString', function () {
     args[2].should.equal('--bar=foo "bar"')
   })
 
-  it('multiple spaces only counted in quotes', function () {
-    var args = tokenizeArgString('foo  bar  "foo  bar"')
+  // https://github.com/yargs/yargs-parser/pull/100
+  // https://github.com/yargs/yargs-parser/pull/106
+  it('ignores unneeded spaces', function () {
+    var args = tokenizeArgString('  foo  bar  "foo  bar"  ')
     args[0].should.equal('foo')
     expect(args[1]).equal('bar')
     expect(args[2]).equal('foo  bar')
