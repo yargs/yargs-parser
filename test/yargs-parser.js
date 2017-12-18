@@ -2442,6 +2442,25 @@ describe('yargs-parser', function () {
       })
       parsed.error.message.should.equal('foo is array: true')
     })
+
+    // see: https://github.com/yargs/yargs-parser/issues/76
+    it('only runs coercion functions once, even with aliases', function () {
+      var runcount = 0
+      var func = (arg) => {
+        runcount++
+        return undefined
+      }
+      parser([ '--foo', 'bar' ], {
+        alias: {
+          foo: ['f', 'foo-bar', 'bar'],
+          b: ['bar']
+        },
+        coerce: {
+          bar: func
+        }
+      })
+      runcount.should.equal(1)
+    })
   })
 
   // see: https://github.com/yargs/yargs-parser/issues/37

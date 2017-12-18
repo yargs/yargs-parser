@@ -523,13 +523,19 @@ function parse (args, opts) {
 
   function applyCoercions (argv) {
     var coerce
+    var applied = {}
     Object.keys(argv).forEach(function (key) {
-      coerce = checkAllAliases(key, flags.coercions)
-      if (typeof coerce === 'function') {
-        try {
-          argv[key] = coerce(argv[key])
-        } catch (err) {
-          error = err
+      if (!applied.hasOwnProperty(key)) { // If we haven't already coerced this option via one of its aliases
+        coerce = checkAllAliases(key, flags.coercions)
+        if (typeof coerce === 'function') {
+          try {
+            var value = coerce(argv[key])
+            ;([].concat(flags.aliases[key] || [], key)).forEach(ali => {
+              applied[ali] = argv[ali] = value
+            })
+          } catch (err) {
+            error = err
+          }
         }
       }
     })
