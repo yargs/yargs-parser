@@ -2485,4 +2485,31 @@ describe('yargs-parser', function () {
     })
     argv.foo.should.equal(9.39404959509494e+22)
   })
+
+  // see: https://github.com/yargs/yargs-parser/issues/101
+  describe('dot-notation array arguments combined with string arguments', function () {
+    it('parses correctly when dot-notation argument is first', function () {
+      var argv = parser([ '--foo.bar', 'baz', '--foo', 'bux' ])
+      Array.isArray(argv.foo).should.equal(true)
+      argv.foo[0].bar.should.equal('baz')
+      argv.foo[1].should.equal('bux')
+    })
+
+    it('parses correctly when dot-notation argument is last', function () {
+      var argv = parser([ '--foo', 'bux', '--foo.bar', 'baz' ])
+      Array.isArray(argv.foo).should.equal(true)
+      argv.foo[0].should.equal('bux')
+      argv.foo[1].bar.should.equal('baz')
+    })
+
+    it('parses correctly when there are multiple dot-notation arguments', function () {
+      var argv = parser([ '--foo.first', 'firstvalue', '--foo', 'bux', '--foo.bar', 'baz', '--foo.bla', 'banana' ])
+      Array.isArray(argv.foo).should.equal(true)
+      argv.foo.length.should.equal(4)
+      argv.foo[0].first.should.equal('firstvalue')
+      argv.foo[1].should.equal('bux')
+      argv.foo[2].bar.should.equal('baz')
+      argv.foo[3].bla.should.equal('banana')
+    })
+  })
 })
