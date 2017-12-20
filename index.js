@@ -635,10 +635,10 @@ function parse (args, opts) {
         flags.aliases[key].concat(key).forEach(function (x) {
           if (/-/.test(x) && configuration['camel-case-expansion']) {
             var c = camelCase(x)
-            if (flags.aliases[key].indexOf(c) === -1) {
+            if (c !== key && flags.aliases[key].indexOf(c) === -1) {
               flags.aliases[key].push(c)
+              newAliases[c] = true
             }
-            newAliases[c] = true
           }
         })
         flags.aliases[key].forEach(function (x) {
