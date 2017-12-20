@@ -487,7 +487,7 @@ function parse (args, opts) {
       } else {
         // setting arguments via CLI takes precedence over
         // values within the config file.
-        if (!hasKey(argv, fullKey.split('.')) || (flags.defaulted[fullKey])) {
+        if (!hasKey(argv, fullKey.split('.')) || (flags.defaulted[fullKey]) || (flags.arrays[fullKey])) {
           setArg(fullKey, value)
         }
       }
