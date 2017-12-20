@@ -1220,6 +1220,18 @@ describe('yargs-parser', function () {
         result.should.have.property('some-option').that.is.a('string').and.equals('val')
         result.should.have.property('someOption').that.is.a('string').and.equals('val')
       })
+
+      // https://github.com/yargs/yargs-parser/issues/95
+      it('should not duplicate option values when equivalent dashed aliases are provided', function () {
+        var result = parser(['--someOption', 'val'], {
+          alias: {
+            someOption: 'some-option'
+          }
+        })
+
+        result.should.have.property('some-option').that.is.a('string').and.equals('val')
+        result.should.have.property('someOption').that.is.a('string').and.equals('val')
+      })
     }
 
     describe('dashes and camelCase', function () {
@@ -1496,6 +1508,11 @@ describe('yargs-parser', function () {
       Array.isArray(result['1']).should.equal(true)
       result['1'][0].should.equal('a')
       result['1'][1].should.equal('b')
+    })
+
+    it('should create an array when passing an argument twice with same value', function () {
+      var result = parser(['-x', 'val1', '-x', 'val1'])
+      result.should.have.property('x').that.is.an('array').and.to.deep.equal(['val1', 'val1'])
     })
   })
 
