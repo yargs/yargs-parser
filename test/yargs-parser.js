@@ -642,13 +642,15 @@ describe('yargs-parser', function () {
         configObjects: [{
           apple: 'apple',
           banana: 42,
-          foo: 'baz'
+          foo: 'baz',
+          gotcha: null
         }]
       })
 
       argv.should.have.property('apple', 'apple')
       argv.should.have.property('banana', 42)
       argv.should.have.property('foo', 'bar')
+      argv.should.have.property('gotcha', null)
     })
 
     it('should use value from config object, if argv value is using default value', function () {
@@ -1972,6 +1974,17 @@ describe('yargs-parser', function () {
         })
         expect(parsed._[0]).to.equal('5')
       })
+
+      it('parses number if option explicitly set to number type', function () {
+        var parsed = parser(['--foo', '5', '--bar', '6'], {
+          number: 'bar',
+          configuration: {
+            'parse-numbers': false
+          }
+        })
+        expect(parsed['foo']).to.equal('5')
+        expect(parsed['bar']).to.equal(6)
+      })
     })
 
     describe('boolean negation', function () {
@@ -2446,6 +2459,25 @@ describe('yargs-parser', function () {
       })
       parsed.error.message.should.equal('foo is array: true')
     })
+
+    // see: https://github.com/yargs/yargs-parser/issues/76
+    it('only runs coercion functions once, even with aliases', function () {
+      var runcount = 0
+      var func = (arg) => {
+        runcount++
+        return undefined
+      }
+      parser([ '--foo', 'bar' ], {
+        alias: {
+          foo: ['f', 'foo-bar', 'bar'],
+          b: ['bar']
+        },
+        coerce: {
+          bar: func
+        }
+      })
+      runcount.should.equal(1)
+    })
   })
 
   // see: https://github.com/yargs/yargs-parser/issues/37
@@ -2456,5 +2488,50 @@ describe('yargs-parser', function () {
       configObjects: [{'a': ['bin/../a.txt', 'bin/../b.txt']}]
     })
     argv.a.should.deep.equal(['a.txt', 'b.txt'])
+  })
+
+  // see: https://github.com/yargs/yargs/issues/963
+  it('does not magically convert numeric strings larger than Number.MAX_SAFE_INTEGER', () => {
+    const argv = parser([ '--foo', '93940495950949399948393' ])
+    argv.foo.should.equal('93940495950949399948393')
+  })
+
+  it('does not magically convert scientific notation larger than Number.MAX_SAFE_INTEGER', () => {
+    const argv = parser([ '--foo', '33e99999' ])
+    argv.foo.should.equal('33e99999')
+  })
+
+  it('converts numeric options larger than Number.MAX_SAFE_INTEGER to number', () => {
+    const argv = parser([ '--foo', '93940495950949399948393' ], {
+      number: ['foo']
+    })
+    argv.foo.should.equal(9.39404959509494e+22)
+  })
+
+  // see: https://github.com/yargs/yargs-parser/issues/101
+  describe('dot-notation array arguments combined with string arguments', function () {
+    it('parses correctly when dot-notation argument is first', function () {
+      var argv = parser([ '--foo.bar', 'baz', '--foo', 'bux' ])
+      Array.isArray(argv.foo).should.equal(true)
+      argv.foo[0].bar.should.equal('baz')
+      argv.foo[1].should.equal('bux')
+    })
+
+    it('parses correctly when dot-notation argument is last', function () {
+      var argv = parser([ '--foo', 'bux', '--foo.bar', 'baz' ])
+      Array.isArray(argv.foo).should.equal(true)
+      argv.foo[0].should.equal('bux')
+      argv.foo[1].bar.should.equal('baz')
+    })
+
+    it('parses correctly when there are multiple dot-notation arguments', function () {
+      var argv = parser([ '--foo.first', 'firstvalue', '--foo', 'bux', '--foo.bar', 'baz', '--foo.bla', 'banana' ])
+      Array.isArray(argv.foo).should.equal(true)
+      argv.foo.length.should.equal(4)
+      argv.foo[0].first.should.equal('firstvalue')
+      argv.foo[1].should.equal('bux')
+      argv.foo[2].bar.should.equal('baz')
+      argv.foo[3].bla.should.equal('banana')
+    })
   })
 })

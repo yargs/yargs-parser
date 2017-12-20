@@ -270,9 +270,7 @@ function parse (args, opts) {
         }
       }
     } else {
-      argv._.push(
-        flags.strings['_'] || !isNumber(arg) ? arg : Number(arg)
-      )
+      argv._.push(maybeCoerceNumber('_', arg))
     }
   }
 
@@ -348,10 +346,8 @@ function parse (args, opts) {
   function setArg (key, val) {
     unsetDefaulted(key)
 
-    if (/-/.test(key) && !(flags.aliases[key] && flags.aliases[key].length) && configuration['camel-case-expansion']) {
-      var c = camelCase(key)
-      flags.aliases[key] = [c]
-      newAliases[c] = true
+    if (/-/.test(key) && configuration['camel-case-expansion']) {
+      addNewAlias(key, camelCase(key))
     }
 
     var value = processValue(key, val)
@@ -396,17 +392,23 @@ function parse (args, opts) {
     }
   }
 
+  function addNewAlias (key, alias) {
+    if (!(flags.aliases[key] && flags.aliases[key].length)) {
+      flags.aliases[key] = [alias]
+      newAliases[alias] = true
+    }
+    if (!(flags.aliases[alias] && flags.aliases[alias].length)) {
+      addNewAlias(alias, key)
+    }
+  }
+
   function processValue (key, val) {
     // handle parsing boolean arguments --foo=true --bar false.
     if (checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
       if (typeof val === 'string') val = val === 'true'
     }
 
-    var value = val
-    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
-      if (isNumber(val)) value = Number(val)
-      if (!isUndefined(val) && !isNumber(val) && checkAllAliases(key, flags.numbers)) value = NaN
-    }
+    var value = maybeCoerceNumber(key, val)
 
     // increment a count given as arg (either no value or value parsed as boolean)
     if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
@@ -417,6 +419,16 @@ function parse (args, opts) {
     if (checkAllAliases(key, flags.normalize) && checkAllAliases(key, flags.arrays)) {
       if (Array.isArray(val)) value = val.map(path.normalize)
       else value = path.normalize(val)
+    }
+    return value
+  }
+
+  function maybeCoerceNumber (key, value) {
+    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
+      const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
+        Number.isSafeInteger(Math.floor(value))
+      )
+      if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
     }
     return value
   }
@@ -469,7 +481,7 @@ function parse (args, opts) {
       // if the value is an inner object and we have dot-notation
       // enabled, treat inner objects in config the same as
       // heavily nested dot notations (foo.bar.apple).
-      if (typeof value === 'object' && !Array.isArray(value) && configuration['dot-notation']) {
+      if (typeof value === 'object' && value !== null && !Array.isArray(value) && configuration['dot-notation']) {
         // if the value is an object but not an array, check nested object
         setConfigObject(value, fullKey)
       } else {
@@ -513,13 +525,19 @@ function parse (args, opts) {
 
   function applyCoercions (argv) {
     var coerce
+    var applied = {}
     Object.keys(argv).forEach(function (key) {
-      coerce = checkAllAliases(key, flags.coercions)
-      if (typeof coerce === 'function') {
-        try {
-          argv[key] = coerce(argv[key])
-        } catch (err) {
-          error = err
+      if (!applied.hasOwnProperty(key)) { // If we haven't already coerced this option via one of its aliases
+        coerce = checkAllAliases(key, flags.coercions)
+        if (typeof coerce === 'function') {
+          try {
+            var value = coerce(argv[key])
+            ;([].concat(flags.aliases[key] || [], key)).forEach(ali => {
+              applied[ali] = argv[ali] = value
+            })
+          } catch (err) {
+            error = err
+          }
         }
       }
     })
@@ -558,9 +576,24 @@ function parse (args, opts) {
 
     if (!configuration['dot-notation']) keys = [keys.join('.')]
 
-    keys.slice(0, -1).forEach(function (key) {
-      if (o[key] === undefined) o[key] = {}
-      o = o[key]
+    keys.slice(0, -1).forEach(function (key, index) {
+      if (typeof o === 'object' && o[key] === undefined) {
+        o[key] = {}
+      }
+
+      if (typeof o[key] !== 'object' || Array.isArray(o[key])) {
+        // ensure that o[key] is an array, and that the last item is an empty object.
+        if (Array.isArray(o[key])) {
+          o[key].push({})
+        } else {
+          o[key] = [o[key], {}]
+        }
+
+        // we want to update the empty object at the end of the o[key] array, so set o to that object
+        o = o[key][o[key].length - 1]
+      } else {
+        o = o[key]
+      }
     })
 
     var key = keys[keys.length - 1]
@@ -602,10 +635,9 @@ function parse (args, opts) {
         flags.aliases[key].concat(key).forEach(function (x) {
           if (/-/.test(x) && configuration['camel-case-expansion']) {
             var c = camelCase(x)
-            if (key === c) {
-              return
+            if (flags.aliases[key].indexOf(c) === -1) {
+              flags.aliases[key].push(c)
             }
-            flags.aliases[key].push(c)
             newAliases[c] = true
           }
         })
@@ -667,7 +699,6 @@ function parse (args, opts) {
   }
 
   function isNumber (x) {
-    if (!configuration['parse-numbers']) return false
     if (typeof x === 'number') return true
     if (/^0x[0-9a-f]+$/i.test(x)) return true
     return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
