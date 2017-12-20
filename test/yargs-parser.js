@@ -2479,6 +2479,11 @@ describe('yargs-parser', function () {
     argv.foo.should.equal('93940495950949399948393')
   })
 
+  it('does not magically convert scientific notation larger than Number.MAX_SAFE_INTEGER', () => {
+    const argv = parser([ '--foo', '33e99999' ])
+    argv.foo.should.equal('33e99999')
+  })
+
   it('converts numeric options larger than Number.MAX_SAFE_INTEGER to number', () => {
     const argv = parser([ '--foo', '93940495950949399948393' ], {
       number: ['foo']
