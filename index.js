@@ -19,7 +19,8 @@ function parse (args, opts) {
     'negation-prefix': 'no-',
     'duplicate-arguments-array': true,
     'flatten-duplicate-arrays': true,
-    'populate--': false
+    'populate--': false,
+    'combine-arrays': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -487,7 +488,7 @@ function parse (args, opts) {
       } else {
         // setting arguments via CLI takes precedence over
         // values within the config file.
-        if (!hasKey(argv, fullKey.split('.')) || (flags.defaulted[fullKey]) || (flags.arrays[fullKey])) {
+        if (!hasKey(argv, fullKey.split('.')) || (flags.defaulted[fullKey]) || (flags.arrays[fullKey] && configuration['combine-arrays'])) {
           setArg(fullKey, value)
         }
       }

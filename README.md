@@ -212,6 +212,14 @@ node example.js --no-foo
 { _: [], "no-foo": true }
 ```
 
+### combine arrays
+
+* default: `false`
+* key: `combine-arrays`
+
+Should arrays be combined when provided by both command line arguments and
+a configuration file.
+
 ### duplicate arguments array
 
 * default: `true`

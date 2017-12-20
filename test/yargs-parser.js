@@ -456,6 +456,9 @@ describe('yargs-parser', function () {
         array: ['foo'],
         default: {
           settings: jsonPath
+        },
+        configuration: {
+          'combine-arrays': true
         }
       })
 
