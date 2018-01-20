@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.0.0"></a>
+# [9.0.0](https://github.com/yargs/yargs-parser/compare/v8.1.0...v9.0.0) (2018-01-20)
+
+
+### Features
+
+* narg arguments no longer consume flag arguments ([#114](https://github.com/yargs/yargs-parser/issues/114)) ([60bb9b3](https://github.com/yargs/yargs-parser/commit/60bb9b3))
+
+
+### BREAKING CHANGES
+
+* arguments of form --foo, -abc, will no longer be consumed by nargs
+
+
+
 <a name="8.1.0"></a>
 # [8.1.0](https://github.com/yargs/yargs-parser/compare/v8.0.0...v8.1.0) (2017-12-20)
 
