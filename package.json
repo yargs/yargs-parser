@@ -4,8 +4,8 @@
   "description": "the mighty option parser used by yargs",
   "main": "index.js",
   "scripts": {
-    "pretest": "standard",
     "test": "nyc mocha test/*.js",
+    "posttest": "standard",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "release": "standard-version"
   },
