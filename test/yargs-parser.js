@@ -1653,6 +1653,16 @@ describe('yargs-parser', function () {
 
       result.error.message.should.equal('Not enough arguments following: foo')
     })
+
+    it('should not consume more than configured nargs', function () {
+      var result = parser(['--foo', 'a', 'b'], {
+        narg: {
+          foo: 1
+        }
+      })
+
+      result.foo.should.eql('a')
+    })
   })
 
   describe('env vars', function () {

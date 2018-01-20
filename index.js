@@ -315,7 +315,7 @@ function parse (args, opts) {
 
     if (available < toEat) error = Error(__('Not enough arguments following: %s', key))
 
-    for (ii = i + 1; ii < (available + i + 1); ii++) {
+    for (ii = i + 1; ii < (Math.min(available, toEat) + i + 1); ii++) {
       setArg(key, args[ii])
     }
 
