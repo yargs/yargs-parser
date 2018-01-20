@@ -1643,6 +1643,16 @@ describe('yargs-parser', function () {
       result['1'][0].should.equal('a')
       result['1'][1].should.equal('b')
     })
+
+    it('should not treat flag arguments as satisfying narg requirements', function () {
+      var result = parser.detailed(['--foo', '--bar'], {
+        narg: {
+          foo: 1
+        }
+      })
+
+      result.error.message.should.equal('Not enough arguments following: foo')
+    })
   })
 
   describe('env vars', function () {

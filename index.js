@@ -302,11 +302,20 @@ function parse (args, opts) {
   // how many arguments should we consume, based
   // on the nargs option?
   function eatNargs (i, key, args) {
+    var ii
     var toEat = checkAllAliases(key, flags.nargs)
 
-    if (args.length - (i + 1) < toEat) error = Error(__('Not enough arguments following: %s', key))
+    // nargs will not consume flag arguments, e.g., -abc, --foo,
+    // and terminates when one is observed.
+    var available = 0
+    for (ii = i + 1; ii < args.length; ii++) {
+      if (!args[ii].match(/^-[^0-9]/)) available++
+      else break
+    }
 
-    for (var ii = i + 1; ii < (toEat + i + 1); ii++) {
+    if (available < toEat) error = Error(__('Not enough arguments following: %s', key))
+
+    for (ii = i + 1; ii < (available + i + 1); ii++) {
       setArg(key, args[ii])
     }
 
