@@ -303,7 +303,7 @@ function parse (args, opts) {
   // on the nargs option?
   function eatNargs (i, key, args) {
     var ii
-    var toEat = checkAllAliases(key, flags.nargs)
+    const toEat = checkAllAliases(key, flags.nargs)
 
     // nargs will not consume flag arguments, e.g., -abc, --foo,
     // and terminates when one is observed.
@@ -315,11 +315,12 @@ function parse (args, opts) {
 
     if (available < toEat) error = Error(__('Not enough arguments following: %s', key))
 
-    for (ii = i + 1; ii < (Math.min(available, toEat) + i + 1); ii++) {
+    const consumed = Math.min(available, toEat)
+    for (ii = i + 1; ii < (consumed + i + 1); ii++) {
       setArg(key, args[ii])
     }
 
-    return (i + toEat)
+    return (i + consumed)
   }
 
   // if an option is an array, eat all non-hyphenated arguments
