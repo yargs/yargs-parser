@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.0"></a>
+# [10.0.0](https://github.com/yargs/yargs-parser/compare/v9.0.2...v10.0.0) (2018-04-04)
+
+
+### Bug Fixes
+
+* do not set boolean flags if not defined in `argv` ([#119](https://github.com/yargs/yargs-parser/issues/119)) ([f6e6599](https://github.com/yargs/yargs-parser/commit/f6e6599))
+
+
+### BREAKING CHANGES
+
+* `boolean` flags defined without a `default` value will now behave like other option type and won't be set in the parsed results when the user doesn't set the corresponding CLI arg.
+
+Previous behavior:
+```js
+var parse = require('yargs-parser');
+
+parse('--flag', {boolean: ['flag']});
+// => { _: [], flag: true }
+
+parse('--no-flag', {boolean: ['flag']});
+// => { _: [], flag: false }
+
+parse('', {boolean: ['flag']});
+// => { _: [], flag: false }
+```
+
+New behavior:
+```js
+var parse = require('yargs-parser');
+
+parse('--flag', {boolean: ['flag']});
+// => { _: [], flag: true }
+
+parse('--no-flag', {boolean: ['flag']});
+// => { _: [], flag: false }
+
+parse('', {boolean: ['flag']});
+// => { _: [] } => flag not set similarly to other option type
+```
+
+
+
 <a name="9.0.2"></a>
 ## [9.0.2](https://github.com/yargs/yargs-parser/compare/v9.0.1...v9.0.2) (2018-01-20)
 
