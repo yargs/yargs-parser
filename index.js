@@ -105,8 +105,10 @@ function parse (args, opts) {
   var argv = { _: [] }
 
   Object.keys(flags.bools).forEach(function (key) {
-    setArg(key, !(key in defaults) ? false : defaults[key])
-    setDefaulted(key)
+    if (Object.prototype.hasOwnProperty.call(defaults, key)) {
+      setArg(key, defaults[key])
+      setDefaulted(key)
+    }
   })
 
   var notFlags = []

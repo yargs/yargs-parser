@@ -199,7 +199,7 @@ describe('yargs-parser', function () {
       boolean: ['x', 'y', 'z']
     })
     parse.should.have.property('x', true).and.be.a('boolean')
-    parse.should.have.property('y', false).and.be.a('boolean')
+    parse.should.not.have.property('y')
     parse.should.have.property('z', true).and.be.a('boolean')
     parse.should.have.property('_').and.deep.equal(['one', 'two', 'three'])
   })
@@ -1101,7 +1101,7 @@ describe('yargs-parser', function () {
         })
 
         it('should set false if no flag in arg', function () {
-          parser([], opts).flag.should.be.false // eslint-disable-line
+          expect(parser([], opts).flag).to.be.undefined // eslint-disable-line
         })
       })
 
