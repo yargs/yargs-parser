@@ -2570,4 +2570,30 @@ describe('yargs-parser', function () {
       argv.foo[3].bla.should.equal('banana')
     })
   })
+
+  describe('directory', () => {
+    it('returns error if directory is not found', () => {
+      const parse = parser.detailed([ '-i', '/foo/bar/batman' ], {
+        directory: 'i'
+      })
+      parse.error.message.should.equal('directory /foo/bar/batman missing')
+    })
+
+    it('returns error if file is provided rather than directory', () => {
+      const parse = parser.detailed([ '-i', './package.json' ], {
+        directory: 'i'
+      })
+      parse.error.message.should.equal('./package.json was not a directory')
+    })
+
+    it('does not return an error if directory is valid', () => {
+      const parse = parser.detailed([ '--input', './node_modules' ], {
+        directory: 'i',
+        alias: {
+          i: ['input']
+        }
+      })
+      expect(parse.error).to.equal(null)
+    })
+  })
 })
