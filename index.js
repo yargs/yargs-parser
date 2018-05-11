@@ -1,7 +1,8 @@
-var camelCase = require('camelcase')
-var path = require('path')
-var tokenizeArgString = require('./lib/tokenize-arg-string')
-var util = require('util')
+const camelCase = require('camelcase')
+const path = require('path')
+const statSync = require('fs').statSync
+const tokenizeArgString = require('./lib/tokenize-arg-string')
+const util = require('util')
 
 function parse (args, opts) {
   if (!opts) opts = {}
@@ -37,6 +38,7 @@ function parse (args, opts) {
     aliases: {},
     arrays: {},
     bools: {},
+    directories: {},
     strings: {},
     numbers: {},
     counts: {},
@@ -59,6 +61,11 @@ function parse (args, opts) {
 
   ;[].concat(opts.string).filter(Boolean).forEach(function (key) {
     flags.strings[key] = true
+  })
+
+  ;[].concat(opts.directory).filter(Boolean).forEach(function (key) {
+    flags.strings[key] = true
+    flags.directories[key] = true
   })
 
   ;[].concat(opts.number).filter(Boolean).forEach(function (key) {
@@ -289,6 +296,7 @@ function parse (args, opts) {
   setConfigObjects()
   applyDefaultsAndAliases(argv, flags.aliases, defaults)
   applyCoercions(argv)
+  validateDirectories(argv)
 
   // for any counts either not in args or without an explicit default, set to 0
   Object.keys(flags.counts).forEach(function (key) {
@@ -719,6 +727,25 @@ function parse (args, opts) {
 
   function isUndefined (num) {
     return num === undefined
+  }
+
+  function validateDirectories (argv) {
+    Object.keys(argv).forEach(key => {
+      const value = argv[key]
+      if (flags.directories[key]) {
+        try {
+          const stats = statSync(value)
+          if (!stats.isDirectory()) {
+            error = Error(__('%s was not a directory', value))
+          }
+        } catch (err) {
+          // TODO: overtime capture more varieties of errors.
+          if (err.code === 'ENOENT') {
+            error = Error(__('directory %s missing', value))
+          }
+        }
+      }
+    })
   }
 
   return {

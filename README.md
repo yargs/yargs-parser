@@ -66,6 +66,8 @@ Parses command line arguments returning a simple mapping of keys and values.
     (or throws an error), e.g. `{coerce: {foo: function (arg) {return modifiedArg}}}`.
   * `opts.count`: indicate a key that should be used as a counter, e.g., `-vvv` = `{v: 3}`.
   * `opts.default`: provide default values for keys: `{default: {x: 33, y: 'hello world!'}}`.
+  * `opts.directory`: key should be treated as directory (directories are string paths that have
+    their existence and file-type checked).
   * `opts.envPrefix`: environment variables (`process.env`) with the prefix provided should be parsed.
   * `opts.narg`: specify that a key requires `n` arguments: `{narg: {x: 2}}`.
   * `opts.normalize`: `path.normalize()` will be applied to values set to this key.
