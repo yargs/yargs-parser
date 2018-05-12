@@ -2324,6 +2324,65 @@ describe('yargs-parser', function () {
         result.should.have.property('--').and.deep.equal(['--not-a-flag', '-', '-h', '-multi', '--', 'eek'])
       })
     })
+
+    describe('set-placeholder-key', function () {
+      it('should not set placeholder key by default', function () {
+        var parsed = parser([], {
+          string: ['a']
+        })
+        parsed.should.not.have.property('a')
+      })
+
+      it('should set placeholder key to "undefined"', function () {
+        var parsed = parser([], {
+          array: ['a'],
+          boolean: ['b'],
+          string: ['c'],
+          number: ['d'],
+          count: ['e'],
+          normalize: ['f'],
+          narg: {g: 2},
+          coerce: {
+            h: function (arg) {
+              return arg
+            }
+          },
+          configuration: {'set-placeholder-key': true}
+        })
+        parsed.should.have.property('a')
+        expect(parsed.a).to.be.equal(undefined)
+        parsed.should.have.property('b')
+        expect(parsed.b).to.be.equal(undefined)
+        parsed.should.have.property('c')
+        expect(parsed.c).to.be.equal(undefined)
+        parsed.should.have.property('d')
+        expect(parsed.d).to.be.equal(undefined)
+        parsed.should.have.property('e')
+        expect(parsed.f).to.be.equal(undefined)
+        parsed.should.have.property('g')
+        expect(parsed.g).to.be.equal(undefined)
+        parsed.should.have.property('h')
+        expect(parsed.h).to.be.equal(undefined)
+      })
+
+      it('should not set placeholder for key with a default value', function () {
+        var parsed = parser([], {
+          string: ['a'],
+          default: {a: 'hello'},
+          configuration: {'set-placeholder-key': true}
+        })
+        parsed.a.should.equal('hello')
+      })
+
+      it('should not set placeholder key with dot notation', function () {
+        var parsed = parser([], {
+          string: ['a.b']
+        })
+        parsed.should.not.have.property('a')
+        parsed.should.not.have.property('b')
+        parsed.should.not.have.property('a.b')
+      })
+    })
   })
 
   // addresses: https://github.com/yargs/yargs-parser/issues/41
