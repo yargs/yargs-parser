@@ -1,4 +1,5 @@
 var camelCase = require('camelcase')
+var decamelize = require('decamelize')
 var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
 var util = require('util')
@@ -648,6 +649,16 @@ function parse (args, opts) {
         flags.aliases[key].concat(key).forEach(function (x) {
           if (/-/.test(x) && configuration['camel-case-expansion']) {
             var c = camelCase(x)
+            if (c !== key && flags.aliases[key].indexOf(c) === -1) {
+              flags.aliases[key].push(c)
+              newAliases[c] = true
+            }
+          }
+        })
+        // For "--optionName", also set argv['option-name']
+        flags.aliases[key].concat(key).forEach(function (x) {
+          if (/[A-Z]/.test(x) && configuration['camel-case-expansion']) {
+            var c = decamelize(x, '-')
             if (c !== key && flags.aliases[key].indexOf(c) === -1) {
               flags.aliases[key].push(c)
               newAliases[c] = true
