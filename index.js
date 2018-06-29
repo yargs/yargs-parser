@@ -20,7 +20,8 @@ function parse (args, opts) {
     'duplicate-arguments-array': true,
     'flatten-duplicate-arrays': true,
     'populate--': false,
-    'combine-arrays': false
+    'combine-arrays': false,
+    'set-placeholder-key': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -44,41 +45,50 @@ function parse (args, opts) {
     configs: {},
     defaulted: {},
     nargs: {},
-    coercions: {}
+    coercions: {},
+    keys: []
   }
   var negative = /^-[0-9]+(\.[0-9]+)?/
   var negatedBoolean = new RegExp('^--' + configuration['negation-prefix'] + '(.+)')
 
   ;[].concat(opts.array).filter(Boolean).forEach(function (key) {
     flags.arrays[key] = true
+    flags.keys.push(key)
   })
 
   ;[].concat(opts.boolean).filter(Boolean).forEach(function (key) {
     flags.bools[key] = true
+    flags.keys.push(key)
   })
 
   ;[].concat(opts.string).filter(Boolean).forEach(function (key) {
     flags.strings[key] = true
+    flags.keys.push(key)
   })
 
   ;[].concat(opts.number).filter(Boolean).forEach(function (key) {
     flags.numbers[key] = true
+    flags.keys.push(key)
   })
 
   ;[].concat(opts.count).filter(Boolean).forEach(function (key) {
     flags.counts[key] = true
+    flags.keys.push(key)
   })
 
   ;[].concat(opts.normalize).filter(Boolean).forEach(function (key) {
     flags.normalize[key] = true
+    flags.keys.push(key)
   })
 
   Object.keys(opts.narg || {}).forEach(function (k) {
     flags.nargs[k] = opts.narg[k]
+    flags.keys.push(k)
   })
 
   Object.keys(opts.coerce || {}).forEach(function (k) {
     flags.coercions[k] = opts.coerce[k]
+    flags.keys.push(k)
   })
 
   if (Array.isArray(opts.config) || typeof opts.config === 'string') {
@@ -289,6 +299,7 @@ function parse (args, opts) {
   setConfigObjects()
   applyDefaultsAndAliases(argv, flags.aliases, defaults)
   applyCoercions(argv)
+  if (configuration['set-placeholder-key']) setPlaceholderKeys(argv)
 
   // for any counts either not in args or without an explicit default, set to 0
   Object.keys(flags.counts).forEach(function (key) {
@@ -554,6 +565,15 @@ function parse (args, opts) {
         }
       }
     })
+  }
+
+  function setPlaceholderKeys (argv) {
+    flags.keys.forEach((key) => {
+      // don't set placeholder keys for dot notation options 'foo.bar'.
+      if (~key.indexOf('.')) return
+      if (typeof argv[key] === 'undefined') argv[key] = undefined
+    })
+    return argv
   }
 
   function applyDefaultsAndAliases (obj, aliases, defaults) {
