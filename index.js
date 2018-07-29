@@ -619,7 +619,7 @@ function parse (args, opts) {
       o[key] = increment(o[key])
     } else if (Array.isArray(o[key])) {
       if (duplicate && isTypeArray && isValueArray) {
-        o[key] = configuration['flatten-duplicate-arrays'] ? o[key].concat(value) : [o[key]].concat([value])
+        o[key] = configuration['flatten-duplicate-arrays'] ? o[key].concat(value) : (Array.isArray(o[key][0]) ? o[key] : [o[key]]).concat([value])
       } else if (!duplicate && Boolean(isTypeArray) === Boolean(isValueArray)) {
         o[key] = value
       } else {

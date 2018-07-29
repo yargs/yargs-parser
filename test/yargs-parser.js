@@ -2088,6 +2088,16 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.deep.equal([['a', 'b'], ['c', 'd']])
       })
+      it('nests duplicate array types of more than 2', function () {
+        var parsed = parser('-x a b -x c d -x e f -x g h', {
+          array: ['x'],
+          configuration: {
+            'flatten-duplicate-arrays': false
+          }
+        })
+
+        parsed['x'].should.deep.equal([['a', 'b'], ['c', 'd'], ['e', 'f'], ['g', 'h']])
+      })
       it('doesn\'t nests single arrays', function () {
         var parsed = parser('-x a b', {
           array: ['x'],
