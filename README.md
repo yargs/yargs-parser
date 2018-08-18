@@ -319,6 +319,27 @@ node example.js -a 1 -c 2
 { _: [], a: 1, b: undefined, c: 2 }
 ```
 
+### stop at unknown
+
+* default: `false`.
+* key: `stop-at-unknown`.
+
+Should parsing stop at the first unknown argument?
+
+_If disabled:_
+
+```sh
+node example.js -a b -x y
+{ _: [ 'b', 'y' ], a: true, x: true }
+```
+
+_If enabled:_
+
+```sh
+node example.js -a b -x y
+{ _: [ 'b', '-x', 'y' ], a: true }
+```
+
 ## Special Thanks
 
 The yargs project evolves from optimist and minimist. It owes its

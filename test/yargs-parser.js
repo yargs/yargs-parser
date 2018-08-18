@@ -2383,6 +2383,27 @@ describe('yargs-parser', function () {
         parsed.should.not.have.property('a.b')
       })
     })
+
+    describe('stop-at-unknown', function () {
+      it('gets the entire rest of line', function () {
+        var parse = parser(['--foo', './file.js', '--foo', '--bar'], {
+          configuration: {'stop-at-unknown': true},
+          boolean: ['foo', 'bar']
+        })
+        parse.should.deep.equal({foo: true, _: ['./file.js', '--foo', '--bar']})
+      })
+
+      it('is not influenced by --', function () {
+        var parse = parser(
+          ['--foo', './file.js', '--foo', '--', 'barbar', '--bar'],
+          {configuration: {'stop-at-unknown': true}, boolean: ['foo', 'bar']}
+        )
+        parse.should.deep.equal({
+          foo: true,
+          _: ['./file.js', '--foo', '--', 'barbar', '--bar']
+        })
+      })
+    })
   })
 
   // addresses: https://github.com/yargs/yargs-parser/issues/41
