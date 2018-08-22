@@ -1115,6 +1115,15 @@ describe('yargs-parser', function () {
 
         argv.fooBar.should.equal(99)
       })
+
+      // Fixes: https://github.com/yargs/yargs-parser/issues/77
+      it('should combine dot-notation and camel-case expansion', function () {
+        var argv = parser(['--dot-notation.foo.bar'])
+
+        argv.should.satisfy(function (args) {
+          return args.dotNotation.foo.bar
+        })
+      })
     })
 
     it('should define option as boolean and set default to true', function () {
