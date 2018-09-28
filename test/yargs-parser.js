@@ -1664,6 +1664,17 @@ describe('yargs-parser', function () {
 
       result.foo.should.eql('a')
     })
+
+    it('should be ignored if input is an array', function () {
+      var result = parser(['--foo', 'a', 'b'], {
+        array: 'foo',
+        narg: {
+          foo: 1
+        }
+      })
+
+      result.foo.should.eql(['a', 'b'])
+    })
   })
 
   describe('env vars', function () {
