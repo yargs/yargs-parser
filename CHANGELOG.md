@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="11.0.0"></a>
+# [11.0.0](https://github.com/yargs/yargs-parser/compare/v10.1.0...v11.0.0) (2018-10-06)
+
+
+### Bug Fixes
+
+* flatten-duplicate-arrays:false for more than 2 arrays ([#128](https://github.com/yargs/yargs-parser/issues/128)) ([2bc395f](https://github.com/yargs/yargs-parser/commit/2bc395f))
+* hyphenated flags combined with dot notation broke parsing ([#131](https://github.com/yargs/yargs-parser/issues/131)) ([dc788da](https://github.com/yargs/yargs-parser/commit/dc788da))
+* make requiresArg work in conjunction with arrays ([#136](https://github.com/yargs/yargs-parser/issues/136)) ([77ae1d4](https://github.com/yargs/yargs-parser/commit/77ae1d4))
+
+
+### Chores
+
+* update dependencies ([6dc42a1](https://github.com/yargs/yargs-parser/commit/6dc42a1))
+
+
+### Features
+
+* also add camelCase array options ([#125](https://github.com/yargs/yargs-parser/issues/125)) ([08c0117](https://github.com/yargs/yargs-parser/commit/08c0117))
+* array.type can now be provided, supporting coercion ([#132](https://github.com/yargs/yargs-parser/issues/132)) ([4b8cfce](https://github.com/yargs/yargs-parser/commit/4b8cfce))
+
+
+### BREAKING CHANGES
+
+* drops Node 4 support
+* the argv object is now populated differently (correctly) when hyphens and dot notation are used in conjunction.
+
+
+
 <a name="10.1.0"></a>
 # [10.1.0](https://github.com/yargs/yargs-parser/compare/v10.0.0...v10.1.0) (2018-06-29)
 
