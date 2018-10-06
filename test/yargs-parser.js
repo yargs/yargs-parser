@@ -146,7 +146,7 @@ describe('yargs-parser', function () {
       '--other', '-99', '-220'
     ], {
       array: 'bounds',
-      narg: {'other': 2}
+      narg: { 'other': 2 }
     })
 
     argv._.should.deep.equal([-33, -177, 33])
@@ -1419,12 +1419,12 @@ describe('yargs-parser', function () {
 
   describe('array', function () {
     it('should group values into an array if the same option is specified multiple times (duplicate-arguments-array=true)', function () {
-      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], {configuration: {'duplicate-arguments-array': true}})
+      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], { configuration: { 'duplicate-arguments-array': true } })
       parse.should.have.property('v').and.deep.equal(['a', 'b', 'c'])
       parse.should.have.property('_').with.length(0)
     })
     it('should keep only the last value if the same option is specified multiple times (duplicate-arguments-false)', function () {
-      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], {configuration: {'duplicate-arguments-array': false}})
+      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], { configuration: { 'duplicate-arguments-array': false } })
       parse.should.have.property('v').and.equal('c')
       parse.should.have.property('_').with.length(0)
     })
@@ -1503,8 +1503,8 @@ describe('yargs-parser', function () {
       var result = parser(['-a=hello', 'world', '-b',
         '33', '22', '--foo', 'red', 'green',
         '--bar=cat', 'dog'], {
-          array: ['a', 'b', 'foo', 'bar']
-        })
+        array: ['a', 'b', 'foo', 'bar']
+      })
 
       Array.isArray(result.a).should.equal(true)
       result.a.should.include('hello')
@@ -2166,7 +2166,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal({foo: ['a', 'b']})
+        parsed['x'].should.deep.equal({ foo: ['a', 'b'] })
       })
     })
 
@@ -2400,13 +2400,13 @@ describe('yargs-parser', function () {
           number: ['d'],
           count: ['e'],
           normalize: ['f'],
-          narg: {g: 2},
+          narg: { g: 2 },
           coerce: {
             h: function (arg) {
               return arg
             }
           },
-          configuration: {'set-placeholder-key': true}
+          configuration: { 'set-placeholder-key': true }
         })
         parsed.should.have.property('a')
         expect(parsed.a).to.be.equal(undefined)
@@ -2427,8 +2427,8 @@ describe('yargs-parser', function () {
       it('should not set placeholder for key with a default value', function () {
         var parsed = parser([], {
           string: ['a'],
-          default: {a: 'hello'},
-          configuration: {'set-placeholder-key': true}
+          default: { a: 'hello' },
+          configuration: { 'set-placeholder-key': true }
         })
         parsed.a.should.equal('hello')
       })
@@ -2639,7 +2639,7 @@ describe('yargs-parser', function () {
     var argv = parser([ '--foo', 'bar' ], {
       array: ['a'],
       normalize: ['a'],
-      configObjects: [{'a': ['bin/../a.txt', 'bin/../b.txt']}]
+      configObjects: [{ 'a': ['bin/../a.txt', 'bin/../b.txt'] }]
     })
     argv.a.should.deep.equal(['a.txt', 'b.txt'])
   })
