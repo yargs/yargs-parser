@@ -60,6 +60,8 @@ Parses command line arguments returning a simple mapping of keys and values.
 * `opts`: provide a set of hints indicating how `args` should be parsed:
   * `opts.alias`: an object representing the set of aliases for a key: `{alias: {foo: ['f']}}`.
   * `opts.array`: indicate that keys should be parsed as an array: `{array: ['foo', 'bar']}`.
+     Indicate that keys should be parsed as an array and coerced to booleans / numbers:
+     `{array: [{ key: 'foo', boolean: true }, {key: 'bar', number: true}]}`.
   * `opts.boolean`: arguments should be parsed as booleans: `{boolean: ['x', 'y']}`.
   * `opts.config`: indicate a key that represents a path to a configuration file (this file will be loaded and parsed).
   * `opts.coerce`: provide a custom synchronous function that returns a coerced value from the argument provided
