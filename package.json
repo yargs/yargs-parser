@@ -34,7 +34,8 @@
     "standard-version": "^4.3.0"
   },
   "dependencies": {
-    "camelcase": "^4.1.0"
+    "camelcase": "^4.1.0",
+    "decamelize": "^2.0.0"
   },
   "files": [
     "lib",

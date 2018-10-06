@@ -1529,6 +1529,35 @@ describe('yargs-parser', function () {
       var result = parser(['-x', 'val1', '-x', 'val1'])
       result.should.have.property('x').that.is.an('array').and.to.deep.equal(['val1', 'val1'])
     })
+
+    it('should eat camelCase switch with camelCase array option', function () {
+      var result = parser(['--someOption', '1', '2'], {
+        array: ['someOption']
+      })
+      Array.isArray(result.someOption).should.equal(true)
+      result.someOption.should.deep.equal([1, 2])
+    })
+    it('should eat hyphenated switch with hyphenated array option', function () {
+      var result = parser(['--some-option', '1', '2'], {
+        array: ['some-option']
+      })
+      Array.isArray(result['some-option']).should.equal(true)
+      result['some-option'].should.deep.equal([1, 2])
+    })
+    it('should eat camelCase switch with hyphenated array option', function () {
+      var result = parser(['--someOption', '1', '2'], {
+        array: ['some-option']
+      })
+      Array.isArray(result['some-option']).should.equal(true)
+      result['some-option'].should.deep.equal([1, 2])
+    })
+    it('should eat hyphenated switch with camelCase array option', function () {
+      var result = parser(['--some-option', '1', '2'], {
+        array: ['someOption']
+      })
+      Array.isArray(result['someOption']).should.equal(true)
+      result['someOption'].should.deep.equal([1, 2])
+    })
   })
 
   describe('nargs', function () {
