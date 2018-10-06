@@ -1567,6 +1567,63 @@ describe('yargs-parser', function () {
       Array.isArray(result['someOption']).should.equal(true)
       result['someOption'].should.deep.equal([1, 2])
     })
+
+    // see https://github.com/yargs/yargs-parser/issues/6
+    it('should respect the type `boolean` option for arrays', function () {
+      var result = parser(['-x=true', 'false'], {
+        array: [{ key: 'x', boolean: true }]
+      })
+      result.should.have.property('x').that.is.an('array').and.to.deep.equal([true, false])
+    })
+
+    it('should respect the type `number` option for arrays', function () {
+      var result = parser(['-x=5', '2'], {
+        array: [{ key: 'x', number: true }]
+      })
+      result.should.have.property('x').that.is.an('array').and.to.deep.equal([5, 2])
+    })
+
+    it('should respect the type `string` option for arrays', function () {
+      var result = parser(['-x=5', '2'], {
+        configuration: {
+          'parse-numbers': true
+        },
+        array: [{ key: 'x', string: true }]
+      })
+      result.should.have.property('x').that.is.an('array').and.to.deep.equal(['5', '2'])
+    })
+
+    it('should eat non-hyphenated arguments until hyphenated option is hit - combined with coercion', function () {
+      var result = parser([
+        '-a=hello', 'world',
+        '-b', '33', '22',
+        '--foo', 'true', 'false',
+        '--bar=cat', 'dog'
+      ], {
+        array: [
+          'a',
+          { key: 'b', integer: true },
+          { key: 'foo', boolean: true },
+          'bar'
+        ]
+      })
+
+      Array.isArray(result.a).should.equal(true)
+      result.a.should.include('hello')
+      result.a.should.include('world')
+
+      Array.isArray(result.b).should.equal(true)
+      result.b.should.include(33)
+      result.b.should.include(22)
+
+      Array.isArray(result.foo).should.equal(true)
+      result.foo.should.include(true)
+      result.foo.should.include(false)
+
+      Array.isArray(result.bar).should.equal(true)
+      result.bar.should.include('cat')
+      result.bar.should.include('dog')
+    })
   })
 
   describe('nargs', function () {

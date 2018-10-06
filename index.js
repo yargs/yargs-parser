@@ -52,7 +52,23 @@ function parse (args, opts) {
   var negative = /^-[0-9]+(\.[0-9]+)?/
   var negatedBoolean = new RegExp('^--' + configuration['negation-prefix'] + '(.+)')
 
-  ;[].concat(opts.array).filter(Boolean).forEach(function (key) {
+  ;[].concat(opts.array).filter(Boolean).forEach(function (opt) {
+    var key = opt.key || opt
+
+    // assign to flags[bools|strings|numbers]
+    const assignment = Object.keys(opt).map(function (key) {
+      return ({
+        boolean: 'bools',
+        string: 'strings',
+        number: 'numbers'
+      })[key]
+    }).filter(Boolean).pop()
+
+    // assign key to be coerced
+    if (assignment) {
+      flags[assignment][key] = true
+    }
+
     flags.arrays[key] = true
     flags.keys.push(key)
   })
