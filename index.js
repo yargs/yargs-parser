@@ -137,7 +137,7 @@ function parse (args, opts) {
     var next
     var value
 
-    // -- seperated by =
+    // -- separated by =
     if (arg.match(/^--.+=/) || (
       !configuration['short-option-groups'] && arg.match(/^-.+=/)
     )) {
