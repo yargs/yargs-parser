@@ -372,7 +372,10 @@ function parse (args, opts) {
     unsetDefaulted(key)
 
     if (/-/.test(key) && configuration['camel-case-expansion']) {
-      addNewAlias(key, camelCase(key))
+      var alias = key.split('.').map(function (prop) {
+        return camelCase(prop)
+      }).join('.')
+      addNewAlias(key, alias)
     }
 
     var value = processValue(key, val)
