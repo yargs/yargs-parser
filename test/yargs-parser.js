@@ -1592,6 +1592,38 @@ describe('yargs-parser', function () {
       })
       result.should.have.property('x').that.is.an('array').and.to.deep.equal(['5', '2'])
     })
+
+    it('should eat non-hyphenated arguments until hyphenated option is hit - combined with coercion', function () {
+      var result = parser([
+        '-a=hello', 'world',
+        '-b', '33', '22',
+        '--foo', 'true', 'false',
+        '--bar=cat', 'dog'
+      ], {
+        array: [
+          'a',
+          { key: 'b', integer: true },
+          { key: 'foo', boolean: true },
+          'bar'
+        ]
+      })
+
+      Array.isArray(result.a).should.equal(true)
+      result.a.should.include('hello')
+      result.a.should.include('world')
+
+      Array.isArray(result.b).should.equal(true)
+      result.b.should.include(33)
+      result.b.should.include(22)
+
+      Array.isArray(result.foo).should.equal(true)
+      result.foo.should.include(true)
+      result.foo.should.include(false)
+
+      Array.isArray(result.bar).should.equal(true)
+      result.bar.should.include('cat')
+      result.bar.should.include('dog')
+    })
   })
 
   describe('nargs', function () {
