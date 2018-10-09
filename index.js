@@ -22,7 +22,7 @@ function parse (args, opts) {
     'populate--': false,
     'combine-arrays': false,
     'set-placeholder-key': false,
-    'stop-at-unknown': false
+    'halt-at-non-option': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -282,7 +282,7 @@ function parse (args, opts) {
     } else if (arg === '--') {
       notFlags = args.slice(i + 1)
       break
-    } else if (configuration['stop-at-unknown']) {
+    } else if (configuration['halt-at-non-option']) {
       notFlags = args.slice(i)
       break
     } else {

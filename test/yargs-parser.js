@@ -2384,23 +2384,35 @@ describe('yargs-parser', function () {
       })
     })
 
-    describe('stop-at-unknown', function () {
+    describe('halt-at-non-option', function () {
       it('gets the entire rest of line', function () {
         var parse = parser(['--foo', './file.js', '--foo', '--bar'], {
-          configuration: {'stop-at-unknown': true},
+          configuration: { 'halt-at-non-option': true },
           boolean: ['foo', 'bar']
         })
-        parse.should.deep.equal({foo: true, _: ['./file.js', '--foo', '--bar']})
+        parse.should.deep.equal({ foo: true, _: ['./file.js', '--foo', '--bar'] })
       })
 
       it('is not influenced by --', function () {
         var parse = parser(
           ['--foo', './file.js', '--foo', '--', 'barbar', '--bar'],
-          {configuration: {'stop-at-unknown': true}, boolean: ['foo', 'bar']}
+          { configuration: { 'halt-at-non-option': true }, boolean: ['foo', 'bar'] }
         )
         parse.should.deep.equal({
           foo: true,
           _: ['./file.js', '--foo', '--', 'barbar', '--bar']
+        })
+      })
+
+      it('is not influenced by unknown options', function () {
+        var parse = parser(
+          ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
+          { configuration: { 'halt-at-non-option': true }, boolean: ['foo'] }
+        )
+        parse.should.deep.equal({
+          v: true,
+          long: 'arg',
+          _: ['./file.js', '--foo', '--', 'barbar']
         })
       })
     })
