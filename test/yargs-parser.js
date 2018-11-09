@@ -2745,4 +2745,15 @@ describe('yargs-parser', function () {
       argv.foo[3].bla.should.equal('banana')
     })
   })
+
+
+  // see: https://github.com/yargs/yargs-parser/issues/145
+  describe('parses leading dash in flag value', function () {
+    it('parses correctly when there is a leading dash in the value', function () {
+      var argv = parser(['--foo', '-helloWorld', '--bar=-fooBar'])
+
+      argv.foo.should.equal('-helloWorld')
+      argv.bar.should.equal('-fooBar')
+    })
+  })
 })

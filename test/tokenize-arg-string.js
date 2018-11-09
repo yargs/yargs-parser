@@ -25,11 +25,25 @@ describe('TokenizeArgString', function () {
     args[2].should.equal('--bar=foo bar')
   })
 
+  it('handles single quoted string with leading dash', function () {
+    var args = tokenizeArgString("--foo '-helloWorld' --bar='-fooBar'")
+    args[0].should.equal('--foo')
+    args[1].should.equal('-helloWorld')
+    args[2].should.equal('--bar=-fooBar')
+  })
+
   it('handles double quoted string with spaces', function () {
     var args = tokenizeArgString('--foo "hello world" --bar="foo bar"')
     args[0].should.equal('--foo')
     args[1].should.equal('hello world')
     args[2].should.equal('--bar=foo bar')
+  })
+
+  it('handles double quoted string with leading dash', function () {
+    var args = tokenizeArgString('--foo "-helloWorld" --bar="-fooBar"')
+    args[0].should.equal('--foo')
+    args[1].should.equal('-helloWorld')
+    args[2].should.equal('--bar=-fooBar')
   })
 
   it('handles quoted string with embeded quotes', function () {
