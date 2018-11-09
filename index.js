@@ -192,7 +192,11 @@ function parse (args, opts) {
       } else {
         next = args[i + 1]
 
-        if (next !== undefined && (!next.match(/^-/) ||
+        const leadingDashWithQuotes = /"(-.+)"$/;
+        if (leadingDashWithQuotes.test(next)) {
+          setArg(key, leadingDashWithQuotes.exec(next)[1])
+          i++
+        } else if (next !== undefined && (!next.match(/^-/) ||
           next.match(negative)) &&
           !checkAllAliases(key, flags.bools) &&
           !checkAllAliases(key, flags.counts)) {
