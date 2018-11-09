@@ -192,7 +192,7 @@ function parse (args, opts) {
       } else {
         next = args[i + 1]
 
-        const leadingDashWithQuotes = /"(-.+)"$/;
+        const leadingDashWithQuotes = /"(-.+)"$/
         if (leadingDashWithQuotes.test(next)) {
           setArg(key, leadingDashWithQuotes.exec(next)[1])
           i++

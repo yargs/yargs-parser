@@ -2746,7 +2746,6 @@ describe('yargs-parser', function () {
     })
   })
 
-
   // see: https://github.com/yargs/yargs-parser/issues/145
   describe('parses leading dash in flag value', function () {
     it('parses correctly when there is a leading dash in the value', function () {
@@ -2757,7 +2756,7 @@ describe('yargs-parser', function () {
     })
 
     it('allows dashes in argument values', function () {
-      var argv = parser(['foo', '--arg', '"--bar --baz"']);
+      var argv = parser(['foo', '--arg', '"--bar --baz"'])
 
       // fails with AssertionError: expected true to equal '--bar --baz'
       argv.should.have.property('arg').and.equal('--bar --baz')
