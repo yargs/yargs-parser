@@ -1218,6 +1218,21 @@ describe('yargs-parser', function () {
         result.should.have.property('someOption', 'asdf')
       })
 
+      it('should not apply camel-case logic to 1-character options', function () {
+        var result = parser(['-p', 'hello'], {
+          alias: {
+            p: 'parallel',
+            P: 'parallel-series'
+          }
+        })
+
+        result.should.not.have.property('P', 'hello')
+        result.should.not.have.property('parallel-series', 'hello')
+        result.should.not.have.property('parallelSeries', 'hello')
+        result.should.have.property('parallel', 'hello')
+        result.should.have.property('p', 'hello')
+      })
+
       it('should provide aliases of options with dashes as camelCase properties', function () {
         var result = parser([], {
           alias: {

@@ -696,7 +696,7 @@ function parse (args, opts) {
         })
         // For "--optionName", also set argv['option-name']
         flags.aliases[key].concat(key).forEach(function (x) {
-          if (/[A-Z]/.test(x) && configuration['camel-case-expansion']) {
+          if (x.length > 1 && /[A-Z]/.test(x) && configuration['camel-case-expansion']) {
             var c = decamelize(x, '-')
             if (c !== key && flags.aliases[key].indexOf(c) === -1) {
               flags.aliases[key].push(c)
