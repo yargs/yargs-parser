@@ -22,7 +22,8 @@ function parse (args, opts) {
     'flatten-duplicate-arrays': true,
     'populate--': false,
     'combine-arrays': false,
-    'set-placeholder-key': false
+    'set-placeholder-key': false,
+    'halt-at-non-option': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -139,10 +140,6 @@ function parse (args, opts) {
   })
 
   var notFlags = []
-  if (args.indexOf('--') !== -1) {
-    notFlags = args.slice(args.indexOf('--') + 1)
-    args = args.slice(0, args.indexOf('--'))
-  }
 
   for (var i = 0; i < args.length; i++) {
     var arg = args[i]
@@ -299,6 +296,12 @@ function parse (args, opts) {
           }
         }
       }
+    } else if (arg === '--') {
+      notFlags = args.slice(i + 1)
+      break
+    } else if (configuration['halt-at-non-option']) {
+      notFlags = args.slice(i)
+      break
     } else {
       argv._.push(maybeCoerceNumber('_', arg))
     }

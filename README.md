@@ -321,6 +321,27 @@ node example.js -a 1 -c 2
 { _: [], a: 1, b: undefined, c: 2 }
 ```
 
+### halt at non-option
+
+* default: `false`.
+* key: `halt-at-non-option`.
+
+Should parsing stop at the first text argument? This is similar to how e.g. `ssh` parses its command line.
+
+_If disabled:_
+
+```sh
+node example.js -a run b -x y
+{ _: [ 'run', 'b', 'y' ], a: true, x: true }
+```
+
+_If enabled:_
+
+```sh
+node example.js -a run b -x y
+{ _: [ 'run', 'b', '-x', 'y' ], a: true }
+```
+
 ## Special Thanks
 
 The yargs project evolves from optimist and minimist. It owes its
