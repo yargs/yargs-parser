@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="11.1.0"></a>
+# [11.1.0](https://github.com/yargs/yargs-parser/compare/v11.0.0...v11.1.0) (2018-11-10)
+
+
+### Bug Fixes
+
+* handling of one char alias ([#139](https://github.com/yargs/yargs-parser/issues/139)) ([ee56e31](https://github.com/yargs/yargs-parser/commit/ee56e31))
+
+
+### Features
+
+* add halt-at-non-option configuration option ([#130](https://github.com/yargs/yargs-parser/issues/130)) ([a849fce](https://github.com/yargs/yargs-parser/commit/a849fce))
+
+
+
 <a name="11.0.0"></a>
 # [11.0.0](https://github.com/yargs/yargs-parser/compare/v10.1.0...v11.0.0) (2018-10-06)
 
