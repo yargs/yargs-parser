@@ -747,6 +747,20 @@ describe('yargs-parser', function () {
         bar: 'bar'
       })
     })
+
+    it('should load objects with first object having greatest priority', function () {
+      var argv = parser(['--foo', 'bar'], {
+        configObjects: [{
+          bar: 'baz'
+        }, {
+          bar: 'quux',
+          foo: 'spam'
+        }]
+      })
+
+      argv.should.have.property('foo', 'bar')
+      argv.should.have.property('bar', 'baz')
+    })
   })
 
   describe('dot notation', function () {
