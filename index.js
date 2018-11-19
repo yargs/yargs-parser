@@ -180,12 +180,12 @@ function parse (args, opts) {
     )) {
       key = arg.match(/^--?(.+)/)[1]
 
-      // array format = '--foo a b c'
-      if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
-        i = eatArray(i, key, args)
       // nargs format = '--foo a b c'
-      } else if (checkAllAliases(key, flags.nargs)) {
+      if (checkAllAliases(key, flags.nargs)) {
         i = eatNargs(i, key, args)
+      // array format = '--foo a b c'
+      } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
+        i = eatArray(i, key, args)
       } else {
         next = args[i + 1]
 
