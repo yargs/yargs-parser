@@ -32,6 +32,20 @@ describe('TokenizeArgString', function () {
     args[2].should.equal('--bar=foo bar')
   })
 
+  it('handles single quoted empty string', function () {
+    var args = tokenizeArgString('--foo \'\' --bar=\'\'')
+    args[0].should.equal('--foo')
+    args[1].should.equal('')
+    args[2].should.equal('--bar=')
+  })
+
+  it('handles double quoted empty string', function () {
+    var args = tokenizeArgString('--foo "" --bar=""')
+    args[0].should.equal('--foo')
+    args[1].should.equal('')
+    args[2].should.equal('--bar=')
+  })
+
   it('handles quoted string with embeded quotes', function () {
     var args = tokenizeArgString('--foo "hello \'world\'" --bar=\'foo "bar"\'')
     args[0].should.equal('--foo')
