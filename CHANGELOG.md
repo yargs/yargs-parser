@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="11.1.1"></a>
+## [11.1.1](https://github.com/yargs/yargs-parser/compare/v11.1.0...v11.1.1) (2018-11-19)
+
+
+### Bug Fixes
+
+* ensure empty string is added into argv._ ([#140](https://github.com/yargs/yargs-parser/issues/140)) ([79cda98](https://github.com/yargs/yargs-parser/commit/79cda98))
+
+
+### Reverts
+
+* make requiresArg work in conjunction with arrays ([#136](https://github.com/yargs/yargs-parser/issues/136)) ([f4a3063](https://github.com/yargs/yargs-parser/commit/f4a3063))
+
+
+
 <a name="11.1.0"></a>
 # [11.1.0](https://github.com/yargs/yargs-parser/compare/v11.0.0...v11.1.0) (2018-11-10)
 
