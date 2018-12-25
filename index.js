@@ -454,7 +454,7 @@ function parse (args, opts) {
     // strings may be quoted, clean this up as we assign values.
     if (typeof val === 'string' &&
       (val[0] === "'" || val[0] === '"') &&
-      (val[val.length - 1] === "'" || val[val.length - 1] === '"')
+      val[val.length - 1] === val[0]
     ) {
       val = val.substring(1, val.length - 1)
     }
