@@ -2796,4 +2796,31 @@ describe('yargs-parser', function () {
       argv.foo[3].bla.should.equal('banana')
     })
   })
+
+  // see: https://github.com/yargs/yargs-parser/issues/145
+  describe('strings with quotes and dashes', () => {
+    it('handles double quoted strings', function () {
+      const args = parser('--foo "hello world" --bar="goodnight\'moon"')
+      args.foo.should.equal('hello world')
+      args.bar.should.equal('goodnight\'moon')
+      const args2 = parser(['--foo', '"hello world"', '--bar="goodnight\'moon"'])
+      args2.foo.should.equal('hello world')
+      args2.bar.should.equal('goodnight\'moon')
+    })
+
+    it('handles double quoted strings', function () {
+      const args = parser("--foo 'hello world' --bar='goodnight\"moon'")
+      args.foo.should.equal('hello world')
+      args.bar.should.equal('goodnight"moon')
+      const args2 = parser(['--foo', "'hello world'", "--bar='goodnight\"moon'"])
+      args2.foo.should.equal('hello world')
+      args2.bar.should.equal('goodnight"moon')
+    })
+
+    it('handles strings with dashes', function () {
+      const args = parser('--foo "-hello world" --bar="--goodnight moon"')
+      args.foo.should.equal('-hello world')
+      args.bar.should.equal('--goodnight moon')
+    })
+  })
 })
