@@ -1,3 +1,3 @@
 var parser = require('./')
-var parse = parser(['-cats', 'meow'])
+var parse = parser('--foo "-bar"')
 console.log(parse)

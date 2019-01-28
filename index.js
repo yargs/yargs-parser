@@ -9,6 +9,7 @@ function parse (args, opts) {
   // allow a string argument to be passed in rather
   // than an argv array.
   args = tokenizeArgString(args)
+
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
   var configuration = assign({
@@ -450,6 +451,14 @@ function parse (args, opts) {
   }
 
   function processValue (key, val) {
+    // strings may be quoted, clean this up as we assign values.
+    if (typeof val === 'string' &&
+      (val[0] === "'" || val[0] === '"') &&
+      val[val.length - 1] === val[0]
+    ) {
+      val = val.substring(1, val.length - 1)
+    }
+
     // handle parsing boolean arguments --foo=true --bar false.
     if (checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
       if (typeof val === 'string') val = val === 'true'
