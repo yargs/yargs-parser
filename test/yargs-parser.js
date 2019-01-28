@@ -2808,7 +2808,7 @@ describe('yargs-parser', function () {
       args2.bar.should.equal('goodnight\'moon')
     })
 
-    it('handles double quoted strings', function () {
+    it('handles single quoted strings', function () {
       const args = parser("--foo 'hello world' --bar='goodnight\"moon'")
       args.foo.should.equal('hello world')
       args.bar.should.equal('goodnight"moon')
