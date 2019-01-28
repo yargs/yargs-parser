@@ -255,7 +255,7 @@ describe('yargs-parser', function () {
   })
 
   // Fixes: https://github.com/bcoe/yargs/issues/68
-  it('should parse flag arguments with no right-hand-value as strings, if defined as strings', function () {
+  it('should parse flag arguments with no right-hand value as strings, if defined as strings', function () {
     var s = parser([ '-s' ], {
       string: ['s']
     }).s
@@ -2822,5 +2822,27 @@ describe('yargs-parser', function () {
       args.foo.should.equal('-hello world')
       args.bar.should.equal('--goodnight moon')
     })
+  })
+
+  // see: https://github.com/yargs/yargs-parser/issues/144
+  it('number/string types should use default when no right-hand value', () => {
+    let argv = parser([ '--foo' ], {
+      number: ['foo'],
+      default: {
+        foo: 99
+      }
+    })
+    argv.foo.should.equal(99)
+
+    argv = parser([ '-b' ], {
+      alias: {
+        bar: 'b'
+      },
+      string: ['bar'],
+      default: {
+        bar: 'hello'
+      }
+    })
+    argv.bar.should.equal('hello')
   })
 })
