@@ -200,7 +200,7 @@ function parse (args, opts) {
           setArg(key, next)
           i++
         } else {
-          setArg(key, defaultForType(guessType(key, flags)))
+          setArg(key, defaultValue(key))
         }
       }
 
@@ -220,7 +220,7 @@ function parse (args, opts) {
         setArg(key, next)
         i++
       } else {
-        setArg(key, defaultForType(guessType(key, flags)))
+        setArg(key, defaultValue(key))
       }
     } else if (arg.match(/^-[^-]+/) && !arg.match(negative)) {
       letters = arg.slice(1, -1).split('')
@@ -267,7 +267,7 @@ function parse (args, opts) {
           broken = true
           break
         } else {
-          setArg(letters[j], defaultForType(guessType(letters[j], flags)))
+          setArg(letters[j], defaultValue(letters[j]))
         }
       }
 
@@ -293,7 +293,7 @@ function parse (args, opts) {
             setArg(key, next)
             i++
           } else {
-            setArg(key, defaultForType(guessType(key, flags)))
+            setArg(key, defaultValue(key))
           }
         }
       }
@@ -749,6 +749,18 @@ function parse (args, opts) {
     })
   }
 
+  // make a best effor to pick a default value
+  // for an option based on name and type.
+  function defaultValue (key) {
+    if (!checkAllAliases(key, flags.bools) &&
+        !checkAllAliases(key, flags.counts) &&
+        `${key}` in defaults) {
+      return defaults[key]
+    } else {
+      return defaultForType(guessType(key))
+    }
+  }
+
   // return a default value, given the type of a flag.,
   // e.g., key of type 'string' will default to '', rather than 'true'.
   function defaultForType (type) {
@@ -763,7 +775,7 @@ function parse (args, opts) {
   }
 
   // given a flag, enforce a default type.
-  function guessType (key, flags) {
+  function guessType (key) {
     var type = 'boolean'
 
     if (checkAllAliases(key, flags.strings)) type = 'string'
