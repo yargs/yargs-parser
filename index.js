@@ -16,7 +16,7 @@ function parse (args, opts) {
     'short-option-groups': true,
     'camel-case-expansion': true,
     'dot-notation': true,
-    'parse-numbers': true,
+    'parse-numbers': false,
     'boolean-negation': true,
     'negation-prefix': 'no-',
     'duplicate-arguments-array': true,

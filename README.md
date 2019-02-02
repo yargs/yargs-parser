@@ -176,7 +176,7 @@ node example.js --foo.bar
 
 ### parse numbers
 
-* default: `true`
+* default: `false`
 * key: `parse-numbers`
 
 Should keys that look like numbers be treated as such?
