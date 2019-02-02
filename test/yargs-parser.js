@@ -2770,6 +2770,24 @@ describe('yargs-parser', function () {
     argv.foo.should.equal(9.39404959509494e+22)
   })
 
+  // see: https://github.com/yargs/yargs/issues/1099
+  it('does not magically convert options with leading + to number', () => {
+    const argv = parser(['--foo', '+5550100', '--bar', '+5550100'], {
+      number: 'bar'
+    })
+    argv.foo.should.equal('+5550100')
+    argv.bar.should.equal(5550100)
+  })
+
+  // see: https://github.com/yargs/yargs/issues/1099
+  it('does not magically convert options with leading 0 to number', () => {
+    const argv = parser(['--foo', '000000', '--bar', '000000'], {
+      number: 'bar'
+    })
+    argv.foo.should.equal('000000')
+    argv.bar.should.equal(0)
+  })
+
   // see: https://github.com/yargs/yargs-parser/issues/101
   describe('dot-notation array arguments combined with string arguments', function () {
     it('parses correctly when dot-notation argument is first', function () {
