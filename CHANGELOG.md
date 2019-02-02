@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="13.0.0"></a>
+# [13.0.0](https://github.com/yargs/yargs-parser/compare/v12.0.0...v13.0.0) (2019-02-02)
+
+
+### Features
+
+* don't coerce number from string with leading '0' or '+' ([#158](https://github.com/yargs/yargs-parser/issues/158)) ([18d0fd5](https://github.com/yargs/yargs-parser/commit/18d0fd5))
+
+
+### BREAKING CHANGES
+
+* options with leading '+' or '0' now parse as strings
+
+
+
 <a name="12.0.0"></a>
 # [12.0.0](https://github.com/yargs/yargs-parser/compare/v11.1.1...v12.0.0) (2019-01-29)
 
