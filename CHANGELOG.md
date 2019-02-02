@@ -34,7 +34,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### BREAKING CHANGES
 
 * a flag with no right-hand value no longer populates defaulted options with `undefined`.
-* quotes and beginning and endings of strings are not removed during parsing.
+* quotes at beginning and endings of strings are not removed during parsing.
 
 
 
