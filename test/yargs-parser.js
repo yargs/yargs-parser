@@ -2191,7 +2191,7 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.deep.equal(['a', 'b'])
       })
-      it('keeps only last argument', function () {
+      it('string: keeps only last argument', function () {
         var parsed = parser('-x a -x b', {
           configuration: {
             'duplicate-arguments-array': false
@@ -2199,6 +2199,26 @@ describe('yargs-parser', function () {
         })
 
         parsed['x'].should.equal('b')
+      })
+      it('array[string]: keeps only last argument', function () {
+        var parsed = parser('-x a -x b', {
+          array: [{ key: 'x', string: true }],
+          configuration: {
+            'duplicate-arguments-array': false
+          }
+        })
+
+        parsed['x'].should.equal('b')
+      })
+      it('array[number]: keeps only last argument', function () {
+        var parsed = parser('-x 1 -x 2', {
+          array: [{ key: 'x', number: true }],
+          configuration: {
+            'duplicate-arguments-array': false
+          }
+        })
+
+        parsed['x'].should.equal(2)
       })
       it('does not interfere with nargs', function () {
         var parsed = parser('-x a b c -x o p q', {
@@ -2405,25 +2425,25 @@ describe('yargs-parser', function () {
       })
       describe('duplicate=true, flatten=false,', function () {
         describe('type=array', function () {
-          it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
+          it('number: [-x 1 -x 2 -x 3] => [[1], [2], [3]]', function () {
             var parsed = parser('-x 1 -x 2 -x 3', {
-              array: ['x'],
+              array: [{ key: 'x', number: true }],
               configuration: {
                 'duplicate-arguments-array': true,
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed['x'].should.deep.equal([[1], [2], [3]])
           })
-          it('[-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [ 2, 3, 4]]', function () {
-            var parsed = parser('-x 1 2 3 -x 2 3 4', {
-              array: ['x'],
+          it("string: [-x 1 -x 2 -x 3] => [['1'], ['2'], ['3']]", function () {
+            var parsed = parser('-x 1 -x 2 -x 3', {
+              array: [{ key: 'x', string: true }],
               configuration: {
                 'duplicate-arguments-array': true,
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([[1, 2, 3], [2, 3, 4]])
+            parsed['x'].should.deep.equal([['1'], ['2'], ['3']])
           })
         })
         describe('type=number', function () {

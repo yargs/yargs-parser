@@ -501,7 +501,9 @@ function parse (args, opts) {
       const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
         Number.isSafeInteger(Math.floor(value))
       )
-      if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
+      if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) {
+        value = Array.isArray(value) ? [Number(value)] : Number(value)
+      }
     }
     return value
   }
