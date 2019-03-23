@@ -667,6 +667,14 @@ function parse (args, opts) {
     var isValueArray = Array.isArray(value)
     var duplicate = configuration['duplicate-arguments-array']
 
+    // nargs has higher priority than duplicate
+    if (!duplicate && checkAllAliases(key, flags.nargs)) {
+      duplicate = true
+      if ((!isUndefined(o[key]) && flags.nargs[key] === 1) || (Array.isArray(o[key]) && o[key].length === flags.nargs[key])) {
+        o[key] = undefined
+      }
+    }
+
     if (value === increment) {
       o[key] = increment(o[key])
     } else if (Array.isArray(o[key])) {

@@ -2189,6 +2189,16 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.equal('b')
       })
+      it('does not interfere with nargs', function () {
+        var parsed = parser('-x a b c -x o p q', {
+          narg: { x: 3 },
+          configuration: {
+            'duplicate-arguments-array': false
+          }
+        })
+
+        parsed['x'].should.deep.equal(['o', 'p', 'q'])
+      })
     })
 
     describe('flatten duplicate arrays', function () {
@@ -2232,7 +2242,6 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.deep.equal(['a', 'b'])
       })
-
       it('flattens duplicate array type, when argument uses dot notation', function () {
         var parsed = parser('-x.foo a -x.foo b', {
           array: ['x.foo'],
