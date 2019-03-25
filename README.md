@@ -324,20 +324,20 @@ node example.js -a 1 -c 2
 * default: `false`.
 * key: `halt-at-non-option`.
 
-Should parsing stop at the first text argument? This is similar to how e.g. `ssh` parses its command line.
+Should parsing stop at the first positional argument? This is similar to how e.g. `ssh` parses its command line.
 
 _If disabled:_
 
 ```sh
 node example.js -a run b -x y
-{ _: [ 'run', 'b', 'y' ], a: true, x: true }
+{ _: [ 'b' ], a: 'run', x: 'y' }
 ```
 
 _If enabled:_
 
 ```sh
 node example.js -a run b -x y
-{ _: [ 'run', 'b', '-x', 'y' ], a: true }
+{ _: [ 'b', '-x', 'y' ], a: 'run' }
 ```
 
 ## Special Thanks
