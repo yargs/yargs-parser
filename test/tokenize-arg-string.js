@@ -12,6 +12,12 @@ describe('TokenizeArgString', function () {
     args[1].should.equal('99')
   })
 
+  it('handles unquoted numbers', function () {
+    var args = tokenizeArgString(['--foo', 9])
+    args[0].should.equal('--foo')
+    args[1].should.equal('9')
+  })
+
   it('handles quoted string with no spaces', function () {
     var args = tokenizeArgString("--foo 'hello'")
     args[0].should.equal('--foo')
