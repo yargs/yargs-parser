@@ -33,9 +33,7 @@ function parse (args, opts) {
   var notFlagsArgv = notFlagsOption ? '--' : '_'
   var newAliases = {}
   // allow a i18n handler to be passed in, default to a fake one (util.format).
-  var __ = opts.__ || function (str) {
-    return util.format.apply(util, Array.prototype.slice.call(arguments))
-  }
+  var __ = opts.__ || util.format
   var error = null
   var flags = {
     aliases: {},
@@ -687,8 +685,8 @@ function parse (args, opts) {
   }
 
   // extend the aliases list with inferred aliases.
-  function extendAliases () {
-    Array.prototype.slice.call(arguments).forEach(function (obj) {
+  function extendAliases (...args) {
+    args.forEach(function (obj) {
       Object.keys(obj || {}).forEach(function (key) {
         // short-circuit if we've already added a key
         // to the aliases array, for example it might
