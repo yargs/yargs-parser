@@ -24,7 +24,9 @@ function parse (args, opts) {
     'populate--': false,
     'combine-arrays': false,
     'set-placeholder-key': false,
-    'halt-at-non-option': false
+    'halt-at-non-option': false,
+    'strip-aliased': false,
+    'strip-dashed': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -332,6 +334,23 @@ function parse (args, opts) {
   notFlags.forEach(function (key) {
     argv[notFlagsArgv].push(key)
   })
+
+  if (configuration['camel-case-expansion'] && configuration['strip-dashed']) {
+    Object.keys(argv).filter(key => key !== '--' && key.includes('-')).forEach(key => {
+      delete argv[key]
+    })
+  }
+
+  if (configuration['strip-aliased']) {
+    // XXX Switch to [].concat(...Object.values(aliases)) once node.js 6 is dropped
+    ;[].concat(...Object.keys(aliases).map(k => aliases[k])).forEach(alias => {
+      if (configuration['camel-case-expansion']) {
+        delete argv[alias.split('.').map(prop => camelCase(prop)).join('.')]
+      }
+
+      delete argv[alias]
+    })
+  }
 
   // how many arguments should we consume, based
   // on the nargs option?
