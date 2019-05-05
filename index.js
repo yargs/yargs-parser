@@ -12,7 +12,7 @@ function parse (args, opts) {
 
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
-  var configuration = assign({
+  var configuration = Object.assign({
     'short-option-groups': true,
     'camel-case-expansion': true,
     'dot-notation': true,
@@ -854,20 +854,6 @@ function combineAliases (aliases) {
   })
 
   return combined
-}
-
-function assign (defaults, configuration) {
-  var o = {}
-  configuration = configuration || {}
-
-  Object.keys(defaults).forEach(function (k) {
-    o[k] = defaults[k]
-  })
-  Object.keys(configuration).forEach(function (k) {
-    o[k] = configuration[k]
-  })
-
-  return o
 }
 
 // this function should only be called when a count is given as an arg
