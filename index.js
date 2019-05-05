@@ -186,7 +186,7 @@ function parse (args, opts) {
       } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
         i = eatArray(i, key, args)
       } else {
-        next = args[i + 1]
+        next = flags.nargs[key] === 0 ? undefined : args[i + 1]
 
         if (next !== undefined && (!next.match(/^-/) ||
           next.match(negative)) &&
