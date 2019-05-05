@@ -2874,4 +2874,71 @@ describe('yargs-parser', function () {
     })
     argv.bar.should.equal('hello')
   })
+
+  describe('stripping', function () {
+    it('strip-dashed removes expected fields from argv', function () {
+      const argv = parser([ '--test-value', '1' ], {
+        number: ['test-value'],
+        alias: {
+          'test-value': ['alt-test']
+        },
+        configuration: {
+          'strip-dashed': true
+        }
+      })
+      argv.should.deep.equal({
+        _: [],
+        'testValue': 1,
+        'altTest': 1
+      })
+    })
+
+    it('strip-aliased removes expected fields from argv', function () {
+      const argv = parser([ '--test-value', '1' ], {
+        number: ['test-value'],
+        alias: {
+          'test-value': ['alt-test']
+        },
+        configuration: {
+          'strip-aliased': true
+        }
+      })
+      argv.should.deep.equal({
+        _: [],
+        'test-value': 1,
+        'testValue': 1
+      })
+    })
+
+    it('strip-aliased and strip-dashed combined removes expected fields from argv', function () {
+      const argv = parser([ '--test-value', '1' ], {
+        number: ['test-value'],
+        alias: {
+          'test-value': ['alt-test']
+        },
+        configuration: {
+          'strip-aliased': true,
+          'strip-dashed': true
+        }
+      })
+      argv.should.deep.equal({
+        _: [],
+        'testValue': 1
+      })
+    })
+
+    it('ignores strip-dashed if camel-case-expansion is disabled', function () {
+      const argv = parser([ '--test-value', '1' ], {
+        number: ['test-value'],
+        configuration: {
+          'camel-case-expansion': false,
+          'strip-dashed': true
+        }
+      })
+      argv.should.deep.equal({
+        _: [],
+        'test-value': 1
+      })
+    })
+  })
 })

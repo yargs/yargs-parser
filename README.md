@@ -340,6 +340,49 @@ node example.js -a run b -x y
 { _: [ 'run', 'b', '-x', 'y' ], a: true }
 ```
 
+### strip aliased
+
+* default: `false`
+* key: `strip-aliased`
+
+Should aliases be removed before returning results?
+
+_If disabled:_
+
+```sh
+node example.js --test-field 1
+{ _: [], 'test-field': 1, testField: 1, 'test-alias': 1, testAlias: 1 }
+```
+
+_If enabled:_
+
+```sh
+node example.js --test-field 1
+{ _: [], 'test-field': 1, testField: 1 }
+```
+
+### strip dashed
+
+* default: `false`
+* key: `strip-dashed`
+
+Should dashed keys be removed before returning results?  This option has no effect if
+`camel-case-exansion` is disabled.
+
+_If disabled:_
+
+```sh
+node example.js --test-field 1
+{ _: [], 'test-field': 1, testField: 1 }
+```
+
+_If enabled:_
+
+```sh
+node example.js --test-field 1
+{ _: [], testField: 1 }
+```
+
 ## Special Thanks
 
 The yargs project evolves from optimist and minimist. It owes its
