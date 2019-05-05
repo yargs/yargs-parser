@@ -1,6 +1,16 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [13.1.0](https://github.com/yargs/yargs-parser/compare/v13.0.0...v13.1.0) (2019-05-05)
+
+
+### Features
+
+* add `strip-aliased` and `strip-dashed` configuration options. ([#172](https://github.com/yargs/yargs-parser/issues/172)) ([a3936aa](https://github.com/yargs/yargs-parser/commit/a3936aa))
+* support boolean which do not consume next argument. ([#171](https://github.com/yargs/yargs-parser/issues/171)) ([0ae7fcb](https://github.com/yargs/yargs-parser/commit/0ae7fcb))
+
+
 
 <a name="13.0.0"></a>
 # [13.0.0](https://github.com/yargs/yargs-parser/compare/v12.0.0...v13.0.0) (2019-02-02)
