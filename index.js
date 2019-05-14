@@ -177,7 +177,7 @@ function parse (args, opts) {
 
     // -- seperated by space.
     } else if (arg.match(/^--.+/) || (
-      !configuration['short-option-groups'] && arg.match(/^-.+/)
+      !configuration['short-option-groups'] && arg.match(/^-[^-]+/)
     )) {
       key = arg.match(/^--?(.+)/)[1]
 
