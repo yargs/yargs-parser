@@ -62,20 +62,20 @@ Parses command line arguments returning a simple mapping of keys and values.
     Indicate that keys should be parsed as an array and coerced to booleans / numbers:<br>
     `{array: [{ key: 'foo', boolean: true }, {key: 'bar', number: true}]}`.
   * `opts.boolean`: arguments should be parsed as booleans: `{boolean: ['x', 'y']}`.
-  * `opts.config`: indicate a key that represents a path to a configuration file (this file will be loaded and parsed).
-  * `opts.configObjects`: configuration objects to parse, their properties will be set as arguments:<br>
-    `{configObjects: [{'x': 5, 'y': 33}, {'z': 44}]}`.
   * `opts.coerce`: provide a custom synchronous function that returns a coerced value from the argument provided
     (or throws an error). For arrays the function is called only once for the entire array:<br>
     `{coerce: {foo: function (arg) {return modifiedArg}}}`.
+  * `opts.config`: indicate a key that represents a path to a configuration file (this file will be loaded and parsed).
+  * `opts.configObjects`: configuration objects to parse, their properties will be set as arguments:<br>
+    `{configObjects: [{'x': 5, 'y': 33}, {'z': 44}]}`.
+  * `opts.configuration`: provide configuration options to the yargs-parser (see: [configuration](#configuration)).
   * `opts.count`: indicate a key that should be used as a counter, e.g., `-vvv` = `{v: 3}`.
   * `opts.default`: provide default values for keys: `{default: {x: 33, y: 'hello world!'}}`.
   * `opts.envPrefix`: environment variables (`process.env`) with the prefix provided should be parsed.
   * `opts.narg`: specify that a key requires `n` arguments: `{narg: {x: 2}}`.
   * `opts.normalize`: `path.normalize()` will be applied to values set to this key.
-  * `opts.string`: keys should be treated as strings (even if they resemble a number `-x 33`).
-  * `opts.configuration`: provide configuration options to the yargs-parser (see: [configuration](#configuration)).
   * `opts.number`: keys should be treated as numbers.
+  * `opts.string`: keys should be treated as strings (even if they resemble a number `-x 33`).
 
 **returns:**
 
