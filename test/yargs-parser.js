@@ -2442,6 +2442,19 @@ describe('yargs-parser', function () {
         result.should.not.have.property('--')
       })
 
+      it('should populate "_" when given config with "short-option-groups" false', function () {
+        var result = parser.detailed([
+          '--', 'foo'
+        ], {
+          configuration: {
+            'short-option-groups': false
+          }
+        })
+        result.argv.should.deep.equal({ '_': ['foo'] })
+        result.argv.should.not.have.property('--')
+        result.newAliases.should.deep.equal({})
+      })
+
       it('should populate the "--" if populate-- is "true"', function () {
         var result = parser([
           '--name=meowmers', 'bare', '-cats', 'woo', 'moxy',
