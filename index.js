@@ -497,7 +497,7 @@ function parse (args, opts) {
   }
 
   function maybeCoerceNumber (key, value) {
-    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
+    if (!checkAllAliases(key, flags.strings)) {
       const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
         Number.isSafeInteger(Math.floor(value))
       )
@@ -604,7 +604,7 @@ function parse (args, opts) {
         coerce = checkAllAliases(key, flags.coercions)
         if (typeof coerce === 'function') {
           try {
-            var value = coerce(argv[key])
+            var value = maybeCoerceNumber(key, coerce(argv[key]))
             ;([].concat(flags.aliases[key] || [], key)).forEach(ali => {
               applied[ali] = argv[ali] = value
             })

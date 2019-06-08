@@ -2147,14 +2147,18 @@ describe('yargs-parser', function () {
       })
 
       it('parses number if option explicitly set to number type', function () {
-        var parsed = parser(['--foo', '5', '--bar', '6'], {
-          number: 'bar',
+        var parsed = parser(['--foo', '5', '--bar', '6', '--baz', '7'], {
+          number: ['bar', 'baz'],
+          coerce: {
+            'baz': val => val
+          },
           configuration: {
             'parse-numbers': false
           }
         })
         expect(parsed['foo']).to.equal('5')
         expect(parsed['bar']).to.equal(6)
+        expect(parsed['baz']).to.equal(7)
       })
     })
 
