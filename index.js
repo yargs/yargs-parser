@@ -219,7 +219,7 @@ function parse (args, opts) {
       next = args[i + 1]
       key = arg.match(/^-(.\..+)/)[1]
 
-      if(!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
+      if (!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
         if (next !== undefined && !next.match(/^-/) &&
           !checkAllAliases(key, flags.bools) &&
           !checkAllAliases(key, flags.counts)) {
@@ -234,7 +234,7 @@ function parse (args, opts) {
     } else if (arg.match(/^-[^-]+/) && !arg.match(negative)) {
       letters = arg.slice(1, -1).split('')
       broken = false
-      unmatched = []
+      let unmatched = []
 
       for (var j = 0; j < letters.length; j++) {
         next = arg.slice(j + 2)
@@ -254,9 +254,9 @@ function parse (args, opts) {
           } else if (!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
             setArg(key, value)
           } else {
-            unmatched.push(key);
-            unmatched.push('=');
-            unmatched.push(value);
+            unmatched.push(key)
+            unmatched.push('=')
+            unmatched.push(value)
           }
 
           broken = true
@@ -267,8 +267,8 @@ function parse (args, opts) {
           if (!configuration['ignore-unknown-options'] || hasAnyFlag(letters[j])) {
             setArg(letters[j], next)
           } else {
-            unmatched.push(letters[j]);
-            unmatched.push(next);
+            unmatched.push(letters[j])
+            unmatched.push(next)
           }
           continue
         }
@@ -279,8 +279,8 @@ function parse (args, opts) {
           if (!configuration['ignore-unknown-options'] || hasAnyFlag(letters[j])) {
             setArg(letters[j], next)
           } else {
-            unmatched.push(letters[j]);
-            unmatched.push(next);
+            unmatched.push(letters[j])
+            unmatched.push(next)
           }
           broken = true
           break
@@ -290,8 +290,8 @@ function parse (args, opts) {
           if (!configuration['ignore-unknown-options'] || hasAnyFlag(letters[j])) {
             setArg(letters[j], next)
           } else {
-            unmatched.push(letters[j]);
-            unmatched.push(next);
+            unmatched.push(letters[j])
+            unmatched.push(next)
           }
           broken = true
           break
@@ -328,7 +328,7 @@ function parse (args, opts) {
             setArg(key, defaultValue(key))
           }
         } else {
-          unmatched.push(key);
+          unmatched.push(key)
         }
       }
       if (unmatched.length > 0) {
@@ -800,7 +800,7 @@ function parse (args, opts) {
 
     return isSet
   }
-  
+
   function hasAnyFlag (key) {
     var isSet = false
     var toCheck = [].concat(Object.values(flags))

@@ -3146,7 +3146,7 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: ['-u=2'],
-        'k':  1
+        'k': 1
       })
     })
     it('should ignore unknown options in short format followed by hyphen', function () {
@@ -3158,7 +3158,7 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: ['-u-'],
-        'k':  '-'
+        'k': '-'
       })
     })
     it('should ignore unknown options in short format separated by space', function () {
@@ -3170,7 +3170,7 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: ['-u', 2],
-        'k':  1
+        'k': 1
       })
     })
     it('should ignore unknown options in short format followed by a number', function () {
@@ -3182,7 +3182,7 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: ['-u2'],
-        'k':  1
+        'k': 1
       })
     })
     it('should ignore unknown options in short format followed by a non-word character', function () {
@@ -3194,7 +3194,7 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: ['-u/2/'],
-        'k':  '/1/'
+        'k': '/1/'
       })
     })
   })
@@ -3207,7 +3207,7 @@ describe('yargs-parser', function () {
     })
     argv.should.deep.equal({
       _: ['-u'],
-      'k':  true,
+      'k': true,
       'v': true
     })
     it('should ignore unknown options in short format with multiple flags in one argument where an unknown flag is at the end', function () {
@@ -3219,7 +3219,7 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: ['-u'],
-        'k':  true,
+        'k': true,
         'v': true
       })
     })
