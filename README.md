@@ -228,7 +228,7 @@ a configuration file.
 * default: `true`
 * key: `duplicate-arguments-array`
 
-Should arguments be coerced into an array when duplicated:
+Should arguments be coerced into an array when duplicated? This option has no effect on `opts.array`.
 
 ```sh
 node example.js -x 1 -x 2

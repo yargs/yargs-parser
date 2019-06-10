@@ -686,6 +686,11 @@ function parse (args, opts) {
     var isValueArray = Array.isArray(value)
     var duplicate = configuration['duplicate-arguments-array']
 
+    // array has higher priority than duplicate
+    if (!duplicate && isTypeArray) {
+      duplicate = true
+    }
+
     // nargs has higher priority than duplicate
     if (!duplicate && checkAllAliases(key, flags.nargs)) {
       duplicate = true

@@ -2200,25 +2200,33 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.equal('b')
       })
-      it('array[string]: keeps only last argument', function () {
-        var parsed = parser('-x a -x b', {
-          array: [{ key: 'x', string: true }],
+      it('array[string]: keeps all arguments - ignores configuration', function () {
+        var parsed = parser('-x a -x b -y c', {
+          array: [
+            { key: 'x', string: true },
+            { key: 'y', string: true }
+          ],
           configuration: {
             'duplicate-arguments-array': false
           }
         })
 
-        parsed['x'].should.equal('b')
+        parsed['x'].should.deep.equal(['a', 'b'])
+        parsed['y'].should.deep.equal(['c'])
       })
-      it('array[number]: keeps only last argument', function () {
-        var parsed = parser('-x 1 -x 2', {
-          array: [{ key: 'x', number: true }],
+      it('array[number]: keeps all arguments - ignores configuration', function () {
+        var parsed = parser('-x 1 -x 2 -y 3', {
+          array: [
+            { key: 'x', number: true },
+            { key: 'y', number: true }
+          ],
           configuration: {
             'duplicate-arguments-array': false
           }
         })
 
-        parsed['x'].should.equal(2)
+        parsed['x'].should.deep.equal([1, 2])
+        parsed['y'].should.deep.equal([3])
       })
       it('does not interfere with nargs', function () {
         var parsed = parser('-x a b c -x o p q', {
@@ -2327,15 +2335,16 @@ describe('yargs-parser', function () {
             })
             parsed['x'].should.deep.equal([1, 2, 3])
           })
-          it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
-            var parsed = parser('-x 1 2 3 -x 2 3 4', {
-              array: ['x'],
+          it('[-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [2, 3, 4]]', function () {
+            var parsed = parser('-x 1 2 3 -x 2 3 4 -y 7', {
+              array: ['x', 'y'],
               configuration: {
                 'duplicate-arguments-array': false,
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([2, 3, 4])
+            parsed['x'].should.deep.equal([[1, 2, 3], [2, 3, 4]])
+            parsed['y'].should.deep.equal([7])
           })
         })
         describe('type=number', function () {
@@ -2363,15 +2372,16 @@ describe('yargs-parser', function () {
             })
             parsed['x'].should.deep.equal([1, 2, 3])
           })
-          it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
-            var parsed = parser('-x 1 2 3 -x 2 3 4', {
-              array: ['x'],
+          it('[-x 1 2 3 -x 2 3 4] => [1, 2, 3, 2, 3, 4]', function () {
+            var parsed = parser('-x 1 2 3 -x 2 3 4 -y 7', {
+              array: ['x', 'y'],
               configuration: {
                 'duplicate-arguments-array': false,
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal([2, 3, 4])
+            parsed['x'].should.deep.equal([1, 2, 3, 2, 3, 4])
+            parsed['y'].should.deep.equal([7])
           })
         })
         describe('type=number', function () {
