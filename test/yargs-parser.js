@@ -2200,11 +2200,12 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.equal('b')
       })
-      it('array[string]: keeps all arguments - ignores configuration', function () {
-        var parsed = parser('-x a -x b -y c', {
+      it('string[]: keeps all arguments - ignores configuration', function () {
+        var parsed = parser('-x a -x b -y c -z d e -z f g', {
           array: [
             { key: 'x', string: true },
-            { key: 'y', string: true }
+            { key: 'y', string: true },
+            { key: 'z', string: true }
           ],
           configuration: {
             'duplicate-arguments-array': false
@@ -2213,12 +2214,14 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.deep.equal(['a', 'b'])
         parsed['y'].should.deep.equal(['c'])
+        parsed['z'].should.deep.equal(['d', 'e', 'f', 'g'])
       })
-      it('array[number]: keeps all arguments - ignores configuration', function () {
-        var parsed = parser('-x 1 -x 2 -y 3', {
+      it('number[]]: keeps all arguments - ignores configuration', function () {
+        var parsed = parser('-x 1 -x 2 -y 3 -z 4 5 -z 6 7', {
           array: [
             { key: 'x', number: true },
-            { key: 'y', number: true }
+            { key: 'y', number: true },
+            { key: 'z', number: true }
           ],
           configuration: {
             'duplicate-arguments-array': false
@@ -2227,6 +2230,7 @@ describe('yargs-parser', function () {
 
         parsed['x'].should.deep.equal([1, 2])
         parsed['y'].should.deep.equal([3])
+        parsed['z'].should.deep.equal([4, 5, 6, 7])
       })
       it('does not interfere with nargs', function () {
         var parsed = parser('-x a b c -x o p q', {
@@ -2298,14 +2302,14 @@ describe('yargs-parser', function () {
         duplicate=false, flatten=false
           type=array
             [-x 1 2 3]          => [1, 2, 3]
-            [-x 1 2 3 -x 2 3 4] => [2, 3, 4]
+            [-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [2, 3, 4]]
           type=string/number/etc
             [-x 1 -x 2 -x 3]    => 3
 
         duplicate=false, flatten=true
           type=array
             [-x 1 2 3]          => [1, 2, 3]
-            [-x 1 2 3 -x 2 3 4] => [2, 3, 4]
+            [-x 1 2 3 -x 2 3 4] => [1, 2, 3, 2, 3, 4]
           type=string/number/etc
             [-x 1 -x 2 -x 3]    => 3
 
@@ -2435,25 +2439,33 @@ describe('yargs-parser', function () {
       })
       describe('duplicate=true, flatten=false,', function () {
         describe('type=array', function () {
-          it('number: [-x 1 -x 2 -x 3] => [[1], [2], [3]]', function () {
-            var parsed = parser('-x 1 -x 2 -x 3', {
-              array: [{ key: 'x', number: true }],
+          it('number[]: [-x 1 -x 2 -x 3] => [[1], [2], [3]]', function () {
+            var parsed = parser('-x 1 -x 2 -x 3 -y 4 5 -y 6 7', {
+              array: [
+                { key: 'x', number: true },
+                { key: 'y', number: true }
+              ],
               configuration: {
                 'duplicate-arguments-array': true,
                 'flatten-duplicate-arrays': false
               }
             })
             parsed['x'].should.deep.equal([[1], [2], [3]])
+            parsed['y'].should.deep.equal([[4, 5], [6, 7]])
           })
-          it("string: [-x 1 -x 2 -x 3] => [['1'], ['2'], ['3']]", function () {
-            var parsed = parser('-x 1 -x 2 -x 3', {
-              array: [{ key: 'x', string: true }],
+          it("string[]: [-x 1 -x 2 -x 3] => [['1'], ['2'], ['3']]", function () {
+            var parsed = parser('-x 1 -x 2 -x 3 -y 4 5 -y 6 7', {
+              array: [
+                { key: 'x', string: true },
+                { key: 'y', string: true }
+              ],
               configuration: {
                 'duplicate-arguments-array': true,
                 'flatten-duplicate-arrays': false
               }
             })
             parsed['x'].should.deep.equal([['1'], ['2'], ['3']])
+            parsed['y'].should.deep.equal([['4', '5'], ['6', '7']])
           })
         })
         describe('type=number', function () {

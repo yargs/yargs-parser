@@ -497,13 +497,13 @@ function parse (args, opts) {
   }
 
   function maybeCoerceNumber (key, value) {
+    if (Array.isArray(value)) return value
+
     if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
       const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
         Number.isSafeInteger(Math.floor(value))
       )
-      if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) {
-        value = Array.isArray(value) ? [Number(value)] : Number(value)
-      }
+      if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
     }
     return value
   }
