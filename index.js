@@ -27,7 +27,7 @@ function parse (args, opts) {
     'halt-at-non-option': false,
     'strip-aliased': false,
     'strip-dashed': false,
-    'ignore-unknown-options': false
+    'parse-unknown-options': true
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -160,17 +160,17 @@ function parse (args, opts) {
       } else if (checkAllAliases(m[1], flags.arrays)) {
         args.splice(i + 1, 0, m[2])
         i = eatArray(i, m[1], args)
-      } else if (!configuration['ignore-unknown-options'] || hasAnyFlag(m[1])) {
+      } else if (configuration['parse-unknown-options'] || hasAnyFlag(m[1])) {
         setArg(m[1], m[2])
       } else {
-        argv._.push(maybeCoerceNumber('_', arg))
+        argv._.push(arg)
       }
     } else if (arg.match(negatedBoolean) && configuration['boolean-negation']) {
       key = arg.match(negatedBoolean)[1]
-      if (!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
+      if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
         setArg(key, checkAllAliases(key, flags.arrays) ? [false] : false)
       } else {
-        argv._.push(maybeCoerceNumber('_', arg))
+        argv._.push(arg)
       }
 
     // -- separated by space.
@@ -186,7 +186,7 @@ function parse (args, opts) {
       // array format = '--foo a b c'
       } else if (checkAllAliases(key, flags.arrays)) {
         i = eatArray(i, key, args)
-      } else if (!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
+      } else if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
         next = args[i + 1]
 
         if (next !== undefined && (!next.match(/^-/) ||
@@ -202,16 +202,16 @@ function parse (args, opts) {
           setArg(key, defaultValue(key))
         }
       } else {
-        argv._.push(maybeCoerceNumber('_', arg))
+        argv._.push(arg)
       }
 
     // dot-notation flag separated by '='.
     } else if (arg.match(/^-.\..+=/)) {
       m = arg.match(/^-([^=]+)=([\s\S]*)$/)
-      if (!configuration['ignore-unknown-options'] || hasAnyFlag(m[1])) {
+      if (configuration['parse-unknown-options'] || hasAnyFlag(m[1])) {
         setArg(m[1], m[2])
       } else {
-        argv._.push(maybeCoerceNumber('_', arg))
+        argv._.push(arg)
       }
 
     // dot-notation flag separated by space.
@@ -219,7 +219,7 @@ function parse (args, opts) {
       next = args[i + 1]
       key = arg.match(/^-(.\..+)/)[1]
 
-      if (!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
+      if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
         if (next !== undefined && !next.match(/^-/) &&
           !checkAllAliases(key, flags.bools) &&
           !checkAllAliases(key, flags.counts)) {
@@ -229,7 +229,7 @@ function parse (args, opts) {
           setArg(key, defaultValue(key))
         }
       } else {
-        argv._.push(maybeCoerceNumber('_', arg))
+        argv._.push(arg)
       }
     } else if (arg.match(/^-[^-]+/) && !arg.match(negative)) {
       letters = arg.slice(1, -1).split('')
@@ -251,7 +251,7 @@ function parse (args, opts) {
           } else if (checkAllAliases(key, flags.arrays)) {
             args.splice(i + 1, 0, value)
             i = eatArray(i, key, args)
-          } else if (!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
+          } else if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
             setArg(key, value)
           } else {
             unmatched.push(key)
@@ -264,7 +264,7 @@ function parse (args, opts) {
         }
 
         if (next === '-') {
-          if (!configuration['ignore-unknown-options'] || hasAnyFlag(letters[j])) {
+          if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
             setArg(letters[j], next)
           } else {
             unmatched.push(letters[j])
@@ -276,7 +276,7 @@ function parse (args, opts) {
         // current letter is an alphabetic character and next value is a number
         if (/[A-Za-z]/.test(letters[j]) &&
           /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) {
-          if (!configuration['ignore-unknown-options'] || hasAnyFlag(letters[j])) {
+          if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
             setArg(letters[j], next)
           } else {
             unmatched.push(letters[j])
@@ -287,7 +287,7 @@ function parse (args, opts) {
         }
 
         if (letters[j + 1] && letters[j + 1].match(/\W/)) {
-          if (!configuration['ignore-unknown-options'] || hasAnyFlag(letters[j])) {
+          if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
             setArg(letters[j], next)
           } else {
             unmatched.push(letters[j])
@@ -295,7 +295,7 @@ function parse (args, opts) {
           }
           broken = true
           break
-        } else if (!configuration['ignore-unknown-options'] || hasAnyFlag(letters[j])) {
+        } else if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
           setArg(letters[j], defaultValue(letters[j]))
         } else {
           unmatched.push(letters[j])
@@ -312,7 +312,7 @@ function parse (args, opts) {
         // array format = '-f a b c'
         } else if (checkAllAliases(key, flags.arrays)) {
           i = eatArray(i, key, args)
-        } else if (!configuration['ignore-unknown-options'] || hasAnyFlag(key)) {
+        } else if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
           next = args[i + 1]
 
           if (next !== undefined && (!/^(-|--)[^-]/.test(next) ||
@@ -332,7 +332,7 @@ function parse (args, opts) {
         }
       }
       if (unmatched.length > 0) {
-        argv._.push(maybeCoerceNumber('_', ['-', ...unmatched].join('')))
+        argv._.push(['-', ...unmatched].join(''))
       }
     } else if (arg === '--') {
       notFlags = args.slice(i + 1)
@@ -803,7 +803,8 @@ function parse (args, opts) {
 
   function hasAnyFlag (key) {
     var isSet = false
-    var toCheck = [].concat(Object.values(flags))
+    // XXX Switch to [].concat(...Object.values(flags)) once node.js 6 is dropped
+    var toCheck = [].concat(...Object.keys(flags).map(k => flags[k]))
 
     toCheck.forEach(function (flag) {
       if (flag[key]) isSet = flag[key]
