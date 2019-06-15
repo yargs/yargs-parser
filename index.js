@@ -132,14 +132,6 @@ function parse (args, opts) {
   })
 
   var argv = { _: [] }
-
-  Object.keys(flags.bools).forEach(function (key) {
-    if (Object.prototype.hasOwnProperty.call(defaults, key)) {
-      setArg(key, defaults[key])
-      setDefaulted(key)
-    }
-  })
-
   var notFlags = []
 
   for (var i = 0; i < args.length; i++) {
@@ -406,8 +398,6 @@ function parse (args, opts) {
   }
 
   function setArg (key, val) {
-    unsetDefaulted(key)
-
     if (/-/.test(key) && configuration['camel-case-expansion']) {
       var alias = key.split('.').map(function (prop) {
         return camelCase(prop)
@@ -704,7 +694,7 @@ function parse (args, opts) {
       }
     } else if (o[key] === undefined && isTypeArray) {
       o[key] = isValueArray ? value : [value]
-    } else if (duplicate && !(o[key] === undefined || checkAllAliases(key, flags.bools) || checkAllAliases(keys.join('.'), flags.bools) || checkAllAliases(key, flags.counts))) {
+    } else if (duplicate && !(o[key] === undefined || checkAllAliases(key, flags.counts))) {
       o[key] = [ o[key], value ]
     } else {
       o[key] = value
@@ -760,18 +750,6 @@ function parse (args, opts) {
     })
 
     return isSet
-  }
-
-  function setDefaulted (key) {
-    [].concat(flags.aliases[key] || [], key).forEach(function (k) {
-      flags.defaulted[k] = true
-    })
-  }
-
-  function unsetDefaulted (key) {
-    [].concat(flags.aliases[key] || [], key).forEach(function (k) {
-      delete flags.defaulted[k]
-    })
   }
 
   // make a best effor to pick a default value
