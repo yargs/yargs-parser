@@ -1108,7 +1108,7 @@ describe('yargs-parser', function () {
         })
       })
 
-      describe('with implied false default', function () {
+      describe('without any default value', function () {
         var opts = null
 
         beforeEach(function () {
@@ -1125,8 +1125,8 @@ describe('yargs-parser', function () {
           parser(['--no-flag'], opts).flag.should.be.false // eslint-disable-line
         })
 
-        it('should set false if no flag in arg', function () {
-          expect(parser([], opts).flag).to.be.undefined // eslint-disable-line
+        it('should not add property if no flag in arg', function () {
+          parser([''], opts).should.not.have.property('flag')
         })
       })
 
@@ -2334,6 +2334,18 @@ describe('yargs-parser', function () {
             parsed['x'].should.deep.equal(3)
           })
         })
+        describe('type=boolean', function () {
+          it('[-x true -x true -x false] => false', function () {
+            var parsed = parser('-x true -x true -x false', {
+              boolean: ['x'],
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal(false)
+          })
+        })
       })
       describe('duplicate=false, flatten=true,', function () {
         describe('type=array', function () {
@@ -2368,6 +2380,18 @@ describe('yargs-parser', function () {
               }
             })
             parsed['x'].should.deep.equal(3)
+          })
+        })
+        describe('type=boolean', function () {
+          it('[-x true -x true -x false] => false', function () {
+            var parsed = parser('-x true -x true -x false', {
+              boolean: ['x'],
+              configuration: {
+                'duplicate-arguments-array': false,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal(false)
           })
         })
       })
@@ -2406,6 +2430,18 @@ describe('yargs-parser', function () {
             parsed['x'].should.deep.equal([1, 2, 3])
           })
         })
+        describe('type=boolean', function () {
+          it('[-x true -x true -x false] => [true, true, false]', function () {
+            var parsed = parser('-x true -x true -x false', {
+              boolean: ['x'],
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': true
+              }
+            })
+            parsed['x'].should.deep.equal([true, true, false])
+          })
+        })
       })
       describe('duplicate=true, flatten=false,', function () {
         describe('type=array', function () {
@@ -2440,6 +2476,18 @@ describe('yargs-parser', function () {
               }
             })
             parsed['x'].should.deep.equal([1, 2, 3])
+          })
+        })
+        describe('type=boolean', function () {
+          it('[-x true -x true -x false] => [true, true, false]', function () {
+            var parsed = parser('-x true -x true -x false', {
+              boolean: ['x'],
+              configuration: {
+                'duplicate-arguments-array': true,
+                'flatten-duplicate-arrays': false
+              }
+            })
+            parsed['x'].should.deep.equal([true, true, false])
           })
         })
       })
