@@ -46,7 +46,6 @@ function parse (args, opts) {
     counts: {},
     normalize: {},
     configs: {},
-    defaulted: {},
     nargs: {},
     coercions: {},
     keys: []
@@ -550,7 +549,7 @@ function parse (args, opts) {
       } else {
         // setting arguments via CLI takes precedence over
         // values within the config file.
-        if (!hasKey(argv, fullKey.split('.')) || (flags.defaulted[fullKey]) || (flags.arrays[fullKey] && configuration['combine-arrays'])) {
+        if (!hasKey(argv, fullKey.split('.')) || (flags.arrays[fullKey] && configuration['combine-arrays'])) {
           setArg(fullKey, value)
         }
       }
@@ -579,7 +578,7 @@ function parse (args, opts) {
           return camelCase(key)
         })
 
-        if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && (!hasKey(argv, keys) || flags.defaulted[keys.join('.')])) {
+        if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && !hasKey(argv, keys)) {
           setArg(keys.join('.'), process.env[envVar])
         }
       }
