@@ -156,7 +156,7 @@ function parse (args, opts) {
         args.splice(i + 1, 0, m[2])
         i = eatNargs(i, m[1], args)
       // arrays format = '--f=a b c'
-      } else if (checkAllAliases(m[1], flags.arrays) && args.length > i + 1) {
+      } else if (checkAllAliases(m[1], flags.arrays)) {
         args.splice(i + 1, 0, m[2])
         i = eatArray(i, m[1], args)
       } else {
@@ -164,7 +164,7 @@ function parse (args, opts) {
       }
     } else if (arg.match(negatedBoolean) && configuration['boolean-negation']) {
       key = arg.match(negatedBoolean)[1]
-      setArg(key, false)
+      setArg(key, checkAllAliases(key, flags.arrays) ? [false] : false)
 
     // -- seperated by space.
     } else if (arg.match(/^--.+/) || (
@@ -177,7 +177,7 @@ function parse (args, opts) {
       if (checkAllAliases(key, flags.nargs) !== false) {
         i = eatNargs(i, key, args)
       // array format = '--foo a b c'
-      } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
+      } else if (checkAllAliases(key, flags.arrays)) {
         i = eatArray(i, key, args)
       } else {
         next = args[i + 1]
@@ -230,7 +230,7 @@ function parse (args, opts) {
             args.splice(i + 1, 0, value)
             i = eatNargs(i, key, args)
           // array format = '-f=a b c'
-          } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
+          } else if (checkAllAliases(key, flags.arrays)) {
             args.splice(i + 1, 0, value)
             i = eatArray(i, key, args)
           } else {
@@ -271,7 +271,7 @@ function parse (args, opts) {
         if (checkAllAliases(key, flags.nargs) !== false) {
           i = eatNargs(i, key, args)
         // array format = '-f a b c'
-        } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
+        } else if (checkAllAliases(key, flags.arrays)) {
           i = eatArray(i, key, args)
         } else {
           next = args[i + 1]
@@ -376,30 +376,27 @@ function parse (args, opts) {
   // following it... YUM!
   // e.g., --foo apple banana cat becomes ["apple", "banana", "cat"]
   function eatArray (i, key, args) {
-    var start = i + 1
-    var argsToSet = []
-    var multipleArrayFlag = i > 0
-    for (var ii = i + 1; ii < args.length; ii++) {
-      if (/^-/.test(args[ii]) && !negative.test(args[ii])) {
-        if (ii === start) {
-          setArg(key, defaultForType('array'))
-        }
-        multipleArrayFlag = true
-        break
+    let argsToSet = []
+    let next = args[i + 1]
+
+    if (checkAllAliases(key, flags.bools) && !(/^(true|false)$/.test(next))) {
+      argsToSet.push(true)
+    } else if (isUndefined(next) || (/^-/.test(next) && !negative.test(next))) {
+      // for keys without value ==> argsToSet remains an empty []
+      // set user default value, if available
+      if (defaults.hasOwnProperty(key)) {
+        argsToSet.push(defaults[key])
       }
-      i = ii
-      argsToSet.push(args[ii])
-    }
-    if (multipleArrayFlag) {
-      setArg(key, argsToSet.map(function (arg) {
-        return processValue(key, arg)
-      }))
     } else {
-      argsToSet.forEach(function (arg) {
-        setArg(key, arg)
-      })
+      for (var ii = i + 1; ii < args.length; ii++) {
+        next = args[ii]
+        if (/^-/.test(next) && !negative.test(next)) break
+        i = ii
+        argsToSet.push(processValue(key, next))
+      }
     }
 
+    setArg(key, argsToSet)
     return i
   }
 
@@ -791,6 +788,7 @@ function parse (args, opts) {
 
     if (checkAllAliases(key, flags.strings)) type = 'string'
     else if (checkAllAliases(key, flags.numbers)) type = 'number'
+    else if (checkAllAliases(key, flags.bools)) type = 'boolean'
     else if (checkAllAliases(key, flags.arrays)) type = 'array'
 
     return type
