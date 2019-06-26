@@ -2718,29 +2718,29 @@ describe('yargs-parser', function () {
         })
       })
       it('should ignore unknown options in long format separated by space', function () {
-        const argv = parser('--known-arg 1 --unknown-arg 2', {
-          number: ['known-arg'],
+        const argv = parser('--known-arg a --unknown-arg b', {
+          string: ['known-arg'],
           configuration: {
             'parse-unknown-options': false
           }
         })
         argv.should.deep.equal({
-          _: ['--unknown-arg', 2],
-          'known-arg': 1,
-          'knownArg': 1
+          _: ['--unknown-arg', 'b'],
+          'known-arg': 'a',
+          'knownArg': 'a'
         })
       })
       it('should ignore unknown options in short dot format separated by equals', function () {
-        const argv = parser('-k.arg=1 -u.arg=2', {
-          number: ['k.arg'],
+        const argv = parser('-k.arg=a -u.arg=b', {
+          string: ['k.arg'],
           configuration: {
             'parse-unknown-options': false
           }
         })
         argv.should.deep.equal({
-          _: ['-u.arg=2'],
+          _: ['-u.arg=b'],
           'k': {
-            'arg': 1
+            'arg': 'a'
           }
         })
       })
@@ -2759,15 +2759,15 @@ describe('yargs-parser', function () {
         })
       })
       it('should ignore unknown options in short format separated by equals', function () {
-        const argv = parser('-k=1 -u=2', {
-          number: ['k'],
+        const argv = parser('-k=a -u=b', {
+          string: ['k'],
           configuration: {
             'parse-unknown-options': false
           }
         })
         argv.should.deep.equal({
-          _: ['-u=2'],
-          'k': 1
+          _: ['-u=b'],
+          'k': 'a'
         })
       })
       it('should ignore unknown options in short format followed by hyphen', function () {
