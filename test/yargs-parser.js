@@ -2160,6 +2160,19 @@ describe('yargs-parser', function () {
         expect(parsed['bar']).to.equal(6)
         expect(parsed['baz']).to.equal(7)
       })
+
+      it('should coerce elements of number typed arrays to numbers', function () {
+        var parsed = parser(['--foo', '4', '--foo', '5', '2'], {
+          array: ['foo'],
+          configObjects: [{ foo: ['1', '2', '3'] }],
+          configuration: {
+            'combine-arrays': true,
+            'flatten-duplicate-arrays': false
+          }
+        })
+
+        expect(parsed['foo']).to.deep.equal([[4], [5, 2], [1, 2, 3]])
+      })
     })
 
     describe('boolean negation', function () {
