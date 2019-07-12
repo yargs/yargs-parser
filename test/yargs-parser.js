@@ -2445,7 +2445,7 @@ describe('yargs-parser', function () {
       })
       describe('duplicate=true, flatten=false,', function () {
         describe('type=array', function () {
-          it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
+          it('[-x 1 -x 2 -x 3] => [[1], [2], [3]]', function () {
             var parsed = parser('-x 1 -x 2 -x 3', {
               array: ['x'],
               configuration: {
@@ -2453,7 +2453,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed['x'].should.deep.equal([[1], [2], [3]])
           })
           it('[-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [ 2, 3, 4]]', function () {
             var parsed = parser('-x 1 2 3 -x 2 3 4', {
