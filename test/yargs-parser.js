@@ -2160,6 +2160,19 @@ describe('yargs-parser', function () {
         expect(parsed['bar']).to.equal(6)
         expect(parsed['baz']).to.equal(7)
       })
+
+      it('should coerce elements of number typed arrays to numbers', function () {
+        var parsed = parser(['--foo', '4', '--foo', '5', '2'], {
+          array: ['foo'],
+          configObjects: [{ foo: ['1', '2', '3'] }],
+          configuration: {
+            'combine-arrays': true,
+            'flatten-duplicate-arrays': false
+          }
+        })
+
+        expect(parsed['foo']).to.deep.equal([[4], [5, 2], [1, 2, 3]])
+      })
     })
 
     describe('boolean negation', function () {
@@ -2445,7 +2458,7 @@ describe('yargs-parser', function () {
       })
       describe('duplicate=true, flatten=false,', function () {
         describe('type=array', function () {
-          it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
+          it('[-x 1 -x 2 -x 3] => [[1], [2], [3]]', function () {
             var parsed = parser('-x 1 -x 2 -x 3', {
               array: ['x'],
               configuration: {
@@ -2453,7 +2466,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed['x'].should.deep.equal([[1], [2], [3]])
           })
           it('[-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [ 2, 3, 4]]', function () {
             var parsed = parser('-x 1 2 3 -x 2 3 4', {

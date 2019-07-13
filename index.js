@@ -470,7 +470,9 @@ function parse (args, opts) {
       if (typeof val === 'string') val = val === 'true'
     }
 
-    var value = maybeCoerceNumber(key, val)
+    var value = Array.isArray(val)
+      ? val.map(function (v) { return maybeCoerceNumber(key, v) })
+      : maybeCoerceNumber(key, val)
 
     // increment a count given as arg (either no value or value parsed as boolean)
     if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
@@ -486,7 +488,7 @@ function parse (args, opts) {
   }
 
   function maybeCoerceNumber (key, value) {
-    if (!checkAllAliases(key, flags.strings)) {
+    if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.bools) && !Array.isArray(value)) {
       const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
         Number.isSafeInteger(Math.floor(value))
       )
