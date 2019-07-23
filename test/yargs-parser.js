@@ -194,15 +194,17 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').and.deep.equal(['aaatrueaaa', 'moo', 'aaafalseaaa'])
   })
 
-  it('should not use next value for boolean configured with zero narg', function () {
-    var parse = parser(['--all', 'false'], {
-      boolean: ['all'],
-      narg: {
-        all: 0
-      }
+  it('should not use next value for boolean/number/string configured with zero narg', function () {
+    var parse = parser(['--bool', 'false', '--nr', '7', '--str', 'foo'], {
+      boolean: ['bool'],
+      number: ['nr'],
+      string: ['str'],
+      narg: { bool: 0, nr: 0, str: 0 }
     })
-    parse.should.have.property('all', true).and.be.a('boolean')
-    parse.should.have.property('_').and.deep.equal(['false'])
+    parse.should.have.property('bool', true).and.be.a('boolean')
+    parse.should.have.property('nr', undefined).and.be.a('undefined')
+    parse.should.have.property('str', '').and.be.a('string')
+    parse.should.have.property('_').and.deep.equal(['false', 7, 'foo'])
   })
 
   it('should allow defining options as boolean in groups', function () {

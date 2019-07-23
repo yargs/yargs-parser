@@ -173,13 +173,14 @@ function parse (args, opts) {
       key = arg.match(/^--?(.+)/)[1]
 
       // nargs format = '--foo a b c'
-      if (checkAllAliases(key, flags.nargs)) {
+      // should be truthy even if: flags.nargs[key] === 0
+      if (checkAllAliases(key, flags.nargs) !== false) {
         i = eatNargs(i, key, args)
       // array format = '--foo a b c'
       } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
         i = eatArray(i, key, args)
       } else {
-        next = flags.nargs[key] === 0 ? undefined : args[i + 1]
+        next = args[i + 1]
 
         if (next !== undefined && (!next.match(/^-/) ||
           next.match(negative)) &&
@@ -266,7 +267,8 @@ function parse (args, opts) {
 
       if (!broken && key !== '-') {
         // nargs format = '-f a b c'
-        if (checkAllAliases(key, flags.nargs)) {
+        // should be truthy even if: flags.nargs[key] === 0
+        if (checkAllAliases(key, flags.nargs) !== false) {
           i = eatNargs(i, key, args)
         // array format = '-f a b c'
         } else if (checkAllAliases(key, flags.arrays) && args.length > i + 1) {
@@ -346,6 +348,11 @@ function parse (args, opts) {
   function eatNargs (i, key, args) {
     var ii
     const toEat = checkAllAliases(key, flags.nargs)
+
+    if (toEat === 0) {
+      setArg(key, defaultValue(key))
+      return i
+    }
 
     // nargs will not consume flag arguments, e.g., -abc, --foo,
     // and terminates when one is observed.
@@ -747,7 +754,7 @@ function parse (args, opts) {
     var toCheck = [].concat(flags.aliases[key] || [], key)
 
     toCheck.forEach(function (key) {
-      if (flag[key]) isSet = flag[key]
+      if (flag.hasOwnProperty(key)) isSet = flag[key]
     })
 
     return isSet
