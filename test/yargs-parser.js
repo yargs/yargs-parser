@@ -567,6 +567,7 @@ describe('yargs-parser', function () {
     it('should load nested options from config file', function () {
       var jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
       var argv = parser(['--settings', jsonPath, '--nested.foo', 'bar'], {
+        configuration: { 'config-dot-notation': true },
         config: ['settings']
       })
 
@@ -718,6 +719,7 @@ describe('yargs-parser', function () {
 
     it('should load nested options from config object', function () {
       var argv = parser(['--nested.foo', 'bar'], {
+        configuration: { 'config-dot-notation': true },
         configObjects: [{
           a: 'a',
           nested: {

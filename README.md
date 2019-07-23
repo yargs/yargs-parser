@@ -177,6 +177,33 @@ node example.js --foo.bar
 { _: [], "foo.bar": true }
 ```
 
+_Note:_ This setting does not apply to config files (any more). See `config-dot-notation`.
+
+### config-dot-notation
+
+* default: `false`
+* key: `config-dot-notation`
+
+Should keys in the config file that contain `.` split up in objects?
+
+example config.json:
+```json
+{
+  "foo.bar": true
+}
+```
+_if enabled:_
+```sh
+node example.js --config config.json
+{ _: [], foo: { bar: true } }
+```
+
+_if disabled:_
+```sh
+node example.js --config config.json
+{ _: [], "foo.bar": true }
+```
+
 ### parse numbers
 
 * default: `true`
