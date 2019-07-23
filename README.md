@@ -177,14 +177,14 @@ node example.js --foo.bar
 { _: [], "foo.bar": true }
 ```
 
-_Note:_ This setting does not apply to config files (any more). See `config-dot-notation`.
+_Note: as of yargs-parser@14.0.0, `dot-notation` has been split into `dot-notation` and `config-dot-notation`_
 
 ### config-dot-notation
 
 * default: `false`
 * key: `config-dot-notation`
 
-Should keys in the config file that contain `.` split up in objects?
+Should keys in the config file that contain `.` split into objects?
 
 example config.json:
 ```json
