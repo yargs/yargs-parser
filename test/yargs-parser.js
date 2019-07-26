@@ -1492,6 +1492,14 @@ describe('yargs-parser', function () {
       result.should.have.property('b').and.deep.equal([])
     })
 
+    it('should place default of argument in array, when default provided', function () {
+      var result = parser(['-b'], {
+        array: 'b',
+        default: { 'b': 33 }
+      })
+      result.should.have.property('b').and.deep.equal([33])
+    })
+
     it('should place value of argument in array, when one argument provided', function () {
       var result = parser(['-b', '33'], {
         array: ['b']
@@ -1616,6 +1624,22 @@ describe('yargs-parser', function () {
         array: [{ key: 'x', boolean: true }]
       })
       result.should.have.property('x').that.is.an('array').and.to.deep.equal([true, false])
+    })
+
+    it('should respect type `boolean` without value for arrays', function () {
+      var result = parser(['-x', '-x'], {
+        array: [{ key: 'x', boolean: true }],
+        configuration: { 'flatten-duplicate-arrays': false }
+      })
+      result.x.should.deep.equal([[true], [true]])
+    })
+
+    it('should respect `boolean negation` for arrays', function () {
+      var result = parser(['--no-bool', '--no-bool'], {
+        array: [{ key: 'bool', boolean: true }],
+        configuration: { 'flatten-duplicate-arrays': false }
+      })
+      result.bool.should.deep.equal([[false], [false]])
     })
 
     it('should respect the type `number` option for arrays', function () {
