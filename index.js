@@ -220,7 +220,6 @@ function parse (args, opts) {
     } else if (arg.match(/^-[^-]+/) && !arg.match(negative)) {
       letters = arg.slice(1, -1).split('')
       broken = false
-      let unmatched = []
 
       for (var j = 0; j < letters.length; j++) {
         next = arg.slice(j + 2)
@@ -293,9 +292,6 @@ function parse (args, opts) {
             setArg(key, defaultValue(key))
           }
         }
-      }
-      if (unmatched.length > 0) {
-        argv._.push(['-', ...unmatched].join(''))
       }
     } else if (arg === '--') {
       notFlags = args.slice(i + 1)
