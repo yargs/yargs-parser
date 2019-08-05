@@ -2829,15 +2829,17 @@ describe('yargs-parser', function () {
           _: ['-kuv']
         })
       })
-      it('should ignore unknown options in short format with multiple flags in one argument where an unknown flag is at the end', function () {
-        const argv = parser('-kvu', {
+      it('should parse known options in short format with multiple flags in one argument where no unknown flag is in the argument', function () {
+        const argv = parser('-kv', {
           boolean: ['k', 'v'],
           configuration: {
             'collect-unknown-options': true
           }
         })
         argv.should.deep.equal({
-          _: ['-kvu']
+          _: [],
+          k: true,
+          v: true
         })
       })
     })

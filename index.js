@@ -143,7 +143,7 @@ function parse (args, opts) {
     var next
     var value
 
-    if (configuration['collect-unknown-options'] && !checkFlags(arg, /^-+([^=]+?)=[\s\S]*$/, /^-+no-([^=]+?)=[\s\S]*$/, /^-+([^=]+?)$/, /^-+no-([^=]+?)$/, /^-+([^=]+?)-$/, /^-+([^=]+?)\d+$/, /^-+([^=]+?)\W+.*$/)) {
+    if (configuration['collect-unknown-options'] && !arg.match(negative) && !hasAllShortFlags(arg) && !hasFlagsMatching(arg, /^-+([^=]+?)=[\s\S]*$/, /^-+no-([^=]+?)=[\s\S]*$/, /^-+([^=]+?)$/, /^-+no-([^=]+?)$/, /^-+([^=]+?)-$/, /^-+([^=]+?)\d+$/, /^-+([^=]+?)\W+.*$/)) {
       argv._.push(arg)
     // -- separated by =
     } else if (arg.match(/^--.+=/) || (
@@ -772,7 +772,7 @@ function parse (args, opts) {
     return isSet
   }
 
-  function checkFlags (arg, ...patterns) {
+  function hasFlagsMatching (arg, ...patterns) {
     var hasFlag = false
     var toCheck = [].concat(...patterns)
     toCheck.forEach(function (pattern) {
@@ -782,6 +782,29 @@ function parse (args, opts) {
       }
     })
     return hasFlag
+  }
+
+  function hasAllShortFlags (arg) {
+    if (arg.match(negative) || !arg.match(/^-[^-]+/)) { return false }
+    var hasAllFlags = true
+    var letters = arg.slice(1).split('')
+    var next
+    for (var j = 0; j < letters.length; j++) {
+      next = arg.slice(j + 2)
+
+      if (!hasAnyFlag(letters[j])) {
+        hasAllFlags = false
+        break
+      }
+
+      if ((letters[j + 1] && letters[j + 1] === '=') ||
+        next === '-' ||
+        (/[A-Za-z]/.test(letters[j]) && /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) ||
+        (letters[j + 1] && letters[j + 1].match(/\W/))) {
+        break
+      }
+    }
+    return hasAllFlags
   }
 
   // make a best effor to pick a default value
