@@ -27,7 +27,7 @@ function parse (args, opts) {
     'halt-at-non-option': false,
     'strip-aliased': false,
     'strip-dashed': false,
-    'parse-unknown-options': true
+    'collect-unknown-options': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -143,8 +143,10 @@ function parse (args, opts) {
     var next
     var value
 
+    if (configuration['collect-unknown-options'] && !checkFlags(arg, /^-+([^=]+?)=[\s\S]*$/, /^-+no-([^=]+?)=[\s\S]*$/, /^-+([^=]+?)$/, /^-+no-([^=]+?)$/, /^-+([^=]+?)-$/, /^-+([^=]+?)\d+$/, /^-+([^=]+?)\W+.*$/)) {
+      argv._.push(arg)
     // -- separated by =
-    if (arg.match(/^--.+=/) || (
+    } else if (arg.match(/^--.+=/) || (
       !configuration['short-option-groups'] && arg.match(/^-.+=/)
     )) {
       // Using [\s\S] instead of . because js doesn't support the
@@ -160,18 +162,12 @@ function parse (args, opts) {
       } else if (checkAllAliases(m[1], flags.arrays)) {
         args.splice(i + 1, 0, m[2])
         i = eatArray(i, m[1], args)
-      } else if (configuration['parse-unknown-options'] || hasAnyFlag(m[1])) {
-        setArg(m[1], m[2])
       } else {
-        argv._.push(arg)
+        setArg(m[1], m[2])
       }
     } else if (arg.match(negatedBoolean) && configuration['boolean-negation']) {
       key = arg.match(negatedBoolean)[1]
-      if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
-        setArg(key, checkAllAliases(key, flags.arrays) ? [false] : false)
-      } else {
-        argv._.push(arg)
-      }
+      setArg(key, checkAllAliases(key, flags.arrays) ? [false] : false)
 
     // -- separated by space.
     } else if (arg.match(/^--.+/) || (
@@ -186,7 +182,7 @@ function parse (args, opts) {
       // array format = '--foo a b c'
       } else if (checkAllAliases(key, flags.arrays)) {
         i = eatArray(i, key, args)
-      } else if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
+      } else {
         next = args[i + 1]
 
         if (next !== undefined && (!next.match(/^-/) ||
@@ -201,35 +197,25 @@ function parse (args, opts) {
         } else {
           setArg(key, defaultValue(key))
         }
-      } else {
-        argv._.push(arg)
       }
 
     // dot-notation flag separated by '='.
     } else if (arg.match(/^-.\..+=/)) {
       m = arg.match(/^-([^=]+)=([\s\S]*)$/)
-      if (configuration['parse-unknown-options'] || hasAnyFlag(m[1])) {
-        setArg(m[1], m[2])
-      } else {
-        argv._.push(arg)
-      }
+      setArg(m[1], m[2])
 
     // dot-notation flag separated by space.
     } else if (arg.match(/^-.\..+/)) {
       next = args[i + 1]
       key = arg.match(/^-(.\..+)/)[1]
 
-      if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
-        if (next !== undefined && !next.match(/^-/) &&
-          !checkAllAliases(key, flags.bools) &&
-          !checkAllAliases(key, flags.counts)) {
-          setArg(key, next)
-          i++
-        } else {
-          setArg(key, defaultValue(key))
-        }
+      if (next !== undefined && !next.match(/^-/) &&
+        !checkAllAliases(key, flags.bools) &&
+        !checkAllAliases(key, flags.counts)) {
+        setArg(key, next)
+        i++
       } else {
-        argv._.push(arg)
+        setArg(key, defaultValue(key))
       }
     } else if (arg.match(/^-[^-]+/) && !arg.match(negative)) {
       letters = arg.slice(1, -1).split('')
@@ -251,12 +237,8 @@ function parse (args, opts) {
           } else if (checkAllAliases(key, flags.arrays)) {
             args.splice(i + 1, 0, value)
             i = eatArray(i, key, args)
-          } else if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
-            setArg(key, value)
           } else {
-            unmatched.push(key)
-            unmatched.push('=')
-            unmatched.push(value)
+            setArg(key, value)
           }
 
           broken = true
@@ -264,41 +246,24 @@ function parse (args, opts) {
         }
 
         if (next === '-') {
-          if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
-            setArg(letters[j], next)
-          } else {
-            unmatched.push(letters[j])
-            unmatched.push(next)
-          }
+          setArg(letters[j], next)
           continue
         }
 
         // current letter is an alphabetic character and next value is a number
         if (/[A-Za-z]/.test(letters[j]) &&
           /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) {
-          if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
-            setArg(letters[j], next)
-          } else {
-            unmatched.push(letters[j])
-            unmatched.push(next)
-          }
+          setArg(letters[j], next)
           broken = true
           break
         }
 
         if (letters[j + 1] && letters[j + 1].match(/\W/)) {
-          if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
-            setArg(letters[j], next)
-          } else {
-            unmatched.push(letters[j])
-            unmatched.push(next)
-          }
+          setArg(letters[j], next)
           broken = true
           break
-        } else if (configuration['parse-unknown-options'] || hasAnyFlag(letters[j])) {
-          setArg(letters[j], defaultValue(letters[j]))
         } else {
-          unmatched.push(letters[j])
+          setArg(letters[j], defaultValue(letters[j]))
         }
       }
 
@@ -312,7 +277,7 @@ function parse (args, opts) {
         // array format = '-f a b c'
         } else if (checkAllAliases(key, flags.arrays)) {
           i = eatArray(i, key, args)
-        } else if (configuration['parse-unknown-options'] || hasAnyFlag(key)) {
+        } else {
           next = args[i + 1]
 
           if (next !== undefined && (!/^(-|--)[^-]/.test(next) ||
@@ -327,8 +292,6 @@ function parse (args, opts) {
           } else {
             setArg(key, defaultValue(key))
           }
-        } else {
-          unmatched.push(key)
         }
       }
       if (unmatched.length > 0) {
@@ -811,6 +774,18 @@ function parse (args, opts) {
     })
 
     return isSet
+  }
+
+  function checkFlags (arg, ...patterns) {
+    var hasFlag = false
+    var toCheck = [].concat(...patterns)
+    toCheck.forEach(function (pattern) {
+      var match = arg.match(pattern)
+      if (match && hasAnyFlag(match[1])) {
+        hasFlag = true
+      }
+    })
+    return hasFlag
   }
 
   // make a best effor to pick a default value
