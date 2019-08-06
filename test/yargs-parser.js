@@ -2842,6 +2842,18 @@ describe('yargs-parser', function () {
           v: true
         })
       })
+      it('should parse negative numbers', function () {
+        const argv = parser('-k -33', {
+          boolean: ['k'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: [-33],
+          k: true
+        })
+      })
     })
   })
 

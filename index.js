@@ -143,7 +143,7 @@ function parse (args, opts) {
     var next
     var value
 
-    if (configuration['collect-unknown-options'] && !arg.match(negative) && !hasAllShortFlags(arg) && !hasFlagsMatching(arg, /^-+([^=]+?)=[\s\S]*$/, /^-+no-([^=]+?)=[\s\S]*$/, /^-+([^=]+?)$/, /^-+no-([^=]+?)$/, /^-+([^=]+?)-$/, /^-+([^=]+?)\d+$/, /^-+([^=]+?)\W+.*$/)) {
+    if (configuration['collect-unknown-options'] && isUnknownOption(arg)) {
       argv._.push(arg)
     // -- separated by =
     } else if (arg.match(/^--.+=/) || (
@@ -784,7 +784,9 @@ function parse (args, opts) {
     return hasFlag
   }
 
+  // based on a simplified version of the short flag group parsing logic
   function hasAllShortFlags (arg) {
+    // if this is a negative number, or doesn't start with a single hyphen, it's not a short flag group
     if (arg.match(negative) || !arg.match(/^-[^-]+/)) { return false }
     var hasAllFlags = true
     var letters = arg.slice(1).split('')
@@ -805,6 +807,25 @@ function parse (args, opts) {
       }
     }
     return hasAllFlags
+  }
+
+  function isUnknownOption (arg) {
+    // ignore negative numbers
+    if (arg.match(negative)) { return false }
+    // if this is a short option group and all of them are configured, it isn't unknown
+    if (hasAllShortFlags(arg)) { return false }
+    // e.g. '--count=2'
+    const flagWithEquals = /^-+([^=]+?)=[\s\S]*$/
+    // e.g. '-a' or '--arg'
+    const normalFlag = /^-+([^=]+?)$/
+    // e.g. '-a-'
+    const flagEndingInHyphen = /^-+([^=]+?)-$/
+    // e.g. '-abc123'
+    const flagEndingInDigits = /^-+([^=]+?)\d+$/
+    // e.g. '-a/usr/local'
+    const flagEndingInNonWordCharacters = /^-+([^=]+?)\W+.*$/
+    // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method
+    return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag, flagEndingInHyphen, flagEndingInDigits, flagEndingInNonWordCharacters)
   }
 
   // make a best effor to pick a default value
