@@ -370,7 +370,7 @@ node example.js --test-field 1
 * key: `strip-dashed`
 
 Should dashed keys be removed before returning results?  This option has no effect if
-`camel-case-exansion` is disabled.
+`camel-case-expansion` is disabled.
 
 _If disabled:_
 
