@@ -410,9 +410,9 @@ function parse (args, opts) {
 
     //var value = processValue(key, val)
     var value = val
-    if (configuration.noProcessValue===undefined
-      || !configuration.noProcessValue)
+    if (configuration.noProcessValue===undefined || !configuration.noProcessValue){
       value =processValue(key, val)    
+    }
 
     var splitKey = key.split('.')
     setKey(argv, splitKey, value)
