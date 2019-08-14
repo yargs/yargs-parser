@@ -408,7 +408,11 @@ function parse (args, opts) {
       addNewAlias(key, alias)
     }
 
-    var value = processValue(key, val)
+    //var value = processValue(key, val)
+    var value = val
+    if (configuration.noProcessValue===undefined
+      || !configuration.noProcessValue)
+      value =processValue(key, val)    
 
     var splitKey = key.split('.')
     setKey(argv, splitKey, value)
