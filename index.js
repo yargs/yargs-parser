@@ -408,10 +408,10 @@ function parse (args, opts) {
       addNewAlias(key, alias)
     }
 
-    //var value = processValue(key, val)
+    // allow bypassing of processValue with configuration property
     var value = val
-    if (configuration.noProcessValue===undefined || !configuration.noProcessValue){
-      value =processValue(key, val)    
+    if (configuration['no-process-value'] === undefined || !configuration['no-process-value']) {
+      value = processValue(key, val)
     }
 
     var splitKey = key.split('.')
