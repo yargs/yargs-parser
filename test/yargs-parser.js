@@ -774,6 +774,21 @@ describe('yargs-parser', function () {
       argv.should.have.property('foo', 'bar')
       argv.should.have.property('bar', 'baz')
     })
+
+    it('should combine array typed options with alias and camel-case', function () {
+      var argv = parser(['--camEl', 'foo', '--camEl', 'bar', '-a', 'red'], {
+        array: ['cam-el', 'apple'],
+        alias: { apple: 'a' },
+        configObjects: [{ camEl: 'baz' }, { a: 'sweet' }],
+        configuration: {
+          'combine-arrays': true,
+          'camel-case-expansion': true
+        }
+      })
+
+      argv['cam-el'].should.deep.equal(['foo', 'bar', 'baz'])
+      argv.apple.should.deep.equal(['red', 'sweet'])
+    })
   })
 
   describe('dot notation', function () {
