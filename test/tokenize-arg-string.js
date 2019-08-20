@@ -52,7 +52,7 @@ describe('TokenizeArgString', function () {
     args[2].should.equal('--bar=""')
   })
 
-  it('handles quoted string with embeded quotes', function () {
+  it('handles quoted string with embedded quotes', function () {
     var args = tokenizeArgString('--foo "hello \'world\'" --bar=\'foo "bar"\'')
     args[0].should.equal('--foo')
     args[1].should.equal('"hello \'world\'"')

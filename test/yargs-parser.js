@@ -83,7 +83,7 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').with.length(0)
   })
 
-  it('should explicitly set a boolean option to false if preceeded by "--no-"', function () {
+  it('should explicitly set a boolean option to false if preceded by "--no-"', function () {
     var parse = parser(['--no-moo'])
     parse.should.have.property('moo', false)
     parse.should.have.property('_').with.length(0)
@@ -894,12 +894,12 @@ describe('yargs-parser', function () {
       argv.foo.bar.cool.should.eql(11)
     })
 
-    it("should allow flags to use dot notation, when seperated by '='", function () {
+    it("should allow flags to use dot notation, when separated by '='", function () {
       var argv = parser(['-f.foo=99'])
       argv.f.foo.should.eql(99)
     })
 
-    it("should allow flags to use dot notation, when seperated by ' '", function () {
+    it("should allow flags to use dot notation, when separated by ' '", function () {
       var argv = parser(['-f.foo', '99'])
       argv.f.foo.should.eql(99)
     })

@@ -166,7 +166,7 @@ function parse (args, opts) {
       key = arg.match(negatedBoolean)[1]
       setArg(key, checkAllAliases(key, flags.arrays) ? [false] : false)
 
-    // -- seperated by space.
+    // -- separated by space.
     } else if (arg.match(/^--.+/) || (
       !configuration['short-option-groups'] && arg.match(/^-[^-]+/)
     )) {
@@ -196,12 +196,12 @@ function parse (args, opts) {
         }
       }
 
-    // dot-notation flag seperated by '='.
+    // dot-notation flag separated by '='.
     } else if (arg.match(/^-.\..+=/)) {
       m = arg.match(/^-([^=]+)=([\s\S]*)$/)
       setArg(m[1], m[2])
 
-    // dot-notation flag seperated by space.
+    // dot-notation flag separated by space.
     } else if (arg.match(/^-.\..+/)) {
       next = args[i + 1]
       key = arg.match(/^-(.\..+)/)[1]
