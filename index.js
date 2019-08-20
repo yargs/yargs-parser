@@ -555,7 +555,7 @@ function parse (args, opts) {
       } else {
         // setting arguments via CLI takes precedence over
         // values within the config file.
-        if (!hasKey(argv, fullKey.split('.')) || (flags.arrays[fullKey] && configuration['combine-arrays'])) {
+        if (!hasKey(argv, fullKey.split('.')) || (checkAllAliases(fullKey, flags.arrays) && configuration['combine-arrays'])) {
           setArg(fullKey, value)
         }
       }
