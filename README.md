@@ -386,6 +386,28 @@ node example.js --test-field 1
 { _: [], testField: 1 }
 ```
 
+### collect unknown options
+
+* default: `false`
+* key: `collect-unknown-options`
+
+Should unknown options be collected into `_`?  An unknown option is one that is not
+configured in `opts`.
+
+_If disabled_
+
+```sh
+node example.js --unknown-option --known-option 2
+{ _: [], unknownOption: true, knownOption: 2 }
+```
+
+_If enabled_
+
+```sh
+node example.js --unknown-option --known-option 2
+{ _: ['--unknown-option'], knownOption: 2 }
+```
+
 ## Special Thanks
 
 The yargs project evolves from optimist and minimist. It owes its
