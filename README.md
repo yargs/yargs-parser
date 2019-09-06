@@ -31,7 +31,7 @@ node example.js --foo=33 --bar hello
 _or parse a string!_
 
 ```js
-var argv = require('./')('--foo=99 --bar=33')
+var argv = require('yargs-parser')('--foo=99 --bar=33')
 console.log(argv)
 ```
 
