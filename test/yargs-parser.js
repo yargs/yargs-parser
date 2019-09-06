@@ -9,7 +9,7 @@ var path = require('path')
 
 describe('yargs-parser', function () {
   it('should parse a "short boolean"', function () {
-    var parse = parser([ '-b' ])
+    var parse = parser(['-b'])
     parse.should.not.have.property('--')
     parse.should.have.property('b').to.be.ok.and.be.a('boolean')
     parse.should.have.property('_').with.length(0)
@@ -166,7 +166,7 @@ describe('yargs-parser', function () {
   })
 
   it('should not set the next value as the value of a short option if that option is explicitly defined as a boolean', function () {
-    var parse = parser([ '-t', 'moo' ], {
+    var parse = parser(['-t', 'moo'], {
       boolean: 't'
     })
     parse.should.have.property('t', true).and.be.a('boolean')
@@ -208,7 +208,7 @@ describe('yargs-parser', function () {
   })
 
   it('should allow defining options as boolean in groups', function () {
-    var parse = parser([ '-x', '-z', 'one', 'two', 'three' ], {
+    var parse = parser(['-x', '-z', 'one', 'two', 'three'], {
       boolean: ['x', 'y', 'z']
     })
     parse.should.have.property('x', true).and.be.a('boolean')
@@ -243,25 +243,25 @@ describe('yargs-parser', function () {
   })
 
   it('should not convert numbers to type number if explicitly defined as strings', function () {
-    var s = parser([ '-s', '0001234' ], {
+    var s = parser(['-s', '0001234'], {
       string: 's'
     }).s
     s.should.be.a('string').and.equal('0001234')
-    var x = parser([ '-x', '56' ], {
+    var x = parser(['-x', '56'], {
       string: ['x']
     }).x
     x.should.be.a('string').and.equal('56')
   })
 
   it('should default numbers to undefined', function () {
-    var n = parser([ '-n' ], {
+    var n = parser(['-n'], {
       number: ['n']
     }).n
     expect(n).to.equal(undefined)
   })
 
   it('should default number to NaN if value is not a valid number', function () {
-    var n = parser([ '-n', 'string' ], {
+    var n = parser(['-n', 'string'], {
       number: ['n']
     }).n
     expect(n).to.deep.equal(NaN)
@@ -269,24 +269,24 @@ describe('yargs-parser', function () {
 
   // Fixes: https://github.com/bcoe/yargs/issues/68
   it('should parse flag arguments with no right-hand value as strings, if defined as strings', function () {
-    var s = parser([ '-s' ], {
+    var s = parser(['-s'], {
       string: ['s']
     }).s
     s.should.be.a('string').and.equal('')
 
-    s = parser([ '-sf' ], {
+    s = parser(['-sf'], {
       string: ['s']
     }).s
     s.should.be.a('string').and.equal('')
 
-    s = parser([ '--string' ], {
+    s = parser(['--string'], {
       string: ['string']
     }).string
     s.should.be.a('string').and.equal('')
   })
 
   it('should leave all non-hyphenated values as strings if _ is defined as a string', function () {
-    var s = parser([ '  ', '  ' ], {
+    var s = parser(['  ', '  '], {
       string: ['_']
     })._
     s.should.have.length(2)
@@ -296,7 +296,7 @@ describe('yargs-parser', function () {
 
   describe('normalize', function () {
     it('should normalize redundant paths', function () {
-      var a = parser([ '-s', ['', 'tmp', '..', ''].join(path.sep) ], {
+      var a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep)], {
         alias: {
           s: ['save']
         },
@@ -316,7 +316,7 @@ describe('yargs-parser', function () {
     })
 
     it('should normalize when key is also an array', function () {
-      var a = parser([ '-s', ['', 'tmp', '..', ''].join(path.sep), ['', 'path', 'to', 'new', 'dir', '..', '..', ''].join(path.sep) ], {
+      var a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep), ['', 'path', 'to', 'new', 'dir', '..', '..', ''].join(path.sep)], {
         alias: {
           s: ['save']
         },
@@ -331,7 +331,7 @@ describe('yargs-parser', function () {
 
   describe('alias', function () {
     it('should set alias value to the same value as the full option', function () {
-      var argv = parser([ '-f', '11', '--zoom', '55' ], {
+      var argv = parser(['-f', '11', '--zoom', '55'], {
         alias: {
           z: ['zoom']
         }
@@ -342,7 +342,7 @@ describe('yargs-parser', function () {
     })
 
     it('should allow multiple aliases to be specified', function () {
-      var argv = parser([ '-f', '11', '--zoom', '55' ], {
+      var argv = parser(['-f', '11', '--zoom', '55'], {
         alias: {
           z: ['zm', 'zoom']
         }
@@ -385,7 +385,7 @@ describe('yargs-parser', function () {
     })
 
     it('should allow transitive aliases to be specified', function () {
-      var argv = parser([ '-f', '11', '--zoom', '55' ], {
+      var argv = parser(['-f', '11', '--zoom', '55'], {
         alias: {
           z: 'zm',
           zm: 'zoom'
@@ -431,7 +431,7 @@ describe('yargs-parser', function () {
 
     // See: https://github.com/chevex/yargs/issues/12
     it('should load options and values from default config if specified', function () {
-      var argv = parser([ '--foo', 'bar' ], {
+      var argv = parser(['--foo', 'bar'], {
         alias: {
           z: 'zoom'
         },
@@ -520,7 +520,7 @@ describe('yargs-parser', function () {
     })
 
     it("should allow config to be set as flag in 'option'", function () {
-      var argv = parser([ '--settings', jsonPath, '--foo', 'bar' ], {
+      var argv = parser(['--settings', jsonPath, '--foo', 'bar'], {
         alias: {
           z: 'zoom'
         },
@@ -534,7 +534,7 @@ describe('yargs-parser', function () {
 
     it('should load options and values from a JS file when config has .js extention', function () {
       var jsPath = path.resolve(__dirname, './fixtures/settings.js')
-      var argv = parser([ '--settings', jsPath, '--foo', 'bar' ], {
+      var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: ['settings']
       })
 
@@ -599,7 +599,7 @@ describe('yargs-parser', function () {
 
     it('allows a custom parsing function to be provided', function () {
       var jsPath = path.resolve(__dirname, './fixtures/config.txt')
-      var argv = parser([ '--settings', jsPath, '--foo', 'bar' ], {
+      var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: {
           settings: function (configPath) {
             // as an example, parse an environment
@@ -624,7 +624,7 @@ describe('yargs-parser', function () {
 
     it('allows a custom parsing function to be provided as an alias', function () {
       var jsPath = path.resolve(__dirname, './fixtures/config.json')
-      var argv = parser([ '--settings', jsPath, '--foo', 'bar' ], {
+      var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: {
           s: function (configPath) {
             return JSON.parse(fs.readFileSync(configPath, 'utf-8'))
@@ -666,7 +666,7 @@ describe('yargs-parser', function () {
 
   describe('config objects', function () {
     it('should load options from config object', function () {
-      var argv = parser([ '--foo', 'bar' ], {
+      var argv = parser(['--foo', 'bar'], {
         configObjects: [{
           apple: 'apple',
           banana: 42,
@@ -855,7 +855,7 @@ describe('yargs-parser', function () {
         }
       })
 
-      ;('foo.bar' in argv).should.equal(false)
+        ; ('foo.bar' in argv).should.equal(false)
     })
 
     it('should respect .string() for dot notation arguments', function () {
@@ -912,7 +912,7 @@ describe('yargs-parser', function () {
   })
 
   it('should set boolean and alias using explicit true', function () {
-    var aliased = [ '-h', 'true' ]
+    var aliased = ['-h', 'true']
     var aliasedArgv = parser(aliased, {
       boolean: ['h'],
       alias: {
@@ -978,12 +978,12 @@ describe('yargs-parser', function () {
     })
 
     it('should set n to the numeric value 123', function () {
-      var argv = parser([ '-n123' ])
+      var argv = parser(['-n123'])
       argv.should.have.property('n', 123)
     })
 
     it('should set n to the numeric value 123, with n at the end of a group', function () {
-      var argv = parser([ '-ab5n123' ])
+      var argv = parser(['-ab5n123'])
       argv.should.have.property('a', true)
       argv.should.have.property('b', true)
       argv.should.have.property('5', true)
@@ -992,12 +992,12 @@ describe('yargs-parser', function () {
     })
 
     it('should set n to the numeric value 123, with = as separator', function () {
-      var argv = parser([ '-n=123' ])
+      var argv = parser(['-n=123'])
       argv.should.have.property('n', 123)
     })
 
     it('should set n to the numeric value 123, with n at the end of a group and = as separator', function () {
-      var argv = parser([ '-ab5n=123' ])
+      var argv = parser(['-ab5n=123'])
       argv.should.have.property('a', true)
       argv.should.have.property('b', true)
       argv.should.have.property('5', true)
@@ -1008,7 +1008,7 @@ describe('yargs-parser', function () {
 
   describe('whitespace', function () {
     it('should be whitespace', function () {
-      var argv = parser([ '-x', '\t' ])
+      var argv = parser(['-x', '\t'])
       argv.should.have.property('x', '\t')
     })
   })
@@ -1049,7 +1049,7 @@ describe('yargs-parser', function () {
 
     function checkStringArg (opts, hasAlias) {
       it('should set defaults even if arg looks like a string', function () {
-        var result = parser([ '--flag', 'extra' ], opts)
+        var result = parser(['--flag', 'extra'], opts)
         result.should.have.property('flag', true)
         result.should.have.property('_').and.deep.equal(['extra'])
         if (hasAlias) {
@@ -1215,7 +1215,7 @@ describe('yargs-parser', function () {
       }
 
       it('should provide count options with dashes as camelCase properties', function () {
-        var result = parser([ '--some-option', '--some-option', '--some-option' ], {
+        var result = parser(['--some-option', '--some-option', '--some-option'], {
           count: ['some-option']
         })
 
@@ -1352,7 +1352,7 @@ describe('yargs-parser', function () {
     })
 
     it('should set - as the value of s when s is set as a string', function () {
-      var argv = parser([ '-s', '-' ], {
+      var argv = parser(['-s', '-'], {
         string: ['s']
       })
 
@@ -1406,13 +1406,13 @@ describe('yargs-parser', function () {
     })
 
     it('should not consume the next argument', function () {
-      var parsed = parser([ '-v', 'moo' ], {
+      var parsed = parser(['-v', 'moo'], {
         count: 'v'
       })
       parsed.v.should.equal(1)
       parsed.should.have.property('_').and.deep.equal(['moo'])
 
-      parsed = parser([ '--verbose', 'moomoo', '--verbose' ], {
+      parsed = parser(['--verbose', 'moomoo', '--verbose'], {
         count: 'verbose'
       })
       parsed.verbose.should.equal(2)
@@ -1709,7 +1709,7 @@ describe('yargs-parser', function () {
 
   describe('nargs', function () {
     it('should allow the number of arguments following a key to be specified', function () {
-      var result = parser([ '--foo', 'apple', 'bar' ], {
+      var result = parser(['--foo', 'apple', 'bar'], {
         narg: {
           foo: 2
         }
@@ -1744,7 +1744,7 @@ describe('yargs-parser', function () {
     })
 
     it('should apply nargs to flag arguments', function () {
-      var result = parser([ '-f', 'apple', 'bar', 'blerg' ], {
+      var result = parser(['-f', 'apple', 'bar', 'blerg'], {
         narg: {
           f: 2
         }
@@ -1793,7 +1793,7 @@ describe('yargs-parser', function () {
     })
 
     it('allows multiple nargs to be set at the same time', function () {
-      var result = parser([ '--foo', 'apple', 'bar', '--bar', 'banana', '-f' ], {
+      var result = parser(['--foo', 'apple', 'bar', '--bar', 'banana', '-f'], {
         narg: {
           foo: 2,
           bar: 1
@@ -2689,6 +2689,172 @@ describe('yargs-parser', function () {
         })
       })
     })
+
+    describe('collect-unknown-options = true', function () {
+      it('should ignore unknown options in long format separated by =', function () {
+        const argv = parser('--known-arg=1 --unknown-arg=2', {
+          number: ['known-arg'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['--unknown-arg=2'],
+          'known-arg': 1,
+          'knownArg': 1
+        })
+      })
+      it('should ignore unknown options in boolean negations', function () {
+        const argv = parser('--no-known-arg --no-unknown-arg', {
+          boolean: ['known-arg'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['--no-unknown-arg'],
+          'known-arg': false,
+          'knownArg': false
+        })
+      })
+      it('should ignore unknown options in long format separated by space', function () {
+        const argv = parser('--known-arg a --unknown-arg b', {
+          string: ['known-arg'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['--unknown-arg', 'b'],
+          'known-arg': 'a',
+          'knownArg': 'a'
+        })
+      })
+      it('should ignore unknown options in short dot format separated by equals', function () {
+        const argv = parser('-k.arg=a -u.arg=b', {
+          string: ['k.arg'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-u.arg=b'],
+          'k': {
+            'arg': 'a'
+          }
+        })
+      })
+      it('should ignore unknown options in short dot format separated by space', function () {
+        const argv = parser('-k.arg 1 -u.arg 2', {
+          number: ['k.arg'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-u.arg', '2'],
+          'k': {
+            'arg': 1
+          }
+        })
+      })
+      it('should ignore unknown options in short format separated by equals', function () {
+        const argv = parser('-k=a -u=b', {
+          string: ['k'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-u=b'],
+          'k': 'a'
+        })
+      })
+      it('should ignore unknown options in short format followed by hyphen', function () {
+        const argv = parser('-k- -u-', {
+          string: ['k'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-u-'],
+          'k': '-'
+        })
+      })
+      it('should ignore unknown options in short format separated by space', function () {
+        const argv = parser('-k 1 -u 2', {
+          number: ['k'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-u', '2'],
+          'k': 1
+        })
+      })
+      it('should ignore unknown options in short format followed by a number', function () {
+        const argv = parser('-k1 -u2', {
+          number: ['k'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-u2'],
+          'k': 1
+        })
+      })
+      it('should ignore unknown options in short format followed by a non-word character', function () {
+        const argv = parser('-k/1/ -u/2/', {
+          string: ['k'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-u/2/'],
+          'k': '/1/'
+        })
+      })
+      it('should ignore unknown options in short format with multiple flags in one argument where an unknown flag is before the end', function () {
+        const argv = parser('-kuv', {
+          boolean: ['k', 'v'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-kuv']
+        })
+      })
+      it('should parse known options in short format with multiple flags in one argument where no unknown flag is in the argument', function () {
+        const argv = parser('-kv', {
+          boolean: ['k', 'v'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: [],
+          k: true,
+          v: true
+        })
+      })
+      it('should parse negative numbers', function () {
+        const argv = parser('-k -33', {
+          boolean: ['k'],
+          configuration: {
+            'collect-unknown-options': true
+          }
+        })
+        argv.should.deep.equal({
+          _: [-33],
+          k: true
+        })
+      })
+    })
   })
 
   // addresses: https://github.com/yargs/yargs-parser/issues/41
@@ -2832,9 +2998,9 @@ describe('yargs-parser', function () {
           bar: fancyNumberParser
         }
       })
-      ;(typeof parsed.foo).should.equal('string')
+        ; (typeof parsed.foo).should.equal('string')
       parsed.foo.should.equal('88888889999990000998989898989898')
-      ;(typeof parsed.bar).should.equal('number')
+      ; (typeof parsed.bar).should.equal('number')
       parsed.bar.should.equal(998)
     })
 
@@ -2868,7 +3034,7 @@ describe('yargs-parser', function () {
         runcount++
         return undefined
       }
-      parser([ '--foo', 'bar' ], {
+      parser(['--foo', 'bar'], {
         alias: {
           foo: ['f', 'foo-bar', 'bar'],
           b: ['bar']
@@ -2883,7 +3049,7 @@ describe('yargs-parser', function () {
 
   // see: https://github.com/yargs/yargs-parser/issues/37
   it('normalizes all paths in array when provided via config object', function () {
-    var argv = parser([ '--foo', 'bar' ], {
+    var argv = parser(['--foo', 'bar'], {
       array: ['a'],
       normalize: ['a'],
       configObjects: [{ 'a': ['bin/../a.txt', 'bin/../b.txt'] }]
@@ -2893,17 +3059,17 @@ describe('yargs-parser', function () {
 
   // see: https://github.com/yargs/yargs/issues/963
   it('does not magically convert numeric strings larger than Number.MAX_SAFE_INTEGER', () => {
-    const argv = parser([ '--foo', '93940495950949399948393' ])
+    const argv = parser(['--foo', '93940495950949399948393'])
     argv.foo.should.equal('93940495950949399948393')
   })
 
   it('does not magically convert scientific notation larger than Number.MAX_SAFE_INTEGER', () => {
-    const argv = parser([ '--foo', '33e99999' ])
+    const argv = parser(['--foo', '33e99999'])
     argv.foo.should.equal('33e99999')
   })
 
   it('converts numeric options larger than Number.MAX_SAFE_INTEGER to number', () => {
-    const argv = parser([ '--foo', '93940495950949399948393' ], {
+    const argv = parser(['--foo', '93940495950949399948393'], {
       number: ['foo']
     })
     argv.foo.should.equal(9.39404959509494e+22)
@@ -2930,21 +3096,21 @@ describe('yargs-parser', function () {
   // see: https://github.com/yargs/yargs-parser/issues/101
   describe('dot-notation array arguments combined with string arguments', function () {
     it('parses correctly when dot-notation argument is first', function () {
-      var argv = parser([ '--foo.bar', 'baz', '--foo', 'bux' ])
+      var argv = parser(['--foo.bar', 'baz', '--foo', 'bux'])
       Array.isArray(argv.foo).should.equal(true)
       argv.foo[0].bar.should.equal('baz')
       argv.foo[1].should.equal('bux')
     })
 
     it('parses correctly when dot-notation argument is last', function () {
-      var argv = parser([ '--foo', 'bux', '--foo.bar', 'baz' ])
+      var argv = parser(['--foo', 'bux', '--foo.bar', 'baz'])
       Array.isArray(argv.foo).should.equal(true)
       argv.foo[0].should.equal('bux')
       argv.foo[1].bar.should.equal('baz')
     })
 
     it('parses correctly when there are multiple dot-notation arguments', function () {
-      var argv = parser([ '--foo.first', 'firstvalue', '--foo', 'bux', '--foo.bar', 'baz', '--foo.bla', 'banana' ])
+      var argv = parser(['--foo.first', 'firstvalue', '--foo', 'bux', '--foo.bar', 'baz', '--foo.bla', 'banana'])
       Array.isArray(argv.foo).should.equal(true)
       argv.foo.length.should.equal(4)
       argv.foo[0].first.should.equal('firstvalue')
@@ -2983,7 +3149,7 @@ describe('yargs-parser', function () {
 
   // see: https://github.com/yargs/yargs-parser/issues/144
   it('number/string types should use default when no right-hand value', () => {
-    let argv = parser([ '--foo' ], {
+    let argv = parser(['--foo'], {
       number: ['foo'],
       default: {
         foo: 99
@@ -2991,7 +3157,7 @@ describe('yargs-parser', function () {
     })
     argv.foo.should.equal(99)
 
-    argv = parser([ '-b' ], {
+    argv = parser(['-b'], {
       alias: {
         bar: 'b'
       },
@@ -3005,7 +3171,7 @@ describe('yargs-parser', function () {
 
   describe('stripping', function () {
     it('strip-dashed removes expected fields from argv', function () {
-      const argv = parser([ '--test-value', '1' ], {
+      const argv = parser(['--test-value', '1'], {
         number: ['test-value'],
         alias: {
           'test-value': ['alt-test']
@@ -3022,7 +3188,7 @@ describe('yargs-parser', function () {
     })
 
     it('strip-aliased removes expected fields from argv', function () {
-      const argv = parser([ '--test-value', '1' ], {
+      const argv = parser(['--test-value', '1'], {
         number: ['test-value'],
         alias: {
           'test-value': ['alt-test']
@@ -3039,7 +3205,7 @@ describe('yargs-parser', function () {
     })
 
     it('strip-aliased and strip-dashed combined removes expected fields from argv', function () {
-      const argv = parser([ '--test-value', '1' ], {
+      const argv = parser(['--test-value', '1'], {
         number: ['test-value'],
         alias: {
           'test-value': ['alt-test']
@@ -3056,7 +3222,7 @@ describe('yargs-parser', function () {
     })
 
     it('ignores strip-dashed if camel-case-expansion is disabled', function () {
-      const argv = parser([ '--test-value', '1' ], {
+      const argv = parser(['--test-value', '1'], {
         number: ['test-value'],
         configuration: {
           'camel-case-expansion': false,

@@ -26,7 +26,8 @@ function parse (args, opts) {
     'set-placeholder-key': false,
     'halt-at-non-option': false,
     'strip-aliased': false,
-    'strip-dashed': false
+    'strip-dashed': false,
+    'collect-unknown-options': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -142,8 +143,10 @@ function parse (args, opts) {
     var next
     var value
 
+    if (configuration['collect-unknown-options'] && isUnknownOption(arg)) {
+      argv._.push(arg)
     // -- separated by =
-    if (arg.match(/^--.+=/) || (
+    } else if (arg.match(/^--.+=/) || (
       !configuration['short-option-groups'] && arg.match(/^-.+=/)
     )) {
       // Using [\s\S] instead of . because js doesn't support the
@@ -755,6 +758,74 @@ function parse (args, opts) {
     })
 
     return isSet
+  }
+
+  function hasAnyFlag (key) {
+    var isSet = false
+    // XXX Switch to [].concat(...Object.values(flags)) once node.js 6 is dropped
+    var toCheck = [].concat(...Object.keys(flags).map(k => flags[k]))
+
+    toCheck.forEach(function (flag) {
+      if (flag[key]) isSet = flag[key]
+    })
+
+    return isSet
+  }
+
+  function hasFlagsMatching (arg, ...patterns) {
+    var hasFlag = false
+    var toCheck = [].concat(...patterns)
+    toCheck.forEach(function (pattern) {
+      var match = arg.match(pattern)
+      if (match && hasAnyFlag(match[1])) {
+        hasFlag = true
+      }
+    })
+    return hasFlag
+  }
+
+  // based on a simplified version of the short flag group parsing logic
+  function hasAllShortFlags (arg) {
+    // if this is a negative number, or doesn't start with a single hyphen, it's not a short flag group
+    if (arg.match(negative) || !arg.match(/^-[^-]+/)) { return false }
+    var hasAllFlags = true
+    var letters = arg.slice(1).split('')
+    var next
+    for (var j = 0; j < letters.length; j++) {
+      next = arg.slice(j + 2)
+
+      if (!hasAnyFlag(letters[j])) {
+        hasAllFlags = false
+        break
+      }
+
+      if ((letters[j + 1] && letters[j + 1] === '=') ||
+        next === '-' ||
+        (/[A-Za-z]/.test(letters[j]) && /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) ||
+        (letters[j + 1] && letters[j + 1].match(/\W/))) {
+        break
+      }
+    }
+    return hasAllFlags
+  }
+
+  function isUnknownOption (arg) {
+    // ignore negative numbers
+    if (arg.match(negative)) { return false }
+    // if this is a short option group and all of them are configured, it isn't unknown
+    if (hasAllShortFlags(arg)) { return false }
+    // e.g. '--count=2'
+    const flagWithEquals = /^-+([^=]+?)=[\s\S]*$/
+    // e.g. '-a' or '--arg'
+    const normalFlag = /^-+([^=]+?)$/
+    // e.g. '-a-'
+    const flagEndingInHyphen = /^-+([^=]+?)-$/
+    // e.g. '-abc123'
+    const flagEndingInDigits = /^-+([^=]+?)\d+$/
+    // e.g. '-a/usr/local'
+    const flagEndingInNonWordCharacters = /^-+([^=]+?)\W+.*$/
+    // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method
+    return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag, flagEndingInHyphen, flagEndingInDigits, flagEndingInNonWordCharacters)
   }
 
   // make a best effor to pick a default value
