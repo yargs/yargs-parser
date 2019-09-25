@@ -27,7 +27,7 @@ function parse (args, opts) {
     'halt-at-non-option': false,
     'strip-aliased': false,
     'strip-dashed': false,
-    'collect-unknown-options': false
+    'unknown-options-as-args': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -143,7 +143,7 @@ function parse (args, opts) {
     var next
     var value
 
-    if (configuration['collect-unknown-options'] && isUnknownOption(arg)) {
+    if (configuration['unknown-options-as-args'] && isUnknownOption(arg)) {
       argv._.push(arg)
     // -- separated by =
     } else if (arg.match(/^--.+=/) || (
@@ -361,7 +361,7 @@ function parse (args, opts) {
     // and terminates when one is observed.
     var available = 0
     for (ii = i + 1; ii < args.length; ii++) {
-      if (!args[ii].match(/^-[^0-9]/)) available++
+      if (!args[ii].match(/^-[^0-9]/) || configuration['unknown-options-as-args']) available++
       else break
     }
 
@@ -384,7 +384,7 @@ function parse (args, opts) {
 
     if (checkAllAliases(key, flags.bools) && !(/^(true|false)$/.test(next))) {
       argsToSet.push(true)
-    } else if (isUndefined(next) || (/^-/.test(next) && !negative.test(next))) {
+    } else if (isUndefined(next) || (/^-/.test(next) && !negative.test(next) && !configuration['unknown-options-as-args'])) {
       // for keys without value ==> argsToSet remains an empty []
       // set user default value, if available
       if (defaults.hasOwnProperty(key)) {
@@ -393,7 +393,7 @@ function parse (args, opts) {
     } else {
       for (var ii = i + 1; ii < args.length; ii++) {
         next = args[ii]
-        if (/^-/.test(next) && !negative.test(next)) break
+        if (/^-/.test(next) && !negative.test(next) && !configuration['unknown-options-as-args']) break
         i = ii
         argsToSet.push(processValue(key, next))
       }

@@ -386,26 +386,26 @@ node example.js --test-field 1
 { _: [], testField: 1 }
 ```
 
-### collect unknown options
+### unknown options as args
 
 * default: `false`
-* key: `collect-unknown-options`
+* key: `unknown-options-as-args`
 
-Should unknown options be collected into `_`?  An unknown option is one that is not
+Should unknown options be treated like regular arguments?  An unknown option is one that is not
 configured in `opts`.
 
 _If disabled_
 
 ```sh
-node example.js --unknown-option --known-option 2
-{ _: [], unknownOption: true, knownOption: 2 }
+node example.js --unknown-option --known-option 2 --string-option --unknown-option2
+{ _: [], unknownOption: true, knownOption: 2, stringOption: '', unknownOption2: true }
 ```
 
 _If enabled_
 
 ```sh
-node example.js --unknown-option --known-option 2
-{ _: ['--unknown-option'], knownOption: 2 }
+node example.js --unknown-option --known-option 2 --string-option --unknown-option2
+{ _: ['--unknown-option'], knownOption: 2, stringOption: '--unknown-option2' }
 ```
 
 ## Special Thanks
