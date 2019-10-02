@@ -761,27 +761,20 @@ function parse (args, opts) {
   }
 
   function hasAnyFlag (key) {
-    var isSet = false
     // XXX Switch to [].concat(...Object.values(flags)) once node.js 6 is dropped
     var toCheck = [].concat(...Object.keys(flags).map(k => flags[k]))
 
-    toCheck.forEach(function (flag) {
-      if (flag[key]) isSet = flag[key]
+    return toCheck.some(function (flag) {
+      return flag[key]
     })
-
-    return isSet
   }
 
   function hasFlagsMatching (arg, ...patterns) {
-    var hasFlag = false
     var toCheck = [].concat(...patterns)
-    toCheck.forEach(function (pattern) {
+    return toCheck.some(function (pattern) {
       var match = arg.match(pattern)
-      if (match && hasAnyFlag(match[1])) {
-        hasFlag = true
-      }
+      return match && hasAnyFlag(match[1])
     })
-    return hasFlag
   }
 
   // based on a simplified version of the short flag group parsing logic
