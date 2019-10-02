@@ -748,16 +748,11 @@ function parse (args, opts) {
     })
   }
 
-  // check if a flag is set for any of a key's aliases.
+  // return the 1st set flag for any of a key's aliases (or false if no flag set)
   function checkAllAliases (key, flag) {
-    var isSet = false
     var toCheck = [].concat(flags.aliases[key] || [], key)
-
-    toCheck.forEach(function (key) {
-      if (flag.hasOwnProperty(key)) isSet = flag[key]
-    })
-
-    return isSet
+    let setAlias = toCheck.find(key => flag.hasOwnProperty(key))
+    return setAlias ? flag[setAlias] : false
   }
 
   function hasAnyFlag (key) {
