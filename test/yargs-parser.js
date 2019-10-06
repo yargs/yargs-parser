@@ -2690,12 +2690,12 @@ describe('yargs-parser', function () {
       })
     })
 
-    describe('collect-unknown-options = true', function () {
+    describe('unknown-options-as-args = true', function () {
       it('should ignore unknown options in long format separated by =', function () {
         const argv = parser('--known-arg=1 --unknown-arg=2', {
           number: ['known-arg'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2708,7 +2708,7 @@ describe('yargs-parser', function () {
         const argv = parser('--no-known-arg --no-unknown-arg', {
           boolean: ['known-arg'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2721,7 +2721,7 @@ describe('yargs-parser', function () {
         const argv = parser('--known-arg a --unknown-arg b', {
           string: ['known-arg'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2734,7 +2734,7 @@ describe('yargs-parser', function () {
         const argv = parser('-k.arg=a -u.arg=b', {
           string: ['k.arg'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2748,7 +2748,7 @@ describe('yargs-parser', function () {
         const argv = parser('-k.arg 1 -u.arg 2', {
           number: ['k.arg'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2762,7 +2762,7 @@ describe('yargs-parser', function () {
         const argv = parser('-k=a -u=b', {
           string: ['k'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2774,7 +2774,7 @@ describe('yargs-parser', function () {
         const argv = parser('-k- -u-', {
           string: ['k'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2786,7 +2786,7 @@ describe('yargs-parser', function () {
         const argv = parser('-k 1 -u 2', {
           number: ['k'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2794,11 +2794,51 @@ describe('yargs-parser', function () {
           'k': 1
         })
       })
+      it('should allow an unknown arg to be used as the value of another flag in short form', function () {
+        const argv = parser('-k -u', {
+          string: ['k'],
+          narg: { 'k': 1 },
+          configuration: {
+            'unknown-options-as-args': true
+          }
+        })
+        argv.should.deep.equal({
+          _: [],
+          'k': '-u'
+        })
+      })
+      it('should allow an unknown arg to be used as the value of another flag in long form', function () {
+        const argv = parser('--known-arg --unknown-arg', {
+          string: ['known-arg'],
+          narg: { 'known-arg': 1 },
+          configuration: {
+            'unknown-options-as-args': true
+          }
+        })
+        argv.should.deep.equal({
+          _: [],
+          'knownArg': '--unknown-arg',
+          'known-arg': '--unknown-arg'
+        })
+      })
+      it('should allow an unknown arg to be used as the value of another flag in array form', function () {
+        const argv = parser('--known-arg --unknown-arg1 --unknown-arg2', {
+          array: ['known-arg'],
+          configuration: {
+            'unknown-options-as-args': true
+          }
+        })
+        argv.should.deep.equal({
+          _: [],
+          'knownArg': ['--unknown-arg1', '--unknown-arg2'],
+          'known-arg': ['--unknown-arg1', '--unknown-arg2']
+        })
+      })
       it('should ignore unknown options in short format followed by a number', function () {
         const argv = parser('-k1 -u2', {
           number: ['k'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2810,7 +2850,7 @@ describe('yargs-parser', function () {
         const argv = parser('-k/1/ -u/2/', {
           string: ['k'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2822,7 +2862,7 @@ describe('yargs-parser', function () {
         const argv = parser('-kuv', {
           boolean: ['k', 'v'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2833,7 +2873,7 @@ describe('yargs-parser', function () {
         const argv = parser('-kv', {
           boolean: ['k', 'v'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
@@ -2846,7 +2886,7 @@ describe('yargs-parser', function () {
         const argv = parser('-k -33', {
           boolean: ['k'],
           configuration: {
-            'collect-unknown-options': true
+            'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({

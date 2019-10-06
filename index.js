@@ -27,7 +27,7 @@ function parse (args, opts) {
     'halt-at-non-option': false,
     'strip-aliased': false,
     'strip-dashed': false,
-    'collect-unknown-options': false
+    'unknown-options-as-args': false
   }, opts.configuration)
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
@@ -143,7 +143,7 @@ function parse (args, opts) {
     var next
     var value
 
-    if (configuration['collect-unknown-options'] && isUnknownOption(arg)) {
+    if (isUnknownOptionAsArg(arg)) {
       argv._.push(arg)
     // -- separated by =
     } else if (arg.match(/^--.+=/) || (
@@ -361,7 +361,7 @@ function parse (args, opts) {
     // and terminates when one is observed.
     var available = 0
     for (ii = i + 1; ii < args.length; ii++) {
-      if (!args[ii].match(/^-[^0-9]/)) available++
+      if (!args[ii].match(/^-[^0-9]/) || isUnknownOptionAsArg(args[ii])) available++
       else break
     }
 
@@ -384,7 +384,7 @@ function parse (args, opts) {
 
     if (checkAllAliases(key, flags.bools) && !(/^(true|false)$/.test(next))) {
       argsToSet.push(true)
-    } else if (isUndefined(next) || (/^-/.test(next) && !negative.test(next))) {
+    } else if (isUndefined(next) || (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next))) {
       // for keys without value ==> argsToSet remains an empty []
       // set user default value, if available
       if (defaults.hasOwnProperty(key)) {
@@ -393,7 +393,7 @@ function parse (args, opts) {
     } else {
       for (var ii = i + 1; ii < args.length; ii++) {
         next = args[ii]
-        if (/^-/.test(next) && !negative.test(next)) break
+        if (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next)) break
         i = ii
         argsToSet.push(processValue(key, next))
       }
@@ -761,27 +761,20 @@ function parse (args, opts) {
   }
 
   function hasAnyFlag (key) {
-    var isSet = false
     // XXX Switch to [].concat(...Object.values(flags)) once node.js 6 is dropped
     var toCheck = [].concat(...Object.keys(flags).map(k => flags[k]))
 
-    toCheck.forEach(function (flag) {
-      if (flag[key]) isSet = flag[key]
+    return toCheck.some(function (flag) {
+      return flag[key]
     })
-
-    return isSet
   }
 
   function hasFlagsMatching (arg, ...patterns) {
-    var hasFlag = false
     var toCheck = [].concat(...patterns)
-    toCheck.forEach(function (pattern) {
+    return toCheck.some(function (pattern) {
       var match = arg.match(pattern)
-      if (match && hasAnyFlag(match[1])) {
-        hasFlag = true
-      }
+      return match && hasAnyFlag(match[1])
     })
-    return hasFlag
   }
 
   // based on a simplified version of the short flag group parsing logic
@@ -807,6 +800,10 @@ function parse (args, opts) {
       }
     }
     return hasAllFlags
+  }
+
+  function isUnknownOptionAsArg (arg) {
+    return configuration['unknown-options-as-args'] && isUnknownOption(arg)
   }
 
   function isUnknownOption (arg) {
