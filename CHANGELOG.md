@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [15.0.0](https://github.com/yargs/yargs-parser/compare/v14.0.0...v15.0.0) (2019-10-07)
+
+
+### Features
+
+* rework `collect-unknown-options` into `unknown-options-as-args`, providing more comprehensive functionality ([ef771ca](https://github.com/yargs/yargs-parser/commit/ef771ca))
+
+
+### BREAKING CHANGES
+
+* rework `collect-unknown-options` into `unknown-options-as-args`, providing more comprehensive functionality
+
+
+
 ## [14.0.0](https://github.com/yargs/yargs-parser/compare/v13.1.1...v14.0.0) (2019-09-06)
 
 
