@@ -1501,18 +1501,21 @@ describe('yargs-parser', function () {
     })
 
     it('should default argument to empty array if no value given', function () {
-      var result = parser(['-b'], {
-        array: 'b'
+      var result = parser(['-b', '--tag'], {
+        array: ['b', 'tag'],
+        default: { 'tag': [] }
       })
-      result.should.have.property('b').and.deep.equal([])
+      result.b.should.deep.equal([])
+      result.tag.should.deep.equal([])
     })
 
     it('should place default of argument in array, when default provided', function () {
-      var result = parser(['-b'], {
-        array: 'b',
-        default: { 'b': 33 }
+      var result = parser(['-b', '--tag'], {
+        array: ['b', 'tag'],
+        default: { 'b': 33, 'tag': ['foo'] }
       })
-      result.should.have.property('b').and.deep.equal([33])
+      result.b.should.deep.equal([33])
+      result.tag.should.deep.equal(['foo'])
     })
 
     it('should place value of argument in array, when one argument provided', function () {
