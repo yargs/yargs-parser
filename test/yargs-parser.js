@@ -2894,6 +2894,36 @@ describe('yargs-parser', function () {
           k: true
         })
       })
+
+      it('should not identify "--" as an unknown option', function () {
+        const argv = parser('-a -k one -1 -- -b -k two -2', {
+          boolean: ['k'],
+          configuration: {
+            'unknown-options-as-args': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-a', 'one', -1, '-b', '-k', 'two', '-2'],
+          k: true
+        })
+      })
+
+      it('should not identify "--" as an unknown option when "populate--" is true', function () {
+        const argv = parser('-a -k one -1 -- -b -k two -2', {
+          boolean: ['k'],
+          configuration: {
+            'populate--': true,
+            'unknown-options-as-args': true
+          }
+        })
+        argv.should.deep.equal({
+          // populate argv._ with everything before the --
+          _: ['-a', 'one', -1],
+          // and argv['--'] with everything after the --
+          '--': ['-b', '-k', 'two', '-2'],
+          k: true
+        })
+      })
     })
   })
 
