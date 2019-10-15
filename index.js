@@ -143,7 +143,8 @@ function parse (args, opts) {
     var next
     var value
 
-    if (isUnknownOptionAsArg(arg)) {
+    // any unknown option (except for end-of-options, "--")
+    if (arg !== '--' && isUnknownOptionAsArg(arg)) {
       argv._.push(arg)
     // -- separated by =
     } else if (arg.match(/^--.+=/) || (
