@@ -51,7 +51,7 @@ function parse (args, opts) {
     coercions: {},
     keys: []
   }
-  var negative = /^-[0-9]+(\.[0-9]+)?/
+  var negative = /^-([0-9]+(\.[0-9]+)?|\.[0-9]+)$/
   var negatedBoolean = new RegExp('^--' + configuration['negation-prefix'] + '(.+)')
 
   ;[].concat(opts.array).filter(Boolean).forEach(function (opt) {
@@ -206,7 +206,7 @@ function parse (args, opts) {
       setArg(m[1], m[2])
 
     // dot-notation flag separated by space.
-    } else if (arg.match(/^-.\..+/)) {
+    } else if (arg.match(/^-.\..+/) && !arg.match(negative)) {
       next = args[i + 1]
       key = arg.match(/^-(.\..+)/)[1]
 
@@ -362,7 +362,7 @@ function parse (args, opts) {
     // and terminates when one is observed.
     var available = 0
     for (ii = i + 1; ii < args.length; ii++) {
-      if (!args[ii].match(/^-[^0-9]/) || isUnknownOptionAsArg(args[ii])) available++
+      if (!args[ii].match(/^-[^0-9]/) || args[ii].match(negative) || isUnknownOptionAsArg(args[ii])) available++
       else break
     }
 

@@ -159,6 +159,21 @@ describe('yargs-parser', function () {
     argv.other.should.deep.equal([-99, -220])
   })
 
+  it('should handle negative (and positive) numbers with decimal places, with or without a leading 0', function () {
+    var argv = parser([
+      '-0.1', '-1.1', '-.5', '-.1', '.1', '.5',
+      '--bounds', '-5.1', '-.1', '.1',
+      '--other', '.9', '-.5'
+    ], {
+      array: 'bounds',
+      narg: { 'other': 2 }
+    })
+
+    argv._.should.deep.equal([-0.1, -1.1, -0.5, -0.1, 0.1, 0.5])
+    argv.bounds.should.deep.equal([-5.1, -0.1, 0.1])
+    argv.other.should.deep.equal([0.9, -0.5])
+  })
+
   it('should set the value of a single short option to the next supplied value, even if the value is empty', function () {
     var parse = parser(['-p', ''])
     parse.should.have.property('p', '')
