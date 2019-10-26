@@ -6,5 +6,11 @@ node_js:
   - "6"
   - "8"
   - "10"
-  - "node"
-after_script: npm run coverage
+
+jobs:
+  include:
+    - stage: coverage
+      node_js: "13"
+      script:
+        - npm t
+        - npm run coverage
