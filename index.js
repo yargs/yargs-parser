@@ -389,7 +389,8 @@ function parse (args, opts) {
       // for keys without value ==> argsToSet remains an empty []
       // set user default value, if available
       if (defaults.hasOwnProperty(key)) {
-        argsToSet.push(defaults[key])
+        let defVal = defaults[key]
+        argsToSet = Array.isArray(defVal) ? defVal : [defVal]
       }
     } else {
       for (var ii = i + 1; ii < args.length; ii++) {
