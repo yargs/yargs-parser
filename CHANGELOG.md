@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [16.0.0](https://www.github.com/yargs/yargs-parser/compare/v15.0.0...v16.0.0) (2019-10-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* moving to c8 for coverage and dropping Node 6 from build matrix (#209)
+
+### Bug Fixes
+
+* **unknown-options-as-args:** '--' is not an unknown option ([#207](https://www.github.com/yargs/yargs-parser/issues/207)) ([3fee2d8](https://www.github.com/yargs/yargs-parser/commit/3fee2d895e9da14af978bbd1c7c9c20170c3aa59))
+* address issue with array options with array default values ([#206](https://www.github.com/yargs/yargs-parser/issues/206)) ([f5f9e5a](https://www.github.com/yargs/yargs-parser/commit/f5f9e5a7ea91821f7c95e8eb4c71dc74de1bc907))
+* support negative numbers with decimal places ([#208](https://www.github.com/yargs/yargs-parser/issues/208)) ([850bbda](https://www.github.com/yargs/yargs-parser/commit/850bbdafcf8a4998f374dfce993422855d10716d))
+
+
+### Build System
+
+* moving to c8 for coverage and dropping Node 6 from build matrix ([#209](https://www.github.com/yargs/yargs-parser/issues/209)) ([f3a9316](https://www.github.com/yargs/yargs-parser/commit/f3a9316e470b0cc5c01981c9614ee935835d719b))
+
 ## [15.0.0](https://github.com/yargs/yargs-parser/compare/v14.0.0...v15.0.0) (2019-10-07)
 
 
