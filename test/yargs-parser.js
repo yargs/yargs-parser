@@ -1487,6 +1487,24 @@ describe('yargs-parser', function () {
       ], { count: 'v' })
       parsed.v.should.equal(8)
     })
+
+    it('should add an error if counter is also set as array', function () {
+      var argv = parser.detailed(['--counter', '--counter', '--counter'], {
+        count: ['counter'],
+        array: ['counter']
+      })
+
+      argv.error.message.should.equal('Invalid configuration: counter, opts.count excludes opts.array.')
+    })
+
+    it('should add an error if counter is also set as narg', function () {
+      var argv = parser.detailed(['--counter', 'foo', 'bar'], {
+        count: ['counter'],
+        narg: { 'counter': 2 }
+      })
+
+      argv.error.message.should.equal('Invalid configuration: counter, opts.count excludes opts.narg.')
+    })
   })
 
   describe('array', function () {
