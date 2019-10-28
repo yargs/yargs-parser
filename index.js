@@ -35,6 +35,7 @@ function parse (args, opts) {
   var notFlagsOption = configuration['populate--']
   var notFlagsArgv = notFlagsOption ? '--' : '_'
   var newAliases = {}
+  var defaulted = {}
   // allow a i18n handler to be passed in, default to a fake one (util.format).
   var __ = opts.__ || util.format
   var error = null
@@ -317,7 +318,7 @@ function parse (args, opts) {
   applyEnvVars(argv, false)
   setConfig(argv)
   setConfigObjects()
-  applyDefaultsAndAliases(argv, flags.aliases, defaults)
+  applyDefaultsAndAliases(argv, flags.aliases, defaults, true)
   applyCoercions(argv)
   if (configuration['set-placeholder-key']) setPlaceholderKeys(argv)
 
@@ -627,10 +628,11 @@ function parse (args, opts) {
     return argv
   }
 
-  function applyDefaultsAndAliases (obj, aliases, defaults) {
+  function applyDefaultsAndAliases (obj, aliases, defaults, canLog = false) {
     Object.keys(defaults).forEach(function (key) {
       if (!hasKey(obj, key.split('.'))) {
         setKey(obj, key.split('.'), defaults[key])
+        if (canLog) defaulted[key] = true
 
         ;(aliases[key] || []).forEach(function (x) {
           if (hasKey(obj, x.split('.'))) return
@@ -895,6 +897,7 @@ function parse (args, opts) {
     error: error,
     aliases: flags.aliases,
     newAliases: newAliases,
+    defaulted: defaulted,
     configuration: configuration
   }
 }
