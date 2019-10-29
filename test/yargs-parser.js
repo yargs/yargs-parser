@@ -1215,6 +1215,32 @@ describe('yargs-parser', function () {
       parse.should.have.property('t', false).and.be.a('boolean')
       parse.should.have.property('_').and.deep.equal(['moo'])
     })
+
+    it('should log defaulted options - not specified by user', function () {
+      var parsed = parser.detailed('', {
+        default: { foo: 'abc', 'bar.prop': 33, baz: 'x' },
+        configObjects: [{ baz: 'xyz' }]
+      })
+      parsed.argv.should.deep.equal({ '_': [], baz: 'xyz', foo: 'abc', bar: { prop: 33 } })
+      parsed.defaulted.should.deep.equal({ foo: true, 'bar.prop': true })
+    })
+
+    it('should not log defaulted options - specified without value', function () {
+      var parsed = parser.detailed('--foo --bar.prop', {
+        default: { foo: 'abc', 'bar.prop': 33 }
+      })
+      parsed.argv.should.deep.equal({ '_': [], foo: 'abc', bar: { prop: 33 } })
+      parsed.defaulted.should.deep.equal({})
+    })
+
+    it('should log defaulted options - no aliases included', function () {
+      var parsed = parser.detailed('', {
+        default: { kaa: 'abc' },
+        alias: { foo: 'kaa' }
+      })
+      parsed.argv.should.deep.equal({ '_': [], kaa: 'abc', foo: 'abc' })
+      parsed.defaulted.should.deep.equal({ kaa: true })
+    })
   })
 
   describe('camelCase', function () {
