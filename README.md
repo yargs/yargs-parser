@@ -99,10 +99,14 @@ yargs engine.
 * `argv`: an object representing the parsed value of `args`
   * `key/value`: key value pairs for each argument and their aliases.
   * `_`: an array representing the positional arguments.
+  * [optional] `--`:  an array with arguments after the end-of-options flag `--`.
 * `error`: populated with an error object if an exception occurred during parsing.
 * `aliases`: the inferred list of aliases built by combining lists in `opts.alias`.
-* `newAliases`: any new aliases added via camel-case expansion.
-* `configuration`: the configuration loaded from the `yargs` stanza in package.json.
+* `newAliases`: any new aliases added via camel-case expansion:
+  * `boolean`: `{ fooBar: true }`
+* `defaulted`: any new argument created by `opts.default`, no aliases included.
+  * `boolean`: `{ foo: true }`
+* `configuration`: given by default settings and `opts.configuration`.
 
 <a name="configuration"></a>
 
