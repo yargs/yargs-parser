@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [17.0.0](https://www.github.com/yargs/yargs-parser/compare/v16.0.0...v17.0.0) (2019-11-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* populate error if incompatible narg/count or array/count options are used (#191)
+
+### Features
+
+* options that have had their default value used are now tracked ([#211](https://www.github.com/yargs/yargs-parser/issues/211)) ([a525234](https://www.github.com/yargs/yargs-parser/commit/a525234558c847deedd73f8792e0a3b77b26e2c0))
+* populate error if incompatible narg/count or array/count options are used ([#191](https://www.github.com/yargs/yargs-parser/issues/191)) ([84a401f](https://www.github.com/yargs/yargs-parser/commit/84a401f0fa3095e0a19661670d1570d0c3b9d3c9))
+
 ## [16.0.0](https://www.github.com/yargs/yargs-parser/compare/v15.0.0...v16.0.0) (2019-10-26)
 
 
