@@ -968,4 +968,11 @@ Parser.detailed = function (args, opts) {
   return parse(args.slice(), opts)
 }
 
+// parse string of arguments to string[] 'argv',
+// as Node in Bash builds 'process.argv'
+Parser.toArgv = function (argString) {
+  const bashParse = require('arrgv')
+  return bashParse(argString)
+}
+
 module.exports = Parser
