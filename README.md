@@ -39,6 +39,18 @@ console.log(argv)
 { _: [], foo: 99, bar: 33 }
 ```
 
+Pre-parse a complex string with escaped metacharacters before passing to `yargs-parser`:
+```js
+const parse = require('yargs-parser')
+let argv = parse.toArgv(String.raw`--foo "hello world" "testing \" \"quotes\""`)
+let args = parse(argv, { array: ['foo'] })
+console.log(args)
+```
+
+```sh
+{ _: [], foo: [ 'hello world', 'testing " "quotes"' ] }
+```
+
 Convert an array of mixed types before passing to `yargs-parser`:
 
 ```js
@@ -124,7 +136,7 @@ var parsed = parser(['--no-dice'], {
 })
 ```
 
-### short option groups
+#### short option groups
 
 * default: `true`.
 * key: `short-option-groups`.
@@ -143,7 +155,7 @@ node example.js -abc
 { _: [], abc: true }
 ```
 
-### camel-case expansion
+#### camel-case expansion
 
 * default: `true`.
 * key: `camel-case-expansion`.
@@ -162,7 +174,7 @@ node example.js --foo-bar
 { _: [], 'foo-bar': true }
 ```
 
-### dot-notation
+#### dot-notation
 
 * default: `true`
 * key: `dot-notation`
@@ -181,7 +193,7 @@ node example.js --foo.bar
 { _: [], "foo.bar": true }
 ```
 
-### parse numbers
+#### parse numbers
 
 * default: `true`
 * key: `parse-numbers`
@@ -200,7 +212,7 @@ node example.js --foo=99.3
 { _: [], foo: "99.3" }
 ```
 
-### boolean negation
+#### boolean negation
 
 * default: `true`
 * key: `boolean-negation`
@@ -219,7 +231,7 @@ node example.js --no-foo
 { _: [], "no-foo": true }
 ```
 
-### combine arrays
+#### combine arrays
 
 * default: `false`
 * key: `combine-arrays`
@@ -227,7 +239,7 @@ node example.js --no-foo
 Should arrays be combined when provided by both command line arguments and
 a configuration file.
 
-### duplicate arguments array
+#### duplicate arguments array
 
 * default: `true`
 * key: `duplicate-arguments-array`
@@ -246,7 +258,7 @@ node example.js -x 1 -x 2
 { _: [], x: 2 }
 ```
 
-### flatten duplicate arrays
+#### flatten duplicate arrays
 
 * default: `true`
 * key: `flatten-duplicate-arrays`
@@ -265,7 +277,7 @@ node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
 ```
 
-### negation prefix
+#### negation prefix
 
 * default: `no-`
 * key: `negation-prefix`
@@ -284,7 +296,7 @@ node example.js --quuxfoo
 { _: [], foo: false }
 ```
 
-### populate --
+#### populate --
 
 * default: `false`.
 * key: `populate--`
@@ -305,7 +317,7 @@ node example.js a -b -- x y
 { _: [ 'a' ], '--': [ 'x', 'y' ], b: true }
 ```
 
-### set placeholder key
+#### set placeholder key
 
 * default: `false`.
 * key: `set-placeholder-key`.
@@ -326,7 +338,7 @@ node example.js -a 1 -c 2
 { _: [], a: 1, b: undefined, c: 2 }
 ```
 
-### halt at non-option
+#### halt at non-option
 
 * default: `false`.
 * key: `halt-at-non-option`.
@@ -347,7 +359,7 @@ node example.js -a run b -x y
 { _: [ 'b', '-x', 'y' ], a: 'run' }
 ```
 
-### strip aliased
+#### strip aliased
 
 * default: `false`
 * key: `strip-aliased`
@@ -368,7 +380,7 @@ node example.js --test-field 1
 { _: [], 'test-field': 1, testField: 1 }
 ```
 
-### strip dashed
+#### strip dashed
 
 * default: `false`
 * key: `strip-dashed`
@@ -390,7 +402,7 @@ node example.js --test-field 1
 { _: [], testField: 1 }
 ```
 
-### unknown options as args
+#### unknown options as args
 
 * default: `false`
 * key: `unknown-options-as-args`
@@ -411,6 +423,20 @@ _If enabled_
 node example.js --unknown-option --known-option 2 --string-option --unknown-option2
 { _: ['--unknown-option'], knownOption: 2, stringOption: '--unknown-option2' }
 ```
+
+### require('yargs-parser').toArgv(argString)
+
+Pre-parses a string of arguments supporting quoting and escaping. Returns an array of tokenized arguments `argv`. Handles arguments the same way as Node launched in Bash builds `process.argv`.slice(2).
+
+**expects:**
+
+* `argString`: a string or `String.raw()`representing options to parse.
+
+**returns:**
+
+* `argv`: an array of strings representing the pre-parsed value of `argString`.
+
+**throws:** `SyntaxError`
 
 ## Special Thanks
 
