@@ -3270,8 +3270,8 @@ describe('yargs-parser', function () {
       args.foo.should.equal('hello world')
       args.bar.should.equal('goodnight\'moon')
       const args2 = parser(['--foo', '"hello world"', '--bar="goodnight\'moon"'])
-      args2.foo.should.equal('hello world')
-      args2.bar.should.equal('goodnight\'moon')
+      args2.foo.should.equal('"hello world"')
+      args2.bar.should.equal('"goodnight\'moon"')
     })
 
     it('handles single quoted strings', function () {
@@ -3279,14 +3279,17 @@ describe('yargs-parser', function () {
       args.foo.should.equal('hello world')
       args.bar.should.equal('goodnight"moon')
       const args2 = parser(['--foo', "'hello world'", "--bar='goodnight\"moon'"])
-      args2.foo.should.equal('hello world')
-      args2.bar.should.equal('goodnight"moon')
+      args2.foo.should.equal("'hello world'")
+      args2.bar.should.equal("'goodnight\"moon'")
     })
 
     it('handles strings with dashes', function () {
-      const args = parser('--foo "-hello world" --bar="--goodnight moon"')
+      const args = parser('--foo "\\-hello world" --bar="--goodnight moon"')
       args.foo.should.equal('-hello world')
       args.bar.should.equal('--goodnight moon')
+      const args2 = parser(['--foo', '\\-hello world', '--bar=--goodnight moon'])
+      args2.foo.should.equal('-hello world')
+      args2.bar.should.equal('--goodnight moon')
     })
   })
 
