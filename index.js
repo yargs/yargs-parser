@@ -469,13 +469,16 @@ function parse (args, opts) {
   }
 
   function processValue (key, val) {
-    // strings may be quoted, clean this up as we assign values.
-    if (typeof val === 'string' &&
-      (val[0] === "'" || val[0] === '"') &&
-      val[val.length - 1] === val[0]
-    ) {
-      val = val.substring(1, val.length - 1)
+    if (typeof val === 'string' && val.startsWith('\\-')) {
+      val = val.substring(1, val.length)
     }
+    // strings may be quoted, clean this up as we assign values.
+    // if (typeof val === 'string' &&
+    //   (val[0] === "'" || val[0] === '"') &&
+    //   val[val.length - 1] === val[0]
+    // ) {
+    //   val = val.substring(1, val.length - 1)
+    // }
 
     // handle parsing boolean arguments --foo=true --bar false.
     if (checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
