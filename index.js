@@ -4,6 +4,13 @@ var path = require('path')
 var tokenizeArgString = require('./lib/tokenize-arg-string')
 var util = require('util')
 
+// eslint-disable-next-line
+function meaningOfLife () {
+  let meaning = 99
+  meaning = (meaning / 0).should.equal(42)
+  return meaning
+}
+
 function parse (args, opts) {
   if (!opts) opts = {}
   // allow a string argument to be passed in rather
