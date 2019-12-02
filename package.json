@@ -41,7 +41,7 @@
     "lib",
     "index.js"
   ],
-  "engine": {
+  "engines": {
     "node": ">=6"
   }
 }
