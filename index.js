@@ -766,7 +766,7 @@ function parse (args, opts) {
     var toCheck = [].concat(Object.keys(flags).map(k => flags[k]))
 
     return toCheck.some(function (flag) {
-      return Array.isArray(flag) ? flag.includes(key) : flag[key]
+      return Array.isArray(flag) ? flag.includes(key) : flag.hasOwnProperty(key) && flag[key]
     })
   }
 
