@@ -762,11 +762,11 @@ function parse (args, opts) {
   }
 
   function hasAnyFlag (key) {
-    // XXX Switch to [].concat(...Object.values(flags)) once node.js 6 is dropped
-    var toCheck = [].concat(...Object.keys(flags).map(k => flags[k]))
+    // XXX Switch to [].concat(Object.values(flags)) once node.js 6 is dropped
+    var toCheck = [].concat(Object.keys(flags).map(k => flags[k]))
 
     return toCheck.some(function (flag) {
-      return flag[key]
+      return Array.isArray(flag) ? flag.includes(key) : flag[key]
     })
   }
 
