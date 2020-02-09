@@ -163,14 +163,14 @@ function parse (args, opts) {
       // http://stackoverflow.com/a/1068308/13216
       m = arg.match(/^--?([^=]+)=([\s\S]*)$/)
 
-      // nargs format = '--f=monkey washing cat'
-      if (checkAllAliases(m[1], flags.nargs)) {
-        args.splice(i + 1, 0, m[2])
-        i = eatNargs(i, m[1], args)
       // arrays format = '--f=a b c'
-      } else if (checkAllAliases(m[1], flags.arrays)) {
+      if (checkAllAliases(m[1], flags.arrays)) {
         args.splice(i + 1, 0, m[2])
         i = eatArray(i, m[1], args)
+      } else if (checkAllAliases(m[1], flags.nargs)) {
+        // nargs format = '--f=monkey washing cat'
+        args.splice(i + 1, 0, m[2])
+        i = eatNargs(i, m[1], args)
       } else {
         setArg(m[1], m[2])
       }
@@ -184,13 +184,13 @@ function parse (args, opts) {
     )) {
       key = arg.match(/^--?(.+)/)[1]
 
-      // nargs format = '--foo a b c'
-      // should be truthy even if: flags.nargs[key] === 0
-      if (checkAllAliases(key, flags.nargs) !== false) {
-        i = eatNargs(i, key, args)
-      // array format = '--foo a b c'
-      } else if (checkAllAliases(key, flags.arrays)) {
+      if (checkAllAliases(key, flags.arrays)) {
+        // array format = '--foo a b c'
         i = eatArray(i, key, args)
+      } else if (checkAllAliases(key, flags.nargs) !== false) {
+        // nargs format = '--foo a b c'
+        // should be truthy even if: flags.nargs[key] === 0
+        i = eatNargs(i, key, args)
       } else {
         next = args[i + 1]
 
@@ -237,14 +237,14 @@ function parse (args, opts) {
           value = arg.slice(j + 3)
           key = letters[j]
 
-          // nargs format = '-f=monkey washing cat'
-          if (checkAllAliases(key, flags.nargs)) {
-            args.splice(i + 1, 0, value)
-            i = eatNargs(i, key, args)
-          // array format = '-f=a b c'
-          } else if (checkAllAliases(key, flags.arrays)) {
+          if (checkAllAliases(key, flags.arrays)) {
+            // array format = '-f=a b c'
             args.splice(i + 1, 0, value)
             i = eatArray(i, key, args)
+          } else if (checkAllAliases(key, flags.nargs)) {
+            // nargs format = '-f=monkey washing cat'
+            args.splice(i + 1, 0, value)
+            i = eatNargs(i, key, args)
           } else {
             setArg(key, value)
           }
@@ -278,13 +278,13 @@ function parse (args, opts) {
       key = arg.slice(-1)[0]
 
       if (!broken && key !== '-') {
-        // nargs format = '-f a b c'
-        // should be truthy even if: flags.nargs[key] === 0
-        if (checkAllAliases(key, flags.nargs) !== false) {
-          i = eatNargs(i, key, args)
-        // array format = '-f a b c'
-        } else if (checkAllAliases(key, flags.arrays)) {
+        if (checkAllAliases(key, flags.arrays)) {
+          // array format = '-f a b c'
           i = eatArray(i, key, args)
+        } else if (checkAllAliases(key, flags.nargs) !== false) {
+          // nargs format = '-f a b c'
+          // should be truthy even if: flags.nargs[key] === 0
+          i = eatNargs(i, key, args)
         } else {
           next = args[i + 1]
 
@@ -407,6 +407,13 @@ function parse (args, opts) {
         i = ii
         argsToSet.push(processValue(key, next))
       }
+    }
+
+    // If both array and nargs are configured, create an error if less than
+    // nargs positionals were found:
+    const toEat = checkAllAliases(key, flags.nargs)
+    if (toEat && argsToSet.length < toEat) {
+      error = Error(__('Not enough arguments following: %s', key))
     }
 
     setArg(key, argsToSet)

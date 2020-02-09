@@ -3539,4 +3539,28 @@ describe('yargs-parser', function () {
     })
     parse.infinite.should.equal(false)
   })
+
+  // See: https://github.com/yargs/yargs/issues/1098
+  describe('array with nargs', () => {
+    it('allows array and nargs to be configured in conjunction, enforcing the nargs value', () => {
+      var parse = parser(['-a', 'apple', 'banana'], {
+        array: 'a',
+        narg: {
+          a: 1
+        }
+      })
+      parse.a.should.eql(['apple', 'banana'])
+    })
+
+    it('returns an error if not enough positionals were provided for nargs', () => {
+      var parse = parser.detailed(['-a'], {
+        array: 'a',
+        narg: {
+          a: 1
+        }
+      })
+      parse.argv.a.should.eql([])
+      parse.error.message.should.equal('Not enough arguments following: a')
+    })
+  })
 })
