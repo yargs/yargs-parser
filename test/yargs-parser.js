@@ -2557,7 +2557,8 @@ describe('yargs-parser', function () {
           })
         })
         describe('type=boolean', function () {
-          it('[-x true -x true -x false] => [true, true, false]', function () {
+          // in the casse of boolean arguments, only the last argument is used:
+          it('[-x true -x true -x false] => false', function () {
             var parsed = parser('-x true -x true -x false', {
               boolean: ['x'],
               configuration: {
@@ -2565,7 +2566,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal([true, true, false])
+            parsed['x'].should.deep.equal(false)
           })
         })
       })
@@ -2605,7 +2606,7 @@ describe('yargs-parser', function () {
           })
         })
         describe('type=boolean', function () {
-          it('[-x true -x true -x false] => [true, true, false]', function () {
+          it('[-x true -x true -x false] => false', function () {
             var parsed = parser('-x true -x true -x false', {
               boolean: ['x'],
               configuration: {
@@ -2613,7 +2614,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([true, true, false])
+            parsed['x'].should.deep.equal(false)
           })
         })
       })
@@ -3513,5 +3514,13 @@ describe('yargs-parser', function () {
       })
       parse.toString.should.equal(66)
     })
+  })
+
+  // See: https://github.com/facebook/jest/issues/9517
+  it('does not collect arguments configured as booleans into implicit array', () => {
+    var parse = parser(['--infinite', 'true', '--infinite', 'true', '--infinite', 'false'], {
+      boolean: 'infinite'
+    })
+    parse.infinite.should.equal(false)
   })
 })
