@@ -3518,7 +3518,7 @@ describe('yargs-parser', function () {
 
   // See: https://github.com/facebook/jest/issues/9517
   it('does not collect arguments configured as booleans into implicit array', () => {
-    var parse = parser(['--infinite', 'true', '--infinite', 'true', '--infinite', 'false'], {
+    var parse = parser(['--infinite', 'true', '--infinite', 'true', '--no-infinite'], {
       boolean: 'infinite'
     })
     parse.infinite.should.equal(false)
