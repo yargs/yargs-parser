@@ -823,7 +823,7 @@ function parse (args, opts) {
     // e.g. '-a-'
     const flagEndingInHyphen = /^-+([^=]+?)-$/
     // e.g. '-abc123'
-    const flagEndingInDigits = /^-+([^=]+?)\d+$/
+    const flagEndingInDigits = /^-+([^=]+?\d+)$/
     // e.g. '-a/usr/local'
     const flagEndingInNonWordCharacters = /^-+([^=]+?)\W+.*$/
     // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method

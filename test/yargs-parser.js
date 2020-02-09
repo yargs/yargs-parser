@@ -3011,6 +3011,22 @@ describe('yargs-parser', function () {
         })
       })
     })
+
+    // See: https://github.com/yargs/yargs-parser/issues/231
+    it('should collect unknown options terminated with digit', function () {
+      const argv = parser('--known-arg=1 --num2', {
+        alias: { 'num': ['n'] },
+        number: ['known-arg'],
+        configuration: {
+          'unknown-options-as-args': true
+        }
+      })
+      argv.should.deep.equal({
+        _: ['--num2'],
+        'known-arg': 1,
+        'knownArg': 1
+      })
+    })
   })
 
   // addresses: https://github.com/yargs/yargs-parser/issues/41
