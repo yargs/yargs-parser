@@ -3,5 +3,6 @@
     "z": 55,
     "foo": "baz",
     "version": "1.0.2",
-    "truthy": true
+    "truthy": true,
+    "toString": "method name"
 }
