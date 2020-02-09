@@ -2,10 +2,10 @@
 
 require('chai').should()
 
-var expect = require('chai').expect
-var fs = require('fs')
-var parser = require('../')
-var path = require('path')
+const { expect } = require('chai')
+const fs = require('fs')
+const parser = require('../')
+const path = require('path')
 
 describe('yargs-parser', function () {
   it('should parse a "short boolean"', function () {
@@ -441,9 +441,8 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').with.length(0)
   })
 
+  let jsonPath = path.resolve(__dirname, './fixtures/config.json')
   describe('config', function () {
-    var jsonPath = path.resolve(__dirname, './fixtures/config.json')
-
     // See: https://github.com/chevex/yargs/issues/12
     it('should load options and values from default config if specified', function () {
       var argv = parser(['--foo', 'bar'], {
@@ -1222,7 +1221,7 @@ describe('yargs-parser', function () {
           default: { foo: 'abc', 'bar.prop': 33, baz: 'x' },
           configObjects: [{ baz: 'xyz' }]
         })
-        parsed.argv.should.deep.equal({ '_': [], baz: 'xyz', foo: 'abc', bar: { prop: 33 } })
+        expect(parsed.argv).to.eql({ '_': [], baz: 'xyz', foo: 'abc', bar: { prop: 33 } })
         parsed.defaulted.should.deep.equal({ foo: true, 'bar.prop': true })
       })
 
@@ -2997,6 +2996,20 @@ describe('yargs-parser', function () {
           k: true
         })
       })
+      // see: https://github.com/yargs/yargs/issues/1489
+      it('should identify "hasOwnProperty" as unknown option', () => {
+        const argv = parser('--known-arg=1 --hasOwnProperty=33', {
+          number: ['known-arg'],
+          configuration: {
+            'unknown-options-as-args': true
+          }
+        })
+        argv.should.deep.equal({
+          _: ['--hasOwnProperty=33'],
+          'known-arg': 1,
+          'knownArg': 1
+        })
+      })
     })
   })
 
@@ -3376,6 +3389,129 @@ describe('yargs-parser', function () {
         _: [],
         'test-value': 1
       })
+    })
+  })
+
+  describe('prototype collisions', () => {
+    it('parses unknown argument colliding with prototype', () => {
+      var parse = parser(['--toString'])
+      parse.toString.should.equal(true)
+    })
+
+    it('parses unknown argument colliding with prototype, when unknown options as args', () => {
+      var parse = parser(['--toString'], {
+        configuration: {
+          'unknown-options-as-args': true
+        }
+      })
+      parse._.should.include('--toString')
+    })
+
+    it('handles "alias" colliding with prototype', () => {
+      var parse = parser(['-t', '99'], {
+        alias: {
+          toString: ['t']
+        }
+      })
+      parse.toString.should.equal(99)
+      parse.t.should.equal(99)
+      parse['to-string'].should.equal(99)
+    })
+
+    it('handles multiple args colliding with alias', () => {
+      var parse = parser(['--toString', '88', '--toString', '99'])
+      parse.toString.should.eql([88, 99])
+    })
+
+    it('handle dot notation colliding with alias', () => {
+      var parse = parser(['--toString.cool', 'apple'])
+      parse.toString.cool.should.equal('apple')
+    })
+
+    it('handles "arrays" colliding with prototype', () => {
+      var parse = parser(['--toString', '99', '100'], {
+        array: ['toString']
+      })
+      parse.toString.should.eql([99, 100])
+    })
+
+    it('handles "arrays" colliding with prototype', () => {
+      var parse = parser(['--toString', '99', '100'], {
+        array: ['toString']
+      })
+      parse.toString.should.eql([99, 100])
+    })
+
+    it('handles "strings" colliding with prototype', () => {
+      var parse = parser(['--toString', '99'], {
+        string: ['toString']
+      })
+      parse.toString.should.eql('99')
+    })
+
+    it('handles "numbers" colliding with prototype', () => {
+      var parse = parser(['--toString', '99'], {
+        number: ['toString'],
+        configuration: {
+          'parse-numbers': false
+        }
+      })
+      parse.toString.should.eql(99)
+    })
+
+    it('handles "counts" colliding with prototype', () => {
+      var parse = parser(['--toString', '--toString', '--toString'], {
+        count: ['toString']
+      })
+      parse.toString.should.eql(3)
+    })
+
+    it('handles "normalize" colliding with prototype', () => {
+      var parse = parser(['--toString', './node_modules/chai'], {
+        normalize: ['toString']
+      })
+      parse.toString.should.include('node_modules')
+    })
+
+    it('handles "normalize" colliding with prototype', () => {
+      var parse = parser(['--toString', './node_modules/chai'], {
+        normalize: ['toString']
+      })
+      parse.toString.should.include('node_modules')
+    })
+
+    it('handles key in configuration file that collides with prototype', function () {
+      var argv = parser(['--foo', 'bar'], {
+        alias: {
+          z: 'zoom'
+        },
+        default: {
+          settings: jsonPath
+        },
+        config: 'settings'
+      })
+      argv.toString.should.equal('method name')
+    })
+
+    it('handles "nargs" colliding with prototype', () => {
+      var parse = parser(['--toString', 'apple', 'banana', 'batman', 'robin'], {
+        narg: {
+          toString: 3
+        }
+      })
+      parse.toString.should.eql(['apple', 'banana', 'batman'])
+      parse._.should.eql(['robin'])
+    })
+
+    it('handles "coercions" colliding with prototype', () => {
+      var parse = parser(['--toString', '33'], {
+        coerce: {
+          toString: (val) => {
+            return val * 2
+          }
+        }
+      })
+      parse.toString.should.equal(66)
     })
   })
 })
