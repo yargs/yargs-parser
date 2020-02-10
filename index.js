@@ -725,7 +725,7 @@ function parse (args, opts) {
         checkAllAliases(key, flags.counts) ||
         checkAllAliases(key, flags.bools)
     )) {
-      o[key] = [ o[key], value ]
+      o[key] = [o[key], value]
     } else {
       o[key] = value
     }
@@ -774,7 +774,7 @@ function parse (args, opts) {
   function checkAllAliases (key, flag) {
     const toCheck = [].concat(flags.aliases[key] || [], key)
     const keys = Object.keys(flag)
-    let setAlias = toCheck.find(key => keys.includes(key))
+    const setAlias = toCheck.find(key => keys.includes(key))
     return setAlias ? flag[setAlias] : false
   }
 
