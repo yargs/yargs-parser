@@ -146,7 +146,7 @@ describe('yargs-parser', function () {
       '--other', '-99', '-220'
     ], {
       array: 'bounds',
-      narg: { 'other': 2 }
+      narg: { other: 2 }
     })
 
     argv._.should.deep.equal([-33, -177, 33])
@@ -166,7 +166,7 @@ describe('yargs-parser', function () {
       '--other', '.9', '-.5'
     ], {
       array: 'bounds',
-      narg: { 'other': 2 }
+      narg: { other: 2 }
     })
 
     argv._.should.deep.equal([-0.1, -1.1, -0.5, -0.1, 0.1, 0.5])
@@ -441,7 +441,7 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').with.length(0)
   })
 
-  let jsonPath = path.resolve(__dirname, './fixtures/config.json')
+  const jsonPath = path.resolve(__dirname, './fixtures/config.json')
   describe('config', function () {
     // See: https://github.com/chevex/yargs/issues/12
     it('should load options and values from default config if specified', function () {
@@ -1221,7 +1221,7 @@ describe('yargs-parser', function () {
           default: { foo: 'abc', 'bar.prop': 33, baz: 'x' },
           configObjects: [{ baz: 'xyz' }]
         })
-        expect(parsed.argv).to.eql({ '_': [], baz: 'xyz', foo: 'abc', bar: { prop: 33 } })
+        expect(parsed.argv).to.eql({ _: [], baz: 'xyz', foo: 'abc', bar: { prop: 33 } })
         parsed.defaulted.should.deep.equal({ foo: true, 'bar.prop': true })
       })
 
@@ -1229,7 +1229,7 @@ describe('yargs-parser', function () {
         var parsed = parser.detailed('--foo --bar.prop', {
           default: { foo: 'abc', 'bar.prop': 33 }
         })
-        parsed.argv.should.deep.equal({ '_': [], foo: 'abc', bar: { prop: 33 } })
+        parsed.argv.should.deep.equal({ _: [], foo: 'abc', bar: { prop: 33 } })
         parsed.defaulted.should.deep.equal({})
       })
 
@@ -1238,7 +1238,7 @@ describe('yargs-parser', function () {
           default: { kaa: 'abc' },
           alias: { foo: 'kaa' }
         })
-        parsed.argv.should.deep.equal({ '_': [], kaa: 'abc', foo: 'abc' })
+        parsed.argv.should.deep.equal({ _: [], kaa: 'abc', foo: 'abc' })
         parsed.defaulted.should.deep.equal({ kaa: true })
       })
 
@@ -1247,7 +1247,7 @@ describe('yargs-parser', function () {
           default: { kaa: 'abc' },
           alias: { foo: 'kaa' }
         })
-        parsed.argv.should.deep.equal({ '_': [], kaa: 'abc', foo: 'abc' })
+        parsed.argv.should.deep.equal({ _: [], kaa: 'abc', foo: 'abc' })
         parsed.defaulted.should.deep.equal({})
       })
     })
@@ -1536,7 +1536,7 @@ describe('yargs-parser', function () {
     it('should add an error if counter is also set as narg', function () {
       var argv = parser.detailed(['--counter', 'foo', 'bar'], {
         count: ['counter'],
-        narg: { 'counter': 2 }
+        narg: { counter: 2 }
       })
 
       argv.error.message.should.equal('Invalid configuration: counter, opts.count excludes opts.narg.')
@@ -1572,7 +1572,7 @@ describe('yargs-parser', function () {
     it('should default argument to empty array if no value given', function () {
       var result = parser(['-b', '--tag'], {
         array: ['b', 'tag'],
-        default: { 'tag': [] }
+        default: { tag: [] }
       })
       result.b.should.deep.equal([])
       result.tag.should.deep.equal([])
@@ -1581,7 +1581,7 @@ describe('yargs-parser', function () {
     it('should place default of argument in array, when default provided', function () {
       var result = parser(['-b', '--tag'], {
         array: ['b', 'tag'],
-        default: { 'b': 33, 'tag': ['foo'] }
+        default: { b: 33, tag: ['foo'] }
       })
       result.b.should.deep.equal([33])
       result.tag.should.deep.equal(['foo'])
@@ -1701,8 +1701,8 @@ describe('yargs-parser', function () {
       var result = parser(['--some-option', '1', '2'], {
         array: ['someOption']
       })
-      Array.isArray(result['someOption']).should.equal(true)
-      result['someOption'].should.deep.equal([1, 2])
+      Array.isArray(result.someOption).should.equal(true)
+      result.someOption.should.deep.equal([1, 2])
     })
 
     // see https://github.com/yargs/yargs-parser/issues/6
@@ -1946,7 +1946,7 @@ describe('yargs-parser', function () {
       var result = parser([], {
         envPrefix: 'AIRFORCE',
         alias: {
-          '1': ['one', 'uno']
+          1: ['one', 'uno']
         }
       })
 
@@ -2191,7 +2191,7 @@ describe('yargs-parser', function () {
       it('does not expand alias of first element of dot notation arguments', function () {
         var parsed = parser(['--foo.bar', 'banana'], {
           alias: {
-            'foo': ['f']
+            foo: ['f']
           },
           configuration: {
             'dot-notation': false
@@ -2205,7 +2205,7 @@ describe('yargs-parser', function () {
       it('does not append nested-object keys from config to top-level key', function () {
         var parsed = parser([], {
           alias: {
-            'foo': ['f']
+            foo: ['f']
           },
           configuration: {
             'dot-notation': false
@@ -2231,14 +2231,14 @@ describe('yargs-parser', function () {
       it('does not coerce defaults into numbers', function () {
         var parsed = parser([], {
           default: {
-            'foo': '5'
+            foo: '5'
           },
           configuration: {
             'parse-numbers': false
           }
         })
 
-        expect(parsed['foo']).to.equal('5')
+        expect(parsed.foo).to.equal('5')
       })
 
       it('does not coerce arguments into numbers', function () {
@@ -2247,7 +2247,7 @@ describe('yargs-parser', function () {
             'parse-numbers': false
           }
         })
-        expect(parsed['foo']).to.equal('5')
+        expect(parsed.foo).to.equal('5')
       })
 
       it('does not coerce positional arguments into numbers', function () {
@@ -2263,15 +2263,15 @@ describe('yargs-parser', function () {
         var parsed = parser(['--foo', '5', '--bar', '6', '--baz', '7'], {
           number: ['bar', 'baz'],
           coerce: {
-            'baz': val => val
+            baz: val => val
           },
           configuration: {
             'parse-numbers': false
           }
         })
-        expect(parsed['foo']).to.equal('5')
-        expect(parsed['bar']).to.equal(6)
-        expect(parsed['baz']).to.equal(7)
+        expect(parsed.foo).to.equal('5')
+        expect(parsed.bar).to.equal(6)
+        expect(parsed.baz).to.equal(7)
       })
 
       it('should coerce elements of number typed arrays to numbers', function () {
@@ -2284,7 +2284,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        expect(parsed['foo']).to.deep.equal([[4], [5, 2], [1, 2, 3]])
+        expect(parsed.foo).to.deep.equal([[4], [5, 2], [1, 2, 3]])
       })
     })
 
@@ -2307,7 +2307,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        expect(parsed['dice']).to.equal(false)
+        expect(parsed.dice).to.equal(false)
       })
     })
 
@@ -2319,7 +2319,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal(['a', 'b'])
+        parsed.x.should.deep.equal(['a', 'b'])
       })
       it('keeps only last argument', function () {
         var parsed = parser('-x a -x b', {
@@ -2328,7 +2328,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.equal('b')
+        parsed.x.should.equal('b')
       })
       it('does not interfere with nargs', function () {
         var parsed = parser('-x a b c -x o p q', {
@@ -2338,7 +2338,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal(['o', 'p', 'q'])
+        parsed.x.should.deep.equal(['o', 'p', 'q'])
       })
     })
 
@@ -2351,7 +2351,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal(['a', 'b', 'c', 'd'])
+        parsed.x.should.deep.equal(['a', 'b', 'c', 'd'])
       })
       it('nests duplicate array types', function () {
         var parsed = parser('-x a b -x c d', {
@@ -2361,7 +2361,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal([['a', 'b'], ['c', 'd']])
+        parsed.x.should.deep.equal([['a', 'b'], ['c', 'd']])
       })
       it('nests duplicate array types of more than 2', function () {
         var parsed = parser('-x a b -x c d -x e f -x g h', {
@@ -2371,7 +2371,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal([['a', 'b'], ['c', 'd'], ['e', 'f'], ['g', 'h']])
+        parsed.x.should.deep.equal([['a', 'b'], ['c', 'd'], ['e', 'f'], ['g', 'h']])
       })
       it('doesn\'t nests single arrays', function () {
         var parsed = parser('-x a b', {
@@ -2381,7 +2381,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal(['a', 'b'])
+        parsed.x.should.deep.equal(['a', 'b'])
       })
       it('flattens duplicate array type, when argument uses dot notation', function () {
         var parsed = parser('-x.foo a -x.foo b', {
@@ -2391,7 +2391,7 @@ describe('yargs-parser', function () {
           }
         })
 
-        parsed['x'].should.deep.equal({ foo: ['a', 'b'] })
+        parsed.x.should.deep.equal({ foo: ['a', 'b'] })
       })
     })
 
@@ -2435,7 +2435,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed.x.should.deep.equal([1, 2, 3])
           })
           it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
             var parsed = parser('-x 1 2 3 -x 2 3 4', {
@@ -2445,7 +2445,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([2, 3, 4])
+            parsed.x.should.deep.equal([2, 3, 4])
           })
         })
         describe('type=number', function () {
@@ -2457,7 +2457,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal(3)
+            parsed.x.should.deep.equal(3)
           })
         })
         describe('type=boolean', function () {
@@ -2469,7 +2469,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal(false)
+            parsed.x.should.deep.equal(false)
           })
         })
       })
@@ -2483,7 +2483,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed.x.should.deep.equal([1, 2, 3])
           })
           it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
             var parsed = parser('-x 1 2 3 -x 2 3 4', {
@@ -2493,7 +2493,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal([2, 3, 4])
+            parsed.x.should.deep.equal([2, 3, 4])
           })
         })
         describe('type=number', function () {
@@ -2505,7 +2505,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal(3)
+            parsed.x.should.deep.equal(3)
           })
         })
         describe('type=boolean', function () {
@@ -2517,7 +2517,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal(false)
+            parsed.x.should.deep.equal(false)
           })
         })
       })
@@ -2531,7 +2531,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed.x.should.deep.equal([1, 2, 3])
           })
           it('[-x 1 2 3 -x 2 3 4] => [1, 2, 3, 2, 3, 4]', function () {
             var parsed = parser('-x 1 2 3 -x 2 3 4', {
@@ -2541,7 +2541,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3, 2, 3, 4])
+            parsed.x.should.deep.equal([1, 2, 3, 2, 3, 4])
           })
         })
         describe('type=number', function () {
@@ -2553,7 +2553,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed.x.should.deep.equal([1, 2, 3])
           })
         })
         describe('type=boolean', function () {
@@ -2566,7 +2566,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': true
               }
             })
-            parsed['x'].should.deep.equal(false)
+            parsed.x.should.deep.equal(false)
           })
         })
       })
@@ -2580,7 +2580,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([[1], [2], [3]])
+            parsed.x.should.deep.equal([[1], [2], [3]])
           })
           it('[-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [ 2, 3, 4]]', function () {
             var parsed = parser('-x 1 2 3 -x 2 3 4', {
@@ -2590,7 +2590,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([[1, 2, 3], [2, 3, 4]])
+            parsed.x.should.deep.equal([[1, 2, 3], [2, 3, 4]])
           })
         })
         describe('type=number', function () {
@@ -2602,7 +2602,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal([1, 2, 3])
+            parsed.x.should.deep.equal([1, 2, 3])
           })
         })
         describe('type=boolean', function () {
@@ -2614,7 +2614,7 @@ describe('yargs-parser', function () {
                 'flatten-duplicate-arrays': false
               }
             })
-            parsed['x'].should.deep.equal(false)
+            parsed.x.should.deep.equal(false)
           })
         })
       })
@@ -2638,7 +2638,7 @@ describe('yargs-parser', function () {
             'short-option-groups': false
           }
         })
-        result.argv.should.deep.equal({ '_': ['foo'] })
+        result.argv.should.deep.equal({ _: ['foo'] })
         result.argv.should.not.have.property('--')
         result.newAliases.should.deep.equal({})
       })
@@ -2774,7 +2774,7 @@ describe('yargs-parser', function () {
         argv.should.deep.equal({
           _: ['--unknown-arg=2'],
           'known-arg': 1,
-          'knownArg': 1
+          knownArg: 1
         })
       })
       it('should ignore unknown options in boolean negations', function () {
@@ -2787,7 +2787,7 @@ describe('yargs-parser', function () {
         argv.should.deep.equal({
           _: ['--no-unknown-arg'],
           'known-arg': false,
-          'knownArg': false
+          knownArg: false
         })
       })
       it('should ignore unknown options in long format separated by space', function () {
@@ -2800,7 +2800,7 @@ describe('yargs-parser', function () {
         argv.should.deep.equal({
           _: ['--unknown-arg', 'b'],
           'known-arg': 'a',
-          'knownArg': 'a'
+          knownArg: 'a'
         })
       })
       it('should ignore unknown options in short dot format separated by equals', function () {
@@ -2812,8 +2812,8 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: ['-u.arg=b'],
-          'k': {
-            'arg': 'a'
+          k: {
+            arg: 'a'
           }
         })
       })
@@ -2826,8 +2826,8 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: ['-u.arg', '2'],
-          'k': {
-            'arg': 1
+          k: {
+            arg: 1
           }
         })
       })
@@ -2840,7 +2840,7 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: ['-u=b'],
-          'k': 'a'
+          k: 'a'
         })
       })
       it('should ignore unknown options in short format followed by hyphen', function () {
@@ -2852,7 +2852,7 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: ['-u-'],
-          'k': '-'
+          k: '-'
         })
       })
       it('should ignore unknown options in short format separated by space', function () {
@@ -2864,20 +2864,20 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: ['-u', '2'],
-          'k': 1
+          k: 1
         })
       })
       it('should allow an unknown arg to be used as the value of another flag in short form', function () {
         const argv = parser('-k -u', {
           string: ['k'],
-          narg: { 'k': 1 },
+          narg: { k: 1 },
           configuration: {
             'unknown-options-as-args': true
           }
         })
         argv.should.deep.equal({
           _: [],
-          'k': '-u'
+          k: '-u'
         })
       })
       it('should allow an unknown arg to be used as the value of another flag in long form', function () {
@@ -2890,7 +2890,7 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: [],
-          'knownArg': '--unknown-arg',
+          knownArg: '--unknown-arg',
           'known-arg': '--unknown-arg'
         })
       })
@@ -2903,7 +2903,7 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: [],
-          'knownArg': ['--unknown-arg1', '--unknown-arg2'],
+          knownArg: ['--unknown-arg1', '--unknown-arg2'],
           'known-arg': ['--unknown-arg1', '--unknown-arg2']
         })
       })
@@ -2916,7 +2916,7 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: ['-u2'],
-          'k': 1
+          k: 1
         })
       })
       it('should ignore unknown options in short format followed by a non-word character', function () {
@@ -2928,7 +2928,7 @@ describe('yargs-parser', function () {
         })
         argv.should.deep.equal({
           _: ['-u/2/'],
-          'k': '/1/'
+          k: '/1/'
         })
       })
       it('should ignore unknown options in short format with multiple flags in one argument where an unknown flag is before the end', function () {
@@ -3008,7 +3008,7 @@ describe('yargs-parser', function () {
         argv.should.deep.equal({
           _: ['--hasOwnProperty=33'],
           'known-arg': 1,
-          'knownArg': 1
+          knownArg: 1
         })
       })
     })
@@ -3016,7 +3016,7 @@ describe('yargs-parser', function () {
     // See: https://github.com/yargs/yargs-parser/issues/231
     it('should collect unknown options terminated with digit', function () {
       const argv = parser('--known-arg=1 --num2', {
-        alias: { 'num': ['n'] },
+        alias: { num: ['n'] },
         number: ['known-arg'],
         configuration: {
           'unknown-options-as-args': true
@@ -3025,7 +3025,7 @@ describe('yargs-parser', function () {
       argv.should.deep.equal({
         _: ['--num2'],
         'known-arg': 1,
-        'knownArg': 1
+        knownArg: 1
       })
     })
   })
@@ -3033,28 +3033,28 @@ describe('yargs-parser', function () {
   // addresses: https://github.com/yargs/yargs-parser/issues/41
   it('defaults to empty array if array option is provided no values', function () {
     var parsed = parser(['-f'], {
-      'alias': {
-        'f': 'files'
+      alias: {
+        f: 'files'
       },
-      'array': ['files']
+      array: ['files']
     })
     parsed.f.should.deep.equal([])
     parsed.files.should.deep.equal([])
 
     parsed = parser(['--files'], {
-      'alias': {
-        'f': 'files'
+      alias: {
+        f: 'files'
       },
-      'array': ['files']
+      array: ['files']
     })
     parsed.f.should.deep.equal([])
     parsed.files.should.deep.equal([])
 
     parsed = parser(['-f', '-y'], {
-      'alias': {
-        'f': 'files'
+      alias: {
+        f: 'files'
       },
-      'array': ['files']
+      array: ['files']
     })
     parsed.f.should.deep.equal([])
     parsed.files.should.deep.equal([])
@@ -3225,7 +3225,7 @@ describe('yargs-parser', function () {
     var argv = parser(['--foo', 'bar'], {
       array: ['a'],
       normalize: ['a'],
-      configObjects: [{ 'a': ['bin/../a.txt', 'bin/../b.txt'] }]
+      configObjects: [{ a: ['bin/../a.txt', 'bin/../b.txt'] }]
     })
     argv.a.should.deep.equal(['a.txt', 'b.txt'])
   })
@@ -3355,8 +3355,8 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: [],
-        'testValue': 1,
-        'altTest': 1
+        testValue: 1,
+        altTest: 1
       })
     })
 
@@ -3373,7 +3373,7 @@ describe('yargs-parser', function () {
       argv.should.deep.equal({
         _: [],
         'test-value': 1,
-        'testValue': 1
+        testValue: 1
       })
     })
 
@@ -3390,7 +3390,7 @@ describe('yargs-parser', function () {
       })
       argv.should.deep.equal({
         _: [],
-        'testValue': 1
+        testValue: 1
       })
     })
 
