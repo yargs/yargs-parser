@@ -265,6 +265,13 @@ node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
 ```
 
+### nargs eats options
+
+* default: `false`
+* key: `nargs-eats-options`
+
+Should nargs consume dash options as well as positional arguments.
+
 ### negation prefix
 
 * default: `no-`
