@@ -1903,6 +1903,21 @@ describe('yargs-parser', function () {
       result.error.message.should.equal('Not enough arguments following: foo')
     })
 
+    // See: https://github.com/yargs/yargs-parser/issues/232
+    it('should treat flag arguments as satisfying narg requirements, if nargs-eats-options=true', function () {
+      var result = parser.detailed(['--foo', '--bar', '99', '--batman', 'robin'], {
+        narg: {
+          foo: 2
+        },
+        configuration: {
+          'nargs-eats-options': true
+        }
+      })
+
+      result.argv.foo.should.eql(['--bar', 99])
+      result.argv.batman.should.eql('robin')
+    })
+
     it('should not consume more than configured nargs', function () {
       var result = parser(['--foo', 'a', 'b'], {
         narg: {

@@ -27,7 +27,8 @@ function parse (args, opts) {
     'halt-at-non-option': false,
     'strip-aliased': false,
     'strip-dashed': false,
-    'unknown-options-as-args': false
+    'unknown-options-as-args': false,
+    'nargs-eats-options': false
   }, opts.configuration)
   const defaults = Object.assign(Object.create(null), opts.default)
   const configObjects = opts.configObjects || []
@@ -366,15 +367,20 @@ function parse (args, opts) {
       return i
     }
 
-    // nargs will not consume flag arguments, e.g., -abc, --foo,
-    // and terminates when one is observed.
     let available = 0
-    for (ii = i + 1; ii < args.length; ii++) {
-      if (!args[ii].match(/^-[^0-9]/) || args[ii].match(negative) || isUnknownOptionAsArg(args[ii])) available++
-      else break
+    if (configuration['nargs-eats-options']) {
+      // classic behavior, yargs eats positional and dash arguments.
+      if (args.length - (i + 1) < toEat) error = Error(__('Not enough arguments following: %s', key))
+      available = toEat
+    } else {
+      // nargs will not consume flag arguments, e.g., -abc, --foo,
+      // and terminates when one is observed.
+      for (ii = i + 1; ii < args.length; ii++) {
+        if (!args[ii].match(/^-[^0-9]/) || args[ii].match(negative) || isUnknownOptionAsArg(args[ii])) available++
+        else break
+      }
+      if (available < toEat) error = Error(__('Not enough arguments following: %s', key))
     }
-
-    if (available < toEat) error = Error(__('Not enough arguments following: %s', key))
 
     const consumed = Math.min(available, toEat)
     for (ii = i + 1; ii < (consumed + i + 1); ii++) {
