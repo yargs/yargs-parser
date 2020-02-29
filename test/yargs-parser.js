@@ -342,6 +342,16 @@ describe('yargs-parser', function () {
       a.should.have.property('s').and.deep.equal(expected)
       a.should.have.property('save').and.deep.equal(expected)
     })
+
+    it('should allow normalized keys to be enumerated', () => {
+      var a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep)], {
+        alias: {
+          s: ['save']
+        },
+        normalize: 's'
+      })
+      Object.keys(a).should.include('s')
+    })
   })
 
   describe('alias', function () {
