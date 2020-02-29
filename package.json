@@ -10,7 +10,8 @@
     "coverage": "c8 report --reporter=text-lcov | coveralls"
   },
   "repository": {
-    "url": "git@github.com:yargs/yargs-parser.git"
+    "type": "git",
+    "url": "https://github.com/yargs/yargs-parser.git"
   },
   "keywords": [
     "argument",
