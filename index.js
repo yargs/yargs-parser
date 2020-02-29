@@ -465,6 +465,7 @@ function parse (args, opts) {
       const keys = [key].concat(flags.aliases[key] || [])
       keys.forEach(function (key) {
         Object.defineProperty(argvReturn, key, {
+          enumerable: true,
           get () {
             return val
           },
