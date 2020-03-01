@@ -3588,4 +3588,40 @@ describe('yargs-parser', function () {
       parse.error.message.should.equal('Not enough arguments following: a')
     })
   })
+
+  describe('greedy-arrays=false', () => {
+    it('does not consume more than one argument after array option', () => {
+      const argv = parser(['--arr', 'foo', 'bar'], {
+        array: 'arr',
+        configuration: {
+          'greedy-arrays': false
+        }
+      })
+      argv.arr.should.eql(['foo'])
+      argv._.should.eql(['bar'])
+    })
+
+    it('places argument into array when specified multiple times', () => {
+      const argv = parser(['--arr', 99, 'foo', '--arr', 'hello', 'bar'], {
+        array: 'arr',
+        configuration: {
+          'greedy-arrays': false
+        }
+      })
+      argv.arr.should.eql([99, 'hello'])
+      argv._.should.eql(['foo', 'bar'])
+    })
+
+    it('places boolean arguments into array when specified multiple times', () => {
+      const argv = parser(['--arr', 101, '--arr', 102, '--arr', 'false'], {
+        array: 'arr',
+        boolean: 'arr',
+        configuration: {
+          'greedy-arrays': false
+        }
+      })
+      argv.arr.should.eql([true, true, false])
+      argv._.should.eql([101, 102])
+    })
+  })
 })

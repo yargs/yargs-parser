@@ -265,6 +265,27 @@ node example.js -x 1 2 -x 3 4
 { _: [], x: [[1, 2], [3, 4]] }
 ```
 
+### greedy arrays
+
+* default: `true`
+* key: `greedy-arrays`
+
+Should arrays consume more than one positional argument following their flag.
+
+```sh
+node example --arr 1 2
+{ _[], arr: [1, 2] }
+```
+
+_if disabled:_
+
+```sh
+node example --arr 1 2
+{ _[2], arr: [1] }
+```
+
+**Note: in `v18.0.0` we are considering defaulting greedy arrays to `false`.**
+
 ### nargs eats options
 
 * default: `false`

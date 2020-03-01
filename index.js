@@ -13,22 +13,23 @@ function parse (args, opts) {
   // aliases might have transitive relationships, normalize this.
   const aliases = combineAliases(Object.assign(Object.create(null), opts.alias))
   const configuration = Object.assign({
-    'short-option-groups': true,
-    'camel-case-expansion': true,
-    'dot-notation': true,
-    'parse-numbers': true,
     'boolean-negation': true,
-    'negation-prefix': 'no-',
+    'camel-case-expansion': true,
+    'combine-arrays': false,
+    'dot-notation': true,
     'duplicate-arguments-array': true,
     'flatten-duplicate-arrays': true,
-    'populate--': false,
-    'combine-arrays': false,
-    'set-placeholder-key': false,
+    'greedy-arrays': true,
     'halt-at-non-option': false,
+    'nargs-eats-options': false,
+    'negation-prefix': 'no-',
+    'parse-numbers': true,
+    'populate--': false,
+    'set-placeholder-key': false,
+    'short-option-groups': true,
     'strip-aliased': false,
     'strip-dashed': false,
-    'unknown-options-as-args': false,
-    'nargs-eats-options': false
+    'unknown-options-as-args': false
   }, opts.configuration)
   const defaults = Object.assign(Object.create(null), opts.default)
   const configObjects = opts.configObjects || []
@@ -412,6 +413,7 @@ function parse (args, opts) {
         if (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next)) break
         i = ii
         argsToSet.push(processValue(key, next))
+        if (!configuration['greedy-arrays']) break
       }
     }
 
