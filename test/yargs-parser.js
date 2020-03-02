@@ -3565,27 +3565,64 @@ describe('yargs-parser', function () {
     parse.infinite.should.equal(false)
   })
 
-  // See: https://github.com/yargs/yargs/issues/1098
+  // See: https://github.com/yargs/yargs/issues/1098,
+  // https://github.com/yargs/yargs/issues/1570
   describe('array with nargs', () => {
     it('allows array and nargs to be configured in conjunction, enforcing the nargs value', () => {
-      var parse = parser(['-a', 'apple', 'banana'], {
+      var parse = parser.detailed(['-a', 'apple', 'banana'], {
         array: 'a',
         narg: {
           a: 1
         }
       })
-      parse.a.should.eql(['apple', 'banana'])
+      expect(parse.error).to.be.null // eslint-disable-line
+      parse.argv.a.should.eql(['apple'])
+      parse.argv._.should.eql(['banana'])
     })
 
-    it('returns an error if not enough positionals were provided for nargs', () => {
+    // see; https://github.com/yargs/yargs/issues/1098
+    it('allows special NaN count to be provided to narg, to indicate one or more array values', () => {
+      var parse = parser.detailed(['-a', 'apple', 'banana'], {
+        array: 'a',
+        narg: {
+          a: NaN
+        }
+      })
+      expect(parse.error).to.be.null // eslint-disable-line
+      parse.argv.a.should.eql(['apple', 'banana'])
+    })
+
+    it('throws error if at least one value not provided for NaN', () => {
       var parse = parser.detailed(['-a'], {
         array: 'a',
         narg: {
-          a: 1
+          a: NaN
         }
       })
-      parse.argv.a.should.eql([])
+      parse.error.message.should.match(/Not enough arguments/)
+    })
+
+    it('returns an error if not enough positionals were provided for nargs', () => {
+      var parse = parser.detailed(['-a', '33'], {
+        array: 'a',
+        narg: {
+          a: 2
+        }
+      })
+      parse.argv.a.should.eql([33])
       parse.error.message.should.equal('Not enough arguments following: a')
+    })
+
+    it('does not raise error if no arguments are provided for boolean option', () => {
+      var parse = parser.detailed(['-a'], {
+        array: 'a',
+        boolean: 'a',
+        narg: {
+          a: NaN
+        }
+      })
+      expect(parse.error).to.be.null // eslint-disable-line
+      parse.argv.a.should.eql([true])
     })
   })
 
