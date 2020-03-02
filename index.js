@@ -361,7 +361,10 @@ function parse (args, opts) {
   // on the nargs option?
   function eatNargs (i, key, args) {
     let ii
-    const toEat = checkAllAliases(key, flags.nargs)
+    let toEat = checkAllAliases(key, flags.nargs)
+    // NaN has a special meaning for the array type, indicating that one or
+    // more values are expected.
+    toEat = isNaN(toEat) ? 1 : toEat
 
     if (toEat === 0) {
       setArg(key, defaultValue(key))
@@ -397,6 +400,8 @@ function parse (args, opts) {
   function eatArray (i, key, args) {
     let argsToSet = []
     let next = args[i + 1]
+    // If both array and nargs are configured, enforce the nargs count:
+    const nargsCount = checkAllAliases(key, flags.nargs)
 
     if (checkAllAliases(key, flags.bools) && !(/^(true|false)$/.test(next))) {
       argsToSet.push(true)
@@ -413,14 +418,16 @@ function parse (args, opts) {
         if (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next)) break
         i = ii
         argsToSet.push(processValue(key, next))
-        if (!configuration['greedy-arrays']) break
+        if (!configuration['greedy-arrays'] ||
+            (nargsCount && argsToSet.length >= nargsCount)) break
       }
     }
 
     // If both array and nargs are configured, create an error if less than
-    // nargs positionals were found:
-    const toEat = checkAllAliases(key, flags.nargs)
-    if (toEat && argsToSet.length < toEat) {
+    // nargs positionals were found. NaN has special meaning, indicating
+    // that at least one value is required (more are okay).
+    if ((nargsCount && argsToSet.length < nargsCount) ||
+        (isNaN(nargsCount) && argsToSet.length === 0)) {
       error = Error(__('Not enough arguments following: %s', key))
     }
 
