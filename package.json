@@ -7,7 +7,7 @@
     "fix": "standard --fix",
     "test": "c8 --reporter=text --reporter=html  mocha test/*.js",
     "posttest": "standard",
-    "coverage": "c8 report --reporter=text-lcov --check-coverage check-coverage --lines=100 --branches=9 --statements=100"
+    "coverage": "c8 report --check-coverage check-coverage --lines=100 --branches=9 --statements=100"
   },
   "repository": {
     "type": "git",
