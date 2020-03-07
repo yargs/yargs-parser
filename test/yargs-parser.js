@@ -438,6 +438,47 @@ describe('yargs-parser', function () {
       argv.should.have.property('zm', 55)
       argv.should.have.property('f', 11)
     })
+
+    it('should set single-digit boolean alias', function () {
+      var argv = parser(['-f', '11', '-0'], {
+        alias: {
+          0: 'print0'
+        },
+        boolean: [
+          'print0'
+        ]
+      })
+      argv.should.have.property('print0', true)
+      argv.should.have.property('f', 11)
+    })
+
+    it('should not set single-digit alias if no alias defined', function () {
+      var argv = parser(['-f', '11', '-0', '-1'])
+      argv.should.have.property('f', 11)
+      argv._.should.deep.equal([-0, -1])
+    })
+
+    it('should not set single-digit boolean alias if no boolean defined', function () {
+      var argv = parser(['-f', '11', '-9'], {
+        alias: {
+          0: 'print0'
+        }
+      })
+      argv.should.have.property('f', 11)
+      argv._.should.deep.equal([-9])
+    })
+
+    it('should be able to negate set single-digit boolean alias', function () {
+      var argv = parser(['--no-9'], {
+        alias: {
+          9: 'max'
+        },
+        boolean: [
+          'max'
+        ]
+      })
+      argv.should.have.property('max', false)
+    })
   })
 
   it('should assign data after forward slash to the option before the slash', function () {

@@ -304,6 +304,12 @@ function parse (args, opts) {
           }
         }
       }
+    } else if (arg.match(/^-[0-9]$/) &&
+      arg.match(negative) &&
+      checkAllAliases(arg.slice(1), flags.bools)) {
+      // single-digit boolean alias, e.g: xargs -0
+      key = arg.slice(1)
+      setArg(key, defaultValue(key))
     } else if (arg === '--') {
       notFlags = args.slice(i + 1)
       break
@@ -347,7 +353,6 @@ function parse (args, opts) {
   }
 
   if (configuration['strip-aliased']) {
-    // XXX Switch to [].concat(...Object.values(aliases)) once node.js 6 is dropped
     ;[].concat(...Object.keys(aliases).map(k => aliases[k])).forEach(alias => {
       if (configuration['camel-case-expansion']) {
         delete argv[alias.split('.').map(prop => camelCase(prop)).join('.')]
