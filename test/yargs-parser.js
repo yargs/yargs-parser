@@ -727,6 +727,25 @@ describe('yargs-parser', function () {
 
       argv.error.message.should.equal('someone set us up the bomb')
     })
+
+    it('should not pollute the prototype', function () {
+      const argv = parser(['--foo', 'bar'], {
+        alias: {
+          z: 'zoom'
+        },
+        default: {
+          settings: jsonPath
+        },
+        config: 'settings'
+      })
+
+      argv.should.have.property('herp', 'derp')
+      argv.should.have.property('zoom', 55)
+      argv.should.have.property('foo').and.deep.equal('bar')
+
+      expect({}.bbb).to.equal(undefined)
+      expect({}.aaa).to.equal(undefined)
+    })
   })
 
   describe('config objects', function () {
@@ -973,6 +992,13 @@ describe('yargs-parser', function () {
       var argv = parser(['-f.foo', '99', '-f.bar'])
       argv.f.foo.should.eql(99)
       argv.f.bar.should.eql(true)
+    })
+
+    it('should not pollute the prototype', function () {
+      parser(['-f.__proto__.foo', '99', '-x.y.__proto__.bar', '100', '--__proto__', '200'])
+      Object.keys({}.__proto__).length.should.equal(0) // eslint-disable-line
+      expect({}.foo).to.equal(undefined)
+      expect({}.bar).to.equal(undefined)
     })
   })
 
@@ -3700,6 +3726,26 @@ describe('yargs-parser', function () {
       })
       argv.arr.should.eql([true, true, false])
       argv._.should.eql([101, 102])
+    })
+  })
+
+  it('should replace the key __proto__ with the key ___proto___', function () {
+    const argv = parser(['-f.__proto__.foo', '99', '-x.y.__proto__.bar', '100', '--__proto__', '200'])
+    argv.should.eql({
+      _: [],
+      ___proto___: 200,
+      f: {
+        ___proto___: {
+          foo: 99
+        }
+      },
+      x: {
+        y: {
+          ___proto___: {
+            bar: 100
+          }
+        }
+      }
     })
   })
 })
