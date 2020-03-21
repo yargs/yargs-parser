@@ -1,9 +1,7 @@
 /* global describe, it */
 
-const tokenizeArgString = require('../lib/tokenize-arg-string')
-
-require('chai').should()
-const expect = require('chai').expect
+import tokenizeArgString from '../lib/tokenize-arg-string.js'
+import { expect } from './deps/chai.ts'
 
 describe('TokenizeArgString', function () {
   it('handles unquoted string', function () {

@@ -1,39 +1,13 @@
-on:
-  push:
-    branches:
-      - master
-  pull_request:
 name: ci
+on: [push, pull_request]
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [8, 10, 12, 13]
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-      - run: node --version
-      - run: npm install
-      - run: npm test
-  windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - run: npm install
-      - run: npm test
-  coverage:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 13
-      - run: npm install
-      - run: npm test
-      - run: npm run coverage
+    - uses: actions/checkout@master
+    - uses: denolib/setup-deno@master
+      with:
+        deno-version: 0.36.0
+    - name: Run tests
+      run: |
+        deno run --allow-env --allow-read ./test.js

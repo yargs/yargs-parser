@@ -1,15 +1,8 @@
 # yargs-parser
 
-[![Build Status](https://travis-ci.org/yargs/yargs-parser.svg)](https://travis-ci.org/yargs/yargs-parser)
-[![NPM version](https://img.shields.io/npm/v/yargs-parser.svg)](https://www.npmjs.com/package/yargs-parser)
-[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
+A fork of the original yargs-parser library targeting Deno.
 
-
-The mighty option parser used by [yargs](https://github.com/yargs/yargs).
-
-visit the [yargs website](http://yargs.js.org/) for more examples, and thorough usage instructions.
-
-<img width="250" src="https://raw.githubusercontent.com/yargs/yargs-parser/master/yargs-logo.png">
+The original source is found here: https://github.com/yargs/yargs-parser/blob/v18.1.0/index.js
 
 ## Example
 

@@ -1,8 +1,7 @@
-const camelCase = require('camelcase')
-const decamelize = require('decamelize')
-const path = require('path')
-const tokenizeArgString = require('./lib/tokenize-arg-string')
-const util = require('util')
+import { camelCase, decamelize, compat, util } from './deps.js'
+import tokenizeArgString from './lib/tokenize-arg-string.js'
+
+const { path, require } = compat
 
 function parse (args, opts) {
   opts = Object.assign(Object.create(null), opts)
@@ -556,7 +555,7 @@ function parse (args, opts) {
       if (configPath) {
         try {
           let config = null
-          const resolvedConfigPath = path.resolve(process.cwd(), configPath)
+          const resolvedConfigPath = path.resolve(compat.cwd(), configPath)
 
           if (typeof flags.configs[configKey] === 'function') {
             try {
@@ -615,7 +614,8 @@ function parse (args, opts) {
     if (typeof envPrefix === 'undefined') return
 
     const prefix = typeof envPrefix === 'string' ? envPrefix : ''
-    Object.keys(process.env).forEach(function (envVar) {
+    const env = compat.env()
+    Object.keys(compat.env()).forEach(function (envVar) {
       if (prefix === '' || envVar.lastIndexOf(prefix, 0) === 0) {
         // get array of nested keys and convert them to camel case
         const keys = envVar.split('__').map(function (key, i) {
@@ -626,7 +626,7 @@ function parse (args, opts) {
         })
 
         if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && !hasKey(argv, keys)) {
-          setArg(keys.join('.'), process.env[envVar])
+          setArg(keys.join('.'), env[envVar])
         }
       }
     })
@@ -1015,4 +1015,4 @@ function sanitizeKey (key) {
   return key
 }
 
-module.exports = Parser
+export default Parser

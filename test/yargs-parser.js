@@ -1,12 +1,11 @@
 /* global beforeEach, describe, it */
 
-require('chai').should()
+import { expect } from './deps/chai.ts'
+import { compat } from '../deps.js'
+import parser from '../mod.ts'
+const { path, fs, process } = compat
 
-const { expect } = require('chai')
-const fs = require('fs')
-const parser = require('../')
-const path = require('path')
-
+const dirname = path.dirname(new URL(import.meta.url).pathname)
 describe('yargs-parser', function () {
   it('should parse a "short boolean"', function () {
     var parse = parser(['-b'])
@@ -492,7 +491,7 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').with.length(0)
   })
 
-  const jsonPath = path.resolve(__dirname, './fixtures/config.json')
+  const jsonPath = path.join(dirname, '/fixtures/config.json')
   describe('config', function () {
     // See: https://github.com/chevex/yargs/issues/12
     it('should load options and values from default config if specified', function () {
@@ -597,8 +596,8 @@ describe('yargs-parser', function () {
       argv.should.have.property('foo').and.deep.equal('bar')
     })
 
-    it('should load options and values from a JS file when config has .js extention', function () {
-      var jsPath = path.resolve(__dirname, './fixtures/settings.js')
+    it.skip('should load options and values from a JS file when config has .js extention', function () {
+      var jsPath = path.join(dirname, '/fixtures/settings.js')
       var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: ['settings']
       })
@@ -632,7 +631,7 @@ describe('yargs-parser', function () {
     })
 
     it('should load nested options from config file', function () {
-      var jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
+      var jsonPath = path.join(dirname, '/fixtures/nested_config.json')
       var argv = parser(['--settings', jsonPath, '--nested.foo', 'bar'], {
         config: ['settings']
       })
@@ -646,7 +645,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use nested value from config file, if argv value is using default value', function () {
-      var jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
+      var jsonPath = path.join(dirname, '/fixtures/nested_config.json')
       var argv = parser(['--settings', jsonPath], {
         config: ['settings'],
         default: {
@@ -663,7 +662,7 @@ describe('yargs-parser', function () {
     })
 
     it('allows a custom parsing function to be provided', function () {
-      var jsPath = path.resolve(__dirname, './fixtures/config.txt')
+      var jsPath = path.join(dirname, '/fixtures/config.txt')
       var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: {
           settings: function (configPath) {
@@ -688,7 +687,7 @@ describe('yargs-parser', function () {
     })
 
     it('allows a custom parsing function to be provided as an alias', function () {
-      var jsPath = path.resolve(__dirname, './fixtures/config.json')
+      var jsPath = path.join(dirname, '/fixtures/config.json')
       var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: {
           s: function (configPath) {
@@ -2097,7 +2096,7 @@ describe('yargs-parser', function () {
       result.bool.should.equal(true)
     })
 
-    var jsonPath = path.resolve(__dirname, './fixtures/config.json')
+    var jsonPath = path.join(dirname, '/fixtures/config.json')
     it('should prefer environment variables over config file', function () {
       process.env.CFG_HERP = 'zerp'
       var result = parser(['--cfg', jsonPath], {
@@ -2130,7 +2129,7 @@ describe('yargs-parser', function () {
     })
 
     it('should prefer cli config file option over env var config file option', function () {
-      process.env.MUX_CFG = path.resolve(__dirname, '../package.json')
+      process.env.MUX_CFG = path.join(dirname, '../package.json')
       var result = parser(['--cfg', jsonPath], {
         envPrefix: 'MUX',
         config: 'cfg'
