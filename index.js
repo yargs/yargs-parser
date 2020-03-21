@@ -1,7 +1,7 @@
-import { camelCase, decamelize, compat, util } from './deps.js'
+import { camelCase, decamelize, compat } from './deps.js'
 import tokenizeArgString from './lib/tokenize-arg-string.js'
 
-const { path, require } = compat
+const { path, require, util } = compat
 
 function parse (args, opts) {
   opts = Object.assign(Object.create(null), opts)
