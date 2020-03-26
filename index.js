@@ -168,7 +168,7 @@ function parse (args, opts) {
       // arrays format = '--f=a b c'
       if (checkAllAliases(m[1], flags.arrays)) {
         i = eatArray(i, m[1], args, m[2])
-      } else if (checkAllAliases(m[1], flags.nargs)) {
+      } else if (checkAllAliases(m[1], flags.nargs) !== false) {
         // nargs format = '--f=monkey washing cat'
         i = eatNargs(i, m[1], args, m[2])
       } else {
@@ -240,7 +240,7 @@ function parse (args, opts) {
           if (checkAllAliases(key, flags.arrays)) {
             // array format = '-f=a b c'
             i = eatArray(i, key, args, value)
-          } else if (checkAllAliases(key, flags.nargs)) {
+          } else if (checkAllAliases(key, flags.nargs) !== false) {
             // nargs format = '-f=monkey washing cat'
             i = eatNargs(i, key, args, value)
           } else {

@@ -1883,6 +1883,24 @@ describe('yargs-parser', function () {
       result.foo[1].should.equal('bar')
     })
 
+    it('should raise an exception if -f== format is used for a key with no expected argument', function () {
+      var argv = parser.detailed('-f=apple', {
+        narg: {
+          f: 0
+        }
+      })
+      argv.error.message.should.equal('Argument unexpected for: f')
+    })
+
+    it('should raise an exception if --bar== format is used for a key with no expected argument', function () {
+      var argv = parser.detailed('--bar=apple', {
+        narg: {
+          bar: 0
+        }
+      })
+      argv.error.message.should.equal('Argument unexpected for: bar')
+    })
+
     it('should raise an exception if there are not enough arguments following key', function () {
       var argv = parser.detailed('--foo apple', {
         narg: {
