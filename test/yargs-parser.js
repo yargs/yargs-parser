@@ -1748,6 +1748,20 @@ describe('yargs-parser', function () {
       result['1'][1].should.equal('b')
     })
 
+    it('should support array for -f= and --bar= format when the value is dashed', function () {
+      var result = parser(['-f=--dog', 'cat', '--bar=--red', 'green'], {
+        array: ['f', 'bar']
+      })
+
+      Array.isArray(result.f).should.equal(true)
+      result.f[0].should.equal('--dog')
+      result.f[1].should.equal('cat')
+
+      Array.isArray(result.bar).should.equal(true)
+      result.bar[0].should.equal('--red')
+      result.bar[1].should.equal('green')
+    })
+
     it('should create an array when passing an argument twice with same value', function () {
       var result = parser(['-x', 'val1', '-x', 'val1'])
       result.should.have.property('x').that.is.an('array').and.to.deep.equal(['val1', 'val1'])
@@ -1869,6 +1883,24 @@ describe('yargs-parser', function () {
       result.foo[1].should.equal('bar')
     })
 
+    it('should raise an exception if -f== format is used for a key with no expected argument', function () {
+      var argv = parser.detailed('-f=apple', {
+        narg: {
+          f: 0
+        }
+      })
+      argv.error.message.should.equal('Argument unexpected for: f')
+    })
+
+    it('should raise an exception if --bar== format is used for a key with no expected argument', function () {
+      var argv = parser.detailed('--bar=apple', {
+        narg: {
+          bar: 0
+        }
+      })
+      argv.error.message.should.equal('Argument unexpected for: bar')
+    })
+
     it('should raise an exception if there are not enough arguments following key', function () {
       var argv = parser.detailed('--foo apple', {
         narg: {
@@ -1917,6 +1949,23 @@ describe('yargs-parser', function () {
       result._[0].should.equal('blerg')
 
       result.bar[0].should.equal('monkey')
+      result.bar[1].should.equal('washing')
+      result._[1].should.equal('cat')
+    })
+
+    it('should support nargs for -f= and --bar= format arguments with dashed values', function () {
+      var result = parser(['-f=--apple', 'bar', 'blerg', '--bar=-monkey', 'washing', 'cat'], {
+        narg: {
+          f: 2,
+          bar: 2
+        }
+      })
+
+      result.f[0].should.equal('--apple')
+      result.f[1].should.equal('bar')
+      result._[0].should.equal('blerg')
+
+      result.bar[0].should.equal('-monkey')
       result.bar[1].should.equal('washing')
       result._[1].should.equal('cat')
     })
@@ -3677,6 +3726,18 @@ describe('yargs-parser', function () {
         }
       })
       parse.argv.a.should.eql([33])
+      parse.error.message.should.equal('Not enough arguments following: a')
+    })
+
+    it('returns an error if not enough positionals were provided for nargs even with nargs-eats-options', () => {
+      var parse = parser.detailed(['-a', '33', '--cat'], {
+        narg: {
+          a: 3
+        },
+        configuration: {
+          'nargs-eats-options': true
+        }
+      })
       parse.error.message.should.equal('Not enough arguments following: a')
     })
 
