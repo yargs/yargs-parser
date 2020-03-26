@@ -170,8 +170,7 @@ function parse (args, opts) {
         i = eatArray(i, m[1], args, m[2])
       } else if (checkAllAliases(m[1], flags.nargs)) {
         // nargs format = '--f=monkey washing cat'
-        args.splice(i + 1, 0, m[2])
-        i = eatNargs(i, m[1], args)
+        i = eatNargs(i, m[1], args, m[2])
       } else {
         setArg(m[1], m[2])
       }
@@ -244,8 +243,7 @@ function parse (args, opts) {
             i = eatArray(i, key, args)
           } else if (checkAllAliases(key, flags.nargs)) {
             // nargs format = '-f=monkey washing cat'
-            args.splice(i + 1, 0, value)
-            i = eatNargs(i, key, args)
+            i = eatNargs(i, key, args, value)
           } else {
             setArg(key, value)
           }
@@ -363,7 +361,7 @@ function parse (args, opts) {
 
   // how many arguments should we consume, based
   // on the nargs option?
-  function eatNargs (i, key, args) {
+  function eatNargs (i, key, args, argAfterEqualSign) {
     let ii
     let toEat = checkAllAliases(key, flags.nargs)
     // NaN has a special meaning for the array type, indicating that one or
@@ -371,14 +369,19 @@ function parse (args, opts) {
     toEat = isNaN(toEat) ? 1 : toEat
 
     if (toEat === 0) {
+      if (!isUndefined(argAfterEqualSign)) {
+        error = Error(__('Argument unexpected for: %s', key))
+      }
       setArg(key, defaultValue(key))
       return i
     }
 
-    let available = 0
+    let available = isUndefined(argAfterEqualSign) ? 0 : 1
     if (configuration['nargs-eats-options']) {
       // classic behavior, yargs eats positional and dash arguments.
-      if (args.length - (i + 1) < toEat) error = Error(__('Not enough arguments following: %s', key))
+      if (args.length - (i + 1) + available < toEat) {
+        error = Error(__('Not enough arguments following: %s', key))
+      }
       available = toEat
     } else {
       // nargs will not consume flag arguments, e.g., -abc, --foo,
@@ -390,7 +393,11 @@ function parse (args, opts) {
       if (available < toEat) error = Error(__('Not enough arguments following: %s', key))
     }
 
-    const consumed = Math.min(available, toEat)
+    let consumed = Math.min(available, toEat)
+    if (!isUndefined(argAfterEqualSign) && consumed > 0) {
+      setArg(key, argAfterEqualSign)
+      consumed--
+    }
     for (ii = i + 1; ii < (consumed + i + 1); ii++) {
       setArg(key, args[ii])
     }
