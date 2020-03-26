@@ -1753,9 +1753,9 @@ describe('yargs-parser', function () {
         array: ['option']
       })
 
-      Array.isArray(result['option']).should.equal(true)
-      result['option'][0].should.equal('--a')
-      result['option'][1].should.equal('b')
+      Array.isArray(result.option).should.equal(true)
+      result.option[0].should.equal('--a')
+      result.option[1].should.equal('b')
     })
 
     it('should create an array when passing an argument twice with same value', function () {

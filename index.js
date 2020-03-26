@@ -167,8 +167,7 @@ function parse (args, opts) {
 
       // arrays format = '--f=a b c'
       if (checkAllAliases(m[1], flags.arrays)) {
-        args.splice(i + 1, 0, m[2])
-        i = eatArray(i, m[1], args)
+        i = eatArray(i, m[1], args, m[2])
       } else if (checkAllAliases(m[1], flags.nargs)) {
         // nargs format = '--f=monkey washing cat'
         args.splice(i + 1, 0, m[2])
@@ -402,15 +401,16 @@ function parse (args, opts) {
   // if an option is an array, eat all non-hyphenated arguments
   // following it... YUM!
   // e.g., --foo apple banana cat becomes ["apple", "banana", "cat"]
-  function eatArray (i, key, args) {
+  function eatArray (i, key, args, argAfterEqualSign) {
     let argsToSet = []
-    let next = args[i + 1]
+    let next = argAfterEqualSign || args[i + 1]
     // If both array and nargs are configured, enforce the nargs count:
     const nargsCount = checkAllAliases(key, flags.nargs)
 
     if (checkAllAliases(key, flags.bools) && !(/^(true|false)$/.test(next))) {
       argsToSet.push(true)
-    } else if (isUndefined(next) || (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next))) {
+    } else if (isUndefined(next) ||
+        (isUndefined(argAfterEqualSign) && /^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next))) {
       // for keys without value ==> argsToSet remains an empty []
       // set user default value, if available
       if (defaults[key] !== undefined) {
@@ -418,13 +418,17 @@ function parse (args, opts) {
         argsToSet = Array.isArray(defVal) ? defVal : [defVal]
       }
     } else {
+      // value in --option=value is eaten as is
+      if (!isUndefined(argAfterEqualSign)) {
+        argsToSet.push(processValue(key, argAfterEqualSign))
+      }
       for (let ii = i + 1; ii < args.length; ii++) {
+        if ((!configuration['greedy-arrays'] && argsToSet.length > 0) ||
+          (nargsCount && argsToSet.length >= nargsCount)) break
         next = args[ii]
         if (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next)) break
         i = ii
         argsToSet.push(processValue(key, next))
-        if (!configuration['greedy-arrays'] ||
-            (nargsCount && argsToSet.length >= nargsCount)) break
       }
     }
 
