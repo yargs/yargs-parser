@@ -3729,6 +3729,18 @@ describe('yargs-parser', function () {
       parse.error.message.should.equal('Not enough arguments following: a')
     })
 
+    it('returns an error if not enough positionals were provided for nargs even with nargs-eats-options', () => {
+      var parse = parser.detailed(['-a', '33', '--cat'], {
+        narg: {
+          a: 3
+        },
+        configuration: {
+          'nargs-eats-options': true
+        }
+      })
+      parse.error.message.should.equal('Not enough arguments following: a')
+    })
+
     it('does not raise error if no arguments are provided for boolean option', () => {
       var parse = parser.detailed(['-a'], {
         array: 'a',
