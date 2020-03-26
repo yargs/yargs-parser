@@ -239,8 +239,7 @@ function parse (args, opts) {
 
           if (checkAllAliases(key, flags.arrays)) {
             // array format = '-f=a b c'
-            args.splice(i + 1, 0, value)
-            i = eatArray(i, key, args)
+            i = eatArray(i, key, args, value)
           } else if (checkAllAliases(key, flags.nargs)) {
             // nargs format = '-f=monkey washing cat'
             i = eatNargs(i, key, args, value)
