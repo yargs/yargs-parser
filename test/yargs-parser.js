@@ -1931,6 +1931,23 @@ describe('yargs-parser', function () {
       result._[1].should.equal('cat')
     })
 
+    it('should support nargs for -f= and --bar= format arguments with dashed values', function () {
+      var result = parser(['-f=--apple', 'bar', 'blerg', '--bar=-monkey', 'washing', 'cat'], {
+        narg: {
+          f: 2,
+          bar: 2
+        }
+      })
+
+      result.f[0].should.equal('--apple')
+      result.f[1].should.equal('bar')
+      result._[0].should.equal('blerg')
+
+      result.bar[0].should.equal('-monkey')
+      result.bar[1].should.equal('washing')
+      result._[1].should.equal('cat')
+    })
+
     it('should not modify the input args if an = was used', function () {
       var expected = ['-f=apple', 'bar', 'blerg', '--bar=monkey', 'washing', 'cat']
       var args = expected.slice()
