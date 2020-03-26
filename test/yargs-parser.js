@@ -1748,6 +1748,16 @@ describe('yargs-parser', function () {
       result['1'][1].should.equal('b')
     })
 
+    it('should support array for --foo= format when the value is dashed', function () {
+      var result = parser(['--option=--a', 'b'], {
+        array: ['option']
+      })
+
+      Array.isArray(result['option']).should.equal(true)
+      result['option'][0].should.equal('--a')
+      result['option'][1].should.equal('b')
+    })
+
     it('should create an array when passing an argument twice with same value', function () {
       var result = parser(['-x', 'val1', '-x', 'val1'])
       result.should.have.property('x').that.is.an('array').and.to.deep.equal(['val1', 'val1'])
