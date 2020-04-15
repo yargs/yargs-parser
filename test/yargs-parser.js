@@ -959,6 +959,20 @@ describe('yargs-parser', function () {
       })
 
       argv.f.bar.should.eql(99)
+      argv.foo.bar.should.eql(99)
+    })
+
+    // see #267
+    it('should populate aliases when dot notation is used on camel-cased option', function () {
+      var argv = parser(['--foo-baz.bar', '99'], {
+        alias: {
+          'foo-baz': ['f']
+        }
+      })
+
+      argv.f.bar.should.eql(99)
+      argv['foo-baz'].bar.should.eql(99)
+      argv.fooBaz.bar.should.eql(99)
     })
 
     it('should populate aliases when nested dot notation is used', function () {
