@@ -2777,7 +2777,7 @@ describe('yargs-parser', function () {
     // see: https://github.com/yargs/yargs-parser/issues/76
     it('only runs coercion functions once, even with aliases', function () {
       var runcount = 0
-      var func = (arg) => {
+      var func = function (arg) {
         runcount++
         return undefined
       }
@@ -2805,17 +2805,17 @@ describe('yargs-parser', function () {
   })
 
   // see: https://github.com/yargs/yargs/issues/963
-  it('does not magically convert numeric strings larger than Number.MAX_SAFE_INTEGER', () => {
+  it('does not magically convert numeric strings larger than Number.MAX_SAFE_INTEGER', function () {
     const argv = parser([ '--foo', '93940495950949399948393' ])
     argv.foo.should.equal('93940495950949399948393')
   })
 
-  it('does not magically convert scientific notation larger than Number.MAX_SAFE_INTEGER', () => {
+  it('does not magically convert scientific notation larger than Number.MAX_SAFE_INTEGER', function () {
     const argv = parser([ '--foo', '33e99999' ])
     argv.foo.should.equal('33e99999')
   })
 
-  it('converts numeric options larger than Number.MAX_SAFE_INTEGER to number', () => {
+  it('converts numeric options larger than Number.MAX_SAFE_INTEGER to number', function () {
     const argv = parser([ '--foo', '93940495950949399948393' ], {
       number: ['foo']
     })
@@ -2823,7 +2823,7 @@ describe('yargs-parser', function () {
   })
 
   // see: https://github.com/yargs/yargs/issues/1099
-  it('does not magically convert options with leading + to number', () => {
+  it('does not magically convert options with leading + to number', function () {
     const argv = parser(['--foo', '+5550100', '--bar', '+5550100'], {
       number: 'bar'
     })
@@ -2832,7 +2832,7 @@ describe('yargs-parser', function () {
   })
 
   // see: https://github.com/yargs/yargs/issues/1099
-  it('does not magically convert options with leading 0 to number', () => {
+  it('does not magically convert options with leading 0 to number', function () {
     const argv = parser(['--foo', '000000', '--bar', '000000'], {
       number: 'bar'
     })
@@ -2868,7 +2868,7 @@ describe('yargs-parser', function () {
   })
 
   // see: https://github.com/yargs/yargs-parser/issues/145
-  describe('strings with quotes and dashes', () => {
+  describe('strings with quotes and dashes', function () {
     it('handles double quoted strings', function () {
       const args = parser('--foo "hello world" --bar="goodnight\'moon"')
       args.foo.should.equal('hello world')
@@ -2895,8 +2895,8 @@ describe('yargs-parser', function () {
   })
 
   // see: https://github.com/yargs/yargs-parser/issues/144
-  it('number/string types should use default when no right-hand value', () => {
-    let argv = parser([ '--foo' ], {
+  it('number/string types should use default when no right-hand value', function () {
+    const argv = parser([ '--foo' ], {
       number: ['foo'],
       default: {
         foo: 99

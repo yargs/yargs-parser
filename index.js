@@ -12,7 +12,7 @@ function parse (args, opts) {
 
   // aliases might have transitive relationships, normalize this.
   var aliases = combineAliases(opts.alias || {})
-  var configuration = Object.assign({
+  var configuration = {
     'short-option-groups': true,
     'camel-case-expansion': true,
     'dot-notation': true,
@@ -27,7 +27,13 @@ function parse (args, opts) {
     'halt-at-non-option': false,
     'strip-aliased': false,
     'strip-dashed': false
-  }, opts.configuration)
+  }
+  for (var key in opts.configuration) {
+    if (Object.hasOwnProperty(opts.configuration, key)) {
+      configuration[key] = opts.configuration[key]
+    }
+  }
+
   var defaults = opts.default || {}
   var configObjects = opts.configObjects || []
   var envPrefix = opts.envPrefix
@@ -58,18 +64,20 @@ function parse (args, opts) {
     var key = opt.key || opt
 
     // assign to flags[bools|strings|numbers]
-    const assignment = Object.keys(opt).map(function (key) {
-      return ({
-        boolean: 'bools',
-        string: 'strings',
-        number: 'numbers'
-      })[key]
-    }).filter(Boolean).pop()
+    try {
+      var assignment = Object.keys(opt).map(function (key) {
+        return ({
+          boolean: 'bools',
+          string: 'strings',
+          number: 'numbers'
+        })[key]
+      }).filter(Boolean).pop()
 
-    // assign key to be coerced
-    if (assignment) {
-      flags[assignment][key] = true
-    }
+      // assign key to be coerced
+      if (assignment) {
+        flags[assignment][key] = true
+      }
+    } catch (err) {}
 
     flags.arrays[key] = true
     flags.keys.push(key)
@@ -334,16 +342,16 @@ function parse (args, opts) {
   })
 
   if (configuration['camel-case-expansion'] && configuration['strip-dashed']) {
-    Object.keys(argv).filter(key => key !== '--' && key.includes('-')).forEach(key => {
+    Object.keys(argv).filter(function (key) { return key !== '--' && key.includes('-')}).forEach(function (key) {
       delete argv[key]
     })
   }
 
   if (configuration['strip-aliased']) {
     // XXX Switch to [].concat(...Object.values(aliases)) once node.js 6 is dropped
-    ;[].concat(...Object.keys(aliases).map(k => aliases[k])).forEach(alias => {
+    Object.keys(aliases).map(function (k) { return aliases[k]}).forEach(function (alias) {
       if (configuration['camel-case-expansion']) {
-        delete argv[alias.split('.').map(prop => camelCase(prop)).join('.')]
+        delete argv[alias.split('.').map(function (prop){return camelCase(prop)}).join('.')]
       }
 
       delete argv[alias]
@@ -354,7 +362,7 @@ function parse (args, opts) {
   // on the nargs option?
   function eatNargs (i, key, args) {
     var ii
-    const toEat = checkAllAliases(key, flags.nargs)
+    var toEat = checkAllAliases(key, flags.nargs)
 
     // nargs will not consume flag arguments, e.g., -abc, --foo,
     // and terminates when one is observed.
@@ -498,9 +506,7 @@ function parse (args, opts) {
 
   function maybeCoerceNumber (key, value) {
     if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.coercions)) {
-      const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
-        Number.isSafeInteger(Math.floor(value))
-      )
+      var shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'];
       if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
     }
     return value
@@ -605,7 +611,7 @@ function parse (args, opts) {
         if (typeof coerce === 'function') {
           try {
             var value = coerce(argv[key])
-            ;([].concat(flags.aliases[key] || [], key)).forEach(ali => {
+            ;([].concat(flags.aliases[key] || [], key)).forEach(function (ali) {
               applied[ali] = argv[ali] = value
             })
           } catch (err) {
@@ -617,7 +623,7 @@ function parse (args, opts) {
   }
 
   function setPlaceholderKeys (argv) {
-    flags.keys.forEach((key) => {
+    flags.keys.forEach(function (key) {
       // don't set placeholder keys for dot notation options 'foo.bar'.
       if (~key.indexOf('.')) return
       if (typeof argv[key] === 'undefined') argv[key] = undefined
@@ -684,11 +690,11 @@ function parse (args, opts) {
 
     // TODO(bcoe): in the next major version of yargs, switch to
     // Object.create(null) for dot notation:
-    const key = sanitizeKey(keys[keys.length - 1])
+    var key = sanitizeKey(keys[keys.length - 1])
 
-    const isTypeArray = checkAllAliases(keys.join('.'), flags.arrays)
-    const isValueArray = Array.isArray(value)
-    let duplicate = configuration['duplicate-arguments-array']
+    var isTypeArray = checkAllAliases(keys.join('.'), flags.arrays)
+    var isValueArray = Array.isArray(value)
+    var duplicate = configuration['duplicate-arguments-array']
 
     // nargs has higher priority than duplicate
     if (!duplicate && checkAllAliases(key, flags.nargs)) {
@@ -718,7 +724,8 @@ function parse (args, opts) {
   }
 
   // extend the aliases list with inferred aliases.
-  function extendAliases (...args) {
+  function extendAliases () {
+    const args = Array.prototype.slice.call(arguments, 0);
     args.forEach(function (obj) {
       Object.keys(obj || {}).forEach(function (key) {
         // short-circuit if we've already added a key
@@ -785,7 +792,7 @@ function parse (args, opts) {
   function defaultValue (key) {
     if (!checkAllAliases(key, flags.bools) &&
         !checkAllAliases(key, flags.counts) &&
-        `${key}` in defaults) {
+        ("" + key) in defaults) {
       return defaults[key]
     } else {
       return defaultForType(guessType(key))
