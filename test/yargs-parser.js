@@ -410,6 +410,26 @@ describe('yargs-parser', function () {
   describe('config', function () {
     var jsonPath = path.resolve(__dirname, './fixtures/config.json')
 
+    // Patching for https://snyk.io/vuln/SNYK-JS-YARGSPARSER-560381
+    it('should not pollute the prototype', function () {
+      const argv = parser(['--foo', 'bar'], {
+        alias: {
+          z: 'zoom'
+        },
+        default: {
+          settings: jsonPath
+        },
+        config: 'settings'
+      })
+
+      argv.should.have.property('herp', 'derp')
+      argv.should.have.property('zoom', 55)
+      argv.should.have.property('foo').and.deep.equal('bar')
+
+      expect({}.bbb).to.equal(undefined)
+      expect({}.aaa).to.equal(undefined)
+    })
+
     // See: https://github.com/chevex/yargs/issues/12
     it('should load options and values from default config if specified', function () {
       var argv = parser([ '--foo', 'bar' ], {
@@ -2374,5 +2394,13 @@ describe('yargs-parser', function () {
       configObjects: [{'a': ['bin/../a.txt', 'bin/../b.txt']}]
     })
     argv.a.should.deep.equal(['a.txt', 'b.txt'])
+  })
+
+  // Patching for https://snyk.io/vuln/SNYK-JS-YARGSPARSER-560381
+  it('should not pollute the prototype', function () {
+    parser(['-f.__proto__.foo', '99', '-x.y.__proto__.bar', '100', '--__proto__', '200'])
+    Object.keys({}.__proto__).length.should.equal(0) // eslint-disable-line
+    expect({}.foo).to.equal(undefined)
+    expect({}.bar).to.equal(undefined)
   })
 })
