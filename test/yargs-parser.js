@@ -2397,7 +2397,7 @@ describe('yargs-parser', function () {
   })
 
   // Patching for https://snyk.io/vuln/SNYK-JS-YARGSPARSER-560381
-  it.skip('should not pollute the prototype', function () {
+  it('should not pollute the prototype', function () {
     parser(['-f.__proto__.foo', '99', '-x.y.__proto__.bar', '100', '--__proto__', '200'])
     Object.keys({}.__proto__).length.should.equal(0) // eslint-disable-line
     expect({}.foo).to.equal(undefined)
