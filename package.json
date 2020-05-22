@@ -34,7 +34,8 @@
     "standard-version": "^4.0.0"
   },
   "dependencies": {
-    "camelcase": "^3.0.0"
+    "camelcase": "^3.0.0",
+    "object.assign": "^4.1.0"
   },
   "files": [
     "lib",
