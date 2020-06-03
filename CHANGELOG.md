@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [18.1.4](https://www.github.com/yargs/yargs-parser/compare/v18.1.3...v18.1.4) (2020-06-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency decamelize to v3 ([#274](https://www.github.com/yargs/yargs-parser/issues/274)) ([4d98698](https://www.github.com/yargs/yargs-parser/commit/4d98698bc6767e84ec54a0842908191739be73b7))
+
 ### [18.1.3](https://www.github.com/yargs/yargs-parser/compare/v18.1.2...v18.1.3) (2020-04-16)
 
 
