@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "camelcase": "^5.0.0",
-    "decamelize": "^1.2.0"
+    "decamelize": "^3.2.0"
   },
   "files": [
     "lib",
