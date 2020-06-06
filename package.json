@@ -36,20 +36,20 @@
     "@types/node": "^10.0.3",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
-    "c8": "^7.0.1",
+    "c8": "^7.1.2",
     "chai": "^4.2.0",
     "eslint": "^7.0.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
     "gts": "^2.0.0-alpha.4",
-    "mocha": "^7.0.0",
+    "mocha": "^7.2.0",
     "rimraf": "^3.0.2",
     "standardx": "^5.0.0",
     "typescript": "^3.7.0"
   },
   "dependencies": {
-    "camelcase": "^5.0.0",
-    "decamelize": "^3.2.0"
+    "camelcase": "^6.0.0",
+    "decamelize": "^4.0.0"
   },
   "files": [
     "index.js",
