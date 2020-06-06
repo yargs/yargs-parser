@@ -3823,4 +3823,13 @@ describe('yargs-parser', function () {
       }
     })
   })
+
+  it('throws error for unsupported Node.js versions', () => {
+    process.env.YARGS_MIN_NODE_VERSION = '55'
+    delete require.cache[require.resolve('../')]
+    expect(() => {
+      require('../')
+    }).to.throw(/yargs parser supports a minimum Node.js version of 55/)
+    delete process.env.YARGS_MIN_NODE_VERSION
+  })
 })
