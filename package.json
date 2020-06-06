@@ -57,7 +57,7 @@
     "lib/**/*.js"
   ],
   "engines": {
-    "node": ">=6"
+    "node": ">=10"
   },
   "standardx": {
     "ignore": [
