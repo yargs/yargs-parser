@@ -4,6 +4,17 @@ const path = require('path')
 const tokenizeArgString = require('./lib/tokenize-arg-string')
 const util = require('util')
 
+// See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our
+// version support policy. The YARGS_MIN_NODE_VERSION is used for testing only.
+const minNodeVersion = (process && process.env && process.env.YARGS_MIN_NODE_VERSION)
+  ? Number(process.env.YARGS_MIN_NODE_VERSION) : 10
+if (process && process.version) {
+  const major = Number(process.version.match(/v([^.]+)/)[1])
+  if (major < minNodeVersion) {
+    throw Error(`yargs parser supports a minimum Node.js version of ${minNodeVersion}. Read our version support policy: https://github.com/yargs/yargs-parser#supported-nodejs-versions`)
+  }
+}
+
 function parse (args, opts) {
   opts = Object.assign(Object.create(null), opts)
   // allow a string argument to be passed in rather
@@ -626,8 +637,8 @@ function parse (args, opts) {
   }
 
   function applyEnvVars (argv, configOnly) {
+    if (!process) return
     if (typeof envPrefix === 'undefined') return
-
     const prefix = typeof envPrefix === 'string' ? envPrefix : ''
     Object.keys(process.env).forEach(function (envVar) {
       if (prefix === '' || envVar.lastIndexOf(prefix, 0) === 0) {
