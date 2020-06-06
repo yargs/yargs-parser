@@ -33,7 +33,7 @@
     "standard": "^14.3.1"
   },
   "dependencies": {
-    "camelcase": "^5.0.0",
+    "camelcase": "^6.0.0",
     "decamelize": "^3.2.0"
   },
   "files": [
