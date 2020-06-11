@@ -148,14 +148,14 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
 
   Object.keys(opts.narg || {}).forEach(function (k) {
     if (opts.narg?.[k] !== undefined) {
-      flags.nargs[k] = opts?.narg?.[k]
+      flags.nargs[k] = opts.narg[k]
       flags.keys.push(k)
     }
   })
 
   Object.keys(opts.coerce || {}).forEach(function (k) {
     if (opts.coerce?.[k] !== undefined) {
-      flags.coercions[k] = opts.coerce?.[k]
+      flags.coercions[k] = opts.coerce[k]
       flags.keys.push(k)
     }
   })
@@ -175,7 +175,7 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
 
   // create a lookup table that takes into account all
   // combinations of aliases: {f: ['foo'], foo: ['f']}
-  extendAliases(opts.key || {}, aliases, opts.default || {}, flags.arrays)
+  extendAliases(opts.key, aliases, opts.default, flags.arrays)
 
   // apply default values to all aliases.
   Object.keys(defaults).forEach(function (key) {
@@ -427,10 +427,9 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
   function eatNargs (i: number, key: string, args: string[], argAfterEqualSign?: string): number {
     let ii
     let toEat = checkAllAliases(key, flags.nargs)
-    toEat = typeof toEat === 'number' ? toEat : 1
     // NaN has a special meaning for the array type, indicating that one or
     // more values are expected.
-    toEat = isNaN(toEat) ? 1 : toEat
+    toEat = typeof toEat !== 'number' || isNaN(toEat) ? 1 : toEat
 
     if (toEat === 0) {
       if (!isUndefined(argAfterEqualSign)) {
@@ -840,7 +839,7 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
   }
 
   // extend the aliases list with inferred aliases.
-  function extendAliases (...args: Array<{ [key: string]: any }>) {
+  function extendAliases (...args: Array<{ [key: string]: any } | undefined>) {
     args.forEach(function (obj) {
       Object.keys(obj || {}).forEach(function (key) {
         // short-circuit if we've already added a key
