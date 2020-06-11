@@ -1,7 +1,7 @@
 const camelCase = require('camelcase')
 const decamelize = require('decamelize')
 const path = require('path')
-const tokenizeArgString = require('./lib/tokenize-arg-string')
+const { tokenizeArgString } = require('./build/lib/tokenize-arg-string')
 const util = require('util')
 
 // See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our

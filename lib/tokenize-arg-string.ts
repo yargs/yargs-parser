@@ -1,5 +1,5 @@
 // take an un-split argv string and tokenize it.
-module.exports = function (argString) {
+export function tokenizeArgString (argString: string | any[]): string[] {
   if (Array.isArray(argString)) {
     return argString.map(e => typeof e !== 'string' ? e + '' : e)
   }
@@ -7,10 +7,10 @@ module.exports = function (argString) {
   argString = argString.trim()
 
   let i = 0
-  let prevC = null
-  let c = null
-  let opening = null
-  const args = []
+  let prevC: string | null = null
+  let c: string | null = null
+  let opening: string | null = null
+  const args: string[] = []
 
   for (let ii = 0; ii < argString.length; ii++) {
     prevC = c

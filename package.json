@@ -4,10 +4,14 @@
   "description": "the mighty option parser used by yargs",
   "main": "index.js",
   "scripts": {
-    "fix": "standard --fix",
-    "test": "c8 --reporter=text --reporter=html  mocha test/*.js",
-    "posttest": "standard",
-    "coverage": "c8 report --check-coverage check-coverage --lines=100 --branches=97 --statements=100"
+    "fix": "standardx --fix && standardx --fix **/*.ts",
+    "pretest": "npm run compile -- -p tsconfig.test.json",
+    "test": "c8 --reporter=text --reporter=html mocha test/*.js",
+    "posttest": "npm run check",
+    "coverage": "c8 report --check-coverage",
+    "check": "standardx && standardx **/*.ts",
+    "compile": "rimraf build && tsc",
+    "prepare": "npm run compile"
   },
   "repository": {
     "type": "git",
@@ -27,20 +31,38 @@
   "author": "Ben Coe <ben@npmjs.com>",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^10.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
     "c8": "^7.1.2",
     "chai": "^4.2.0",
+    "eslint": "^7.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "gts": "^2.0.0-alpha.4",
     "mocha": "^7.2.0",
-    "standard": "^14.3.4"
+    "rimraf": "^3.0.2",
+    "standardx": "^5.0.0",
+    "typescript": "^3.7.0"
   },
   "dependencies": {
     "camelcase": "^6.0.0",
     "decamelize": "^4.0.0"
   },
   "files": [
-    "lib",
-    "index.js"
+    "index.js",
+    "build",
+    "lib/**/*.js"
   ],
   "engines": {
     "node": ">=10"
+  },
+  "standardx": {
+    "ignore": [
+      "build",
+      "example.js"
+    ]
   }
 }
