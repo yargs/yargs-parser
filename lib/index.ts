@@ -221,7 +221,7 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
       m = arg.match(/^--?([^=]+)=([\s\S]*)$/)
 
       // arrays format = '--f=a b c'
-      if (m?.[1]) {
+      if (m !== null && Array.isArray(m) && m.length >= 3) {
         if (checkAllAliases(m[1], flags.arrays)) {
           i = eatArray(i, m[1], args, m[2])
         } else if (checkAllAliases(m[1], flags.nargs) !== false) {
@@ -232,8 +232,9 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
         }
       }
     } else if (arg.match(negatedBoolean) && configuration['boolean-negation']) {
-      key = arg.match(negatedBoolean)?.[1]
-      if (typeof key === 'string') {
+      m = arg.match(negatedBoolean)
+      if (m !== null && Array.isArray(m) && m.length >= 2) {
+        key = m[1]
         setArg(key, checkAllAliases(key, flags.arrays) ? [false] : false)
       }
 
@@ -241,9 +242,9 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
     } else if (arg.match(/^--.+/) || (
       !configuration['short-option-groups'] && arg.match(/^-[^-]+/)
     )) {
-      key = arg.match(/^--?(.+)/)?.[1]
-
-      if (typeof key === 'string') {
+      m = arg.match(/^--?(.+)/)
+      if (m !== null && Array.isArray(m) && m.length >= 2) {
+        key = m[1]
         if (checkAllAliases(key, flags.arrays)) {
           // array format = '--foo a b c'
           i = eatArray(i, key, args)
@@ -272,16 +273,16 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
     // dot-notation flag separated by '='.
     } else if (arg.match(/^-.\..+=/)) {
       m = arg.match(/^-([^=]+)=([\s\S]*)$/)
-      if (m?.[1] && m?.[2]) {
+      if (m !== null && Array.isArray(m) && m.length >= 3) {
         setArg(m[1], m[2])
       }
 
     // dot-notation flag separated by space.
     } else if (arg.match(/^-.\..+/) && !arg.match(negative)) {
       next = args[i + 1]
-      key = arg.match(/^-(.\..+)/)?.[1]
-
-      if (typeof key === 'string') {
+      m = arg.match(/^-(.\..+)/)
+      if (m !== null && Array.isArray(m) && m.length >= 2) {
+        key = m[1]
         if (next !== undefined && !next.match(/^-/) &&
           !checkAllAliases(key, flags.bools) &&
           !checkAllAliases(key, flags.counts)) {
