@@ -113,7 +113,6 @@ export interface Options {
   key?: Dictionary<any>;
 }
 
-export type OptionsConfig = ValueOf<Pick<Options, 'config'>>;
 export type OptionsDefault = ValueOf<Pick<Required<Options>, 'default'>>;
 
 export interface Parser {

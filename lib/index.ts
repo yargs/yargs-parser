@@ -20,7 +20,6 @@ import type {
   ConfigsFlag,
   CoercionsFlag,
   Options,
-  OptionsConfig,
   OptionsDefault,
   Parser
 } from './yargs-parser-types'
@@ -164,15 +163,16 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
     })
   }
 
-  const configOption: OptionsConfig = opts.config
-  if (typeof configOption !== 'undefined') {
-    if (Array.isArray(configOption) || typeof configOption === 'string') {
-      ;([] as string[]).concat(configOption).filter(Boolean).forEach(function (key) {
+  if (typeof opts.config !== 'undefined') {
+    if (Array.isArray(opts.config) || typeof opts.config === 'string') {
+      ;([] as string[]).concat(opts.config).filter(Boolean).forEach(function (key) {
         flags.configs[key] = true
       })
-    } else {
-      Object.keys(configOption).forEach(function (k) {
-        flags.configs[k] = configOption?.[k]
+    } else if (typeof opts.config === 'object') {
+      Object.entries(opts.config).forEach(([key, value]) => {
+        if (typeof value === 'boolean' || typeof value === 'function') {
+          flags.configs[key] = value
+        }
       })
     }
   }
