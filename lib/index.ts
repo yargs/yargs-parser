@@ -155,12 +155,14 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
     })
   }
 
-  Object.keys(opts.coerce || {}).forEach(function (k) {
-    if (opts.coerce?.[k] !== undefined) {
-      flags.coercions[k] = opts.coerce[k]
-      flags.keys.push(k)
-    }
-  })
+  if (typeof opts.coerce === 'object') {
+    Object.entries(opts.coerce).forEach(([key, value]) => {
+      if (typeof value === 'function') {
+        flags.coercions[key] = value
+        flags.keys.push(key)
+      }
+    })
+  }
 
   const configOption: OptionsConfig = opts.config
   if (typeof configOption !== 'undefined') {
