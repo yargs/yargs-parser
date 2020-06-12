@@ -146,12 +146,14 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
     flags.keys.push(key)
   })
 
-  Object.keys(opts.narg || {}).forEach(function (k) {
-    if (opts.narg?.[k] !== undefined) {
-      flags.nargs[k] = opts.narg[k]
-      flags.keys.push(k)
-    }
-  })
+  if (typeof opts.narg === 'object') {
+    Object.entries(opts.narg).forEach(([key, value]) => {
+      if (typeof value === 'number') {
+        flags.nargs[key] = value
+        flags.keys.push(key)
+      }
+    })
+  }
 
   Object.keys(opts.coerce || {}).forEach(function (k) {
     if (opts.coerce?.[k] !== undefined) {
