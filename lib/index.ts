@@ -697,24 +697,26 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
   }
 
   function applyEnvVars (argv: Arguments, configOnly: boolean): void {
-    if (typeof envPrefix === 'undefined') return
+    if (process) {
+      if (typeof envPrefix === 'undefined') return
 
-    const prefix = typeof envPrefix === 'string' ? envPrefix : ''
-    Object.keys(process.env).forEach(function (envVar) {
-      if (prefix === '' || envVar.lastIndexOf(prefix, 0) === 0) {
-        // get array of nested keys and convert them to camel case
-        const keys = envVar.split('__').map(function (key, i) {
-          if (i === 0) {
-            key = key.substring(prefix.length)
+      const prefix = typeof envPrefix === 'string' ? envPrefix : ''
+      Object.keys(process.env).forEach(function (envVar) {
+        if (prefix === '' || envVar.lastIndexOf(prefix, 0) === 0) {
+          // get array of nested keys and convert them to camel case
+          const keys = envVar.split('__').map(function (key, i) {
+            if (i === 0) {
+              key = key.substring(prefix.length)
+            }
+            return camelCase(key)
+          })
+
+          if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && !hasKey(argv, keys)) {
+            setArg(keys.join('.'), process.env[envVar])
           }
-          return camelCase(key)
-        })
-
-        if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && !hasKey(argv, keys)) {
-          setArg(keys.join('.'), process.env[envVar])
         }
-      }
-    })
+      })
+    }
   }
 
   function applyCoercions (argv: Arguments): void {
