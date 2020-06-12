@@ -688,10 +688,11 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
 
   // set all config objects passed in opts
   function setConfigObjects (): void {
-    if (typeof configObjects === 'undefined') return
-    configObjects.forEach(function (configObject) {
-      setConfigObject(configObject)
-    })
+    if (typeof configObjects !== 'undefined') {
+      configObjects.forEach(function (configObject) {
+        setConfigObject(configObject)
+      })
+    }
   }
 
   function applyEnvVars (argv: Arguments, configOnly: boolean): void {
