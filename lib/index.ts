@@ -726,7 +726,7 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
         if (typeof coerce === 'function') {
           try {
             const value = maybeCoerceNumber(key, coerce(argv[key]))
-            ;(([] as string[]).concat(flags.aliases?.[key] || [], key)).forEach(ali => {
+            ;(([] as string[]).concat(flags.aliases[key] || [], key)).forEach(ali => {
               applied.add(ali)
               argv[ali] = value
             })
@@ -767,7 +767,7 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
     if (!configuration['dot-notation']) keys = [keys.join('.')]
 
     keys.slice(0, -1).forEach(function (key) {
-      o = (o?.[key] || {})
+      o = (o[key] || {})
     })
 
     const key = keys[keys.length - 1]
@@ -853,7 +853,7 @@ function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
         // exist in both 'opts.default' and 'opts.key'.
         if (flags.aliases[key]) return
 
-        flags.aliases[key] = ([] as string[]).concat(aliases?.[key] || [])
+        flags.aliases[key] = ([] as string[]).concat(aliases[key] || [])
         // For "--option-name", also set argv.optionName
         flags.aliases[key].concat(key).forEach(function (x) {
           if (/-/.test(x) && configuration['camel-case-expansion']) {
