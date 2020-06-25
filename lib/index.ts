@@ -29,8 +29,8 @@ import decamelize = require('decamelize')
 
 export type { Arguments, DetailedArguments, Configuration, Options, Parser }
 
-function parse (argsInput: ArgsInput, options?: Options): DetailedArguments {
-  const opts: Options = Object.assign({
+function parse (argsInput: ArgsInput, options?: Partial<Options>): DetailedArguments {
+  const opts: Partial<Options> = Object.assign({
     alias: undefined,
     array: undefined,
     boolean: undefined,
@@ -1100,14 +1100,14 @@ function sanitizeKey (key: string): string {
   return key
 }
 
-const yargsParser: Parser = function Parser (args: ArgsInput, opts?: Options): Arguments {
+const yargsParser: Parser = function Parser (args: ArgsInput, opts?: Partial<Options>): Arguments {
   const result = parse(args.slice(), opts)
   return result.argv
 }
 
 // parse arguments and return detailed
 // meta information, aliases, etc.
-yargsParser.detailed = function (args: ArgsInput, opts?: Options): DetailedArguments {
+yargsParser.detailed = function (args: ArgsInput, opts?: Partial<Options>): DetailedArguments {
   return parse(args.slice(), opts)
 }
 

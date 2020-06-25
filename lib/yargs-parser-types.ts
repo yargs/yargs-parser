@@ -73,44 +73,44 @@ export type ConfigCallback = (configPath: string) => { [key: string]: any } | Er
 
 export interface Options {
   /** An object representing the set of aliases for a key: `{ alias: { foo: ['f']} }`. */
-  alias?: Dictionary<string | string[]>;
+  alias: Dictionary<string | string[]>;
   /**
    * Indicate that keys should be parsed as an array: `{ array: ['foo', 'bar'] }`.
    * Indicate that keys should be parsed as an array and coerced to booleans / numbers:
    * { array: [ { key: 'foo', boolean: true }, {key: 'bar', number: true} ] }`.
    */
-  array?: ArrayOption | ArrayOption[];
+  array: ArrayOption | ArrayOption[];
   /** Arguments should be parsed as booleans: `{ boolean: ['x', 'y'] }`. */
-  boolean?: string | string[];
+  boolean: string | string[];
   /** Indicate a key that represents a path to a configuration file (this file will be loaded and parsed). */
-  config?: string | string[] | Dictionary<boolean | ConfigCallback>;
+  config: string | string[] | Dictionary<boolean | ConfigCallback>;
   /** configuration objects to parse, their properties will be set as arguments */
-  configObjects?: Dictionary<any>[];
+  configObjects: Dictionary<any>[];
   /** Provide configuration options to the yargs-parser. */
-  configuration?: Partial<Configuration>;
+  configuration: Partial<Configuration>;
   /**
    * Provide a custom synchronous function that returns a coerced value from the argument provided (or throws an error), e.g.
    * `{ coerce: { foo: function (arg) { return modifiedArg } } }`.
    */
-  coerce?: Dictionary<CoerceCallback>;
+  coerce: Dictionary<CoerceCallback>;
   /** Indicate a key that should be used as a counter, e.g., `-vvv = {v: 3}`. */
-  count?: string | string[];
+  count: string | string[];
   /** Provide default values for keys: `{ default: { x: 33, y: 'hello world!' } }`. */
-  default?: Dictionary<any>;
+  default: Dictionary<any>;
   /** Environment variables (`process.env`) with the prefix provided should be parsed. */
-  envPrefix?: string;
+  envPrefix: string;
   /** Specify that a key requires n arguments: `{ narg: {x: 2} }`. */
-  narg?: Dictionary<number>;
+  narg: Dictionary<number>;
   /** `path.normalize()` will be applied to values set to this key. */
-  normalize?: string | string[];
+  normalize: string | string[];
   /** Keys should be treated as strings (even if they resemble a number `-x 33`). */
-  string?: string | string[];
+  string: string | string[];
   /** Keys should be treated as numbers. */
-  number?: string | string[];
+  number: string | string[];
   /** i18n handler, defaults to util.format */
-  __?: (format: any, ...param: any[]) => string;
+  __: (format: any, ...param: any[]) => string;
   /** alias lookup table defaults */
-  key?: Dictionary<any>;
+  key: Dictionary<any>;
 }
 
 export type OptionsDefault = ValueOf<Pick<Required<Options>, 'default'>>;
