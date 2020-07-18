@@ -2067,6 +2067,26 @@ describe('yargs-parser', function () {
 
       result.foo.should.eql('a')
     })
+
+    it('should ignore undefined configured nargs', function () {
+      var result = parser(['--foo', 'a', 'b'], {
+        narg: {
+          foo: undefined
+        }
+      })
+
+      result.foo.should.eql('a')
+    })
+
+    it('should default to 1 if configured narg is NaN', function () {
+      var result = parser(['--foo', 'a', 'b'], {
+        narg: {
+          foo: NaN
+        }
+      })
+
+      result.foo.should.eql('a')
+    })
   })
 
   describe('env vars', function () {
@@ -2079,6 +2099,29 @@ describe('yargs-parser', function () {
 
       result.oneFish.should.equal('twofish')
       result.redFish.should.equal('bluefish')
+    })
+
+    // envPrefix falls back to empty string if not a string
+    it('should apply all env vars if prefix is not a string', function () {
+      process.env.ONE_FISH = 'twofish'
+      process.env.RED_FISH = 'bluefish'
+      var result = parser([], {
+        envPrefix: null
+      })
+
+      result.oneFish.should.equal('twofish')
+      result.redFish.should.equal('bluefish')
+    })
+
+    it('should not apply all env vars if prefix is undefined', function () {
+      process.env.ONE_FISH = 'twofish'
+      process.env.RED_FISH = 'bluefish'
+      var result = parser([], {
+        envPrefix: undefined
+      })
+
+      expect(result).to.not.have.property('oneFish')
+      expect(result).to.not.have.property('redFish')
     })
 
     it('should apply only env vars matching prefix if prefix is valid string', function () {
@@ -2878,6 +2921,18 @@ describe('yargs-parser', function () {
       it('should not set placeholder key with dot notation', function () {
         var parsed = parser([], {
           string: ['a.b']
+        })
+        parsed.should.not.have.property('a')
+        parsed.should.not.have.property('b')
+        parsed.should.not.have.property('a.b')
+      })
+
+      it('should not set placeholder key with dot notation when `set-placeholder-key` is `true`', function () {
+        var parsed = parser([], {
+          string: ['a.b'],
+          configuration: {
+            'set-placeholder-key': true
+          }
         })
         parsed.should.not.have.property('a')
         parsed.should.not.have.property('b')
