@@ -1128,6 +1128,26 @@ describe('yargs-parser', function () {
       result.should.have.property('b').that.is.a('boolean').and.is.true // eslint-disable-line
       result.should.have.property('_').and.deep.equal([123])
     })
+
+    // Fixes: https://github.com/yargs/yargs-parser/issues/283
+    it('should set boolean numeric option, with numeric option at the end of a group', function () {
+      const result = parser(['-x1'], { boolean: ['x', '1'] })
+      expect(result).to.have.property('x', true)
+      expect(result).to.have.property('1', true)
+    })
+
+    it('should set boolean numeric option, with numeric option at the start of a group', function () {
+      const result = parser(['-1x'], { boolean: ['x', '1'] })
+      expect(result).to.have.property('x', true)
+      expect(result).to.have.property('1', true)
+    })
+
+    it('should set boolean numeric option, with numeric option as part of a group', function () {
+      const result = parser(['-x1b'], { boolean: ['x', '1', 'b'] })
+      expect(result).to.have.property('x', true)
+      expect(result).to.have.property('1', true)
+      expect(result).to.have.property('b', true)
+    })
   })
 
   describe('defaults', function () {

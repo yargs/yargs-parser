@@ -333,7 +333,8 @@ function parse (argsInput: ArgsInput, options?: Partial<Options>): DetailedArgum
 
         // current letter is an alphabetic character and next value is a number
         if (/[A-Za-z]/.test(letters[j]) &&
-          /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) {
+          /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) &&
+          checkAllAliases(next, flags.bools) === false) {
           setArg(letters[j], next)
           broken = true
           break
