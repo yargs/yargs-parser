@@ -1,6 +1,6 @@
 /* global describe, it */
 import { expect, should } from 'chai'
-import { tokenizeArgString } from '../lib/tokenize-arg-string'
+import { tokenizeArgString } from '../lib/tokenize-arg-string.js'
 
 should()
 

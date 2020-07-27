@@ -1,4 +1,4 @@
-import type { Dictionary, KeyOf, ValueOf } from './common-types'
+import type { Dictionary, KeyOf, ValueOf } from './common-types.js'
 
 export type ArgsInput = string | any[];
 

@@ -1,6 +1,5 @@
 {
   "spec": [
-    "build/test",
     "test"
   ]
 }

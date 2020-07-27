@@ -1,6 +1,6 @@
 /* global describe, it */
 
-import * as yargsParser from '../'
+import yargsParser from '../yargs.js'
 import * as assert from 'assert'
 
 describe('types', function () {
@@ -11,3 +11,4 @@ describe('types', function () {
     assert.strictEqual(argv.foo, '99')
   })
 })
+

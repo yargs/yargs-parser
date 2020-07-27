@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as util from 'util'
-import { tokenizeArgString } from './lib/tokenize-arg-string'
+import { tokenizeArgString } from './lib/tokenize-arg-string.js'
 import type {
   ArgsInput,
   Arguments,
@@ -22,8 +22,9 @@ import type {
   Options,
   OptionsDefault,
   Parser
-} from './lib/yargs-parser-types'
-import type { Dictionary, ValueOf } from './lib/common-types'
+} from './lib/yargs-parser-types.js'
+import type { Dictionary, ValueOf } from './lib/common-types.js'
+import { camelCase, decamelize } from './lib/string-utils.js'
 
 // See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our
 // version support policy. The YARGS_MIN_NODE_VERSION is used for testing only.
@@ -35,8 +36,6 @@ if (process && process.version) {
     throw Error(`yargs parser supports a minimum Node.js version of ${minNodeVersion}. Read our version support policy: https://github.com/yargs/yargs-parser#supported-nodejs-versions`)
   }
 }
-import camelCase = require('camelcase')
-import decamelize = require('decamelize')
 
 function parse (argsInput: ArgsInput, options?: Partial<Options>): DetailedArguments {
   const opts: Partial<Options> = Object.assign({
@@ -1120,4 +1119,4 @@ yargsParser.detailed = function (args: ArgsInput, opts?: Partial<Options>): Deta
   return parse(args.slice(), opts)
 }
 
-export = yargsParser
+module.exports = yargsParser
