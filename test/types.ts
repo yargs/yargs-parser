@@ -11,4 +11,3 @@ describe('types', function () {
     assert.strictEqual(argv.foo, '99')
   })
 })
-

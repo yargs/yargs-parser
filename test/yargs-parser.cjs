@@ -602,7 +602,6 @@ describe('yargs-parser', function () {
       var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: ['settings']
       })
-      console.info(argv)
 
       argv.should.have.property('herp', 'derp')
       argv.should.have.property('foo', 'bar')
@@ -1807,7 +1806,6 @@ describe('yargs-parser', function () {
       var result = parser(['--some-option', '1', '2'], {
         array: ['someOption']
       })
-      console.info(result)
       Array.isArray(result.someOption).should.equal(true)
       result.someOption.should.deep.equal([1, 2])
     })
@@ -2098,8 +2096,6 @@ describe('yargs-parser', function () {
       var result = parser([], {
         envPrefix: ''
       })
-      console.info(result)
-
       result.oneFish.should.equal('twofish')
       result.redFish.should.equal('bluefish')
     })

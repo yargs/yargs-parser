@@ -1119,4 +1119,4 @@ yargsParser.detailed = function (args: ArgsInput, opts?: Partial<Options>): Deta
   return parse(args.slice(), opts)
 }
 
-module.exports = yargsParser
+export default yargsParser

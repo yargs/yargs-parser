@@ -3,10 +3,13 @@
   "compilerOptions": {
     "outDir": "build",
     "rootDir": ".",
-    "sourceMap": false
-  },
+    "sourceMap": false,
+    "target": "es2017",
+    "moduleResolution": "node",
+    "module": "es2015"
+  },  
   "include": [
-    "./*.ts",
+    "./yargs.ts",
     "lib/**/*.ts"
   ]
 }
