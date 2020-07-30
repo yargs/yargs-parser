@@ -20,7 +20,7 @@
     "compile": "tsc",
     "postcompile": "npm run build:cjs",
     "build:cjs": "rollup --exports=default --config=rollup.config.js ./index-node.ts --format cjs --file build/index.cjs",
-    "postbuild:cjs": "./scripts/replace-legacy-export.cjs",
+    "postbuild:cjs": "node scripts/replace-legacy-export.cjs",
     "prepare": "npm run compile"
   },
   "repository": {

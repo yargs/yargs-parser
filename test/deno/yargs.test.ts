@@ -10,7 +10,9 @@ Deno.test("parse simple string", () => {
 });
 
 Deno.test("parse simple array", () => {
-  const parsed = parser(['--foo', '--bar', '99'])
+  const parsed = parser(['--foo', '--bar', '99'], {
+    apple: 77
+  })
   assertEquals(parsed.foo, true)
   assertEquals(parsed.bar, 99)
 });
