@@ -9,7 +9,7 @@
     "module": "es2015"
   },  
   "include": [
-    "./yargs.ts",
+    "index-node.ts",
     "lib/**/*.ts"
   ]
 }

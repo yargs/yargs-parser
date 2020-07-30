@@ -113,6 +113,13 @@ export interface Options {
   key: Dictionary<any>;
 }
 
+export interface YargsParserMixin {
+  format: Function;
+  normalize: Function;
+  resolve: Function;
+  env: { [key: string]: string };
+}
+
 export type OptionsDefault = ValueOf<Pick<Required<Options>, 'default'>>;
 
 export interface Parser {

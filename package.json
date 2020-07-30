@@ -4,7 +4,7 @@
   "description": "the mighty option parser used by yargs",
   "main": "build/index.cjs",
   "exports": {
-    "import": "./build/yargs.js",
+    "import": "./build/lib/yargs.js",
     "require": "./build/index.cjs"
   },
   "type": "module",
@@ -19,8 +19,8 @@
     "precompile": "rimraf build",
     "compile": "tsc",
     "postcompile": "npm run build:cjs",
-    "build:cjs": "rollup --exports=default --config=rollup.config.js ./yargs.ts --format cjs --file build/index.cjs",
-    "postbuild:cjs": "./scripts/replace-legacy-export.js",
+    "build:cjs": "rollup --exports=default --config=rollup.config.js ./index-node.ts --format cjs --file build/index.cjs",
+    "postbuild:cjs": "./scripts/replace-legacy-export.cjs",
     "prepare": "npm run compile"
   },
   "repository": {
