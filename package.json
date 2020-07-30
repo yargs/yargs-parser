@@ -4,7 +4,7 @@
   "description": "the mighty option parser used by yargs",
   "main": "build/index.cjs",
   "exports": {
-    "import": "./build/lib/yargs.js",
+    "import": "./build/index-node.js",
     "require": "./build/index.cjs"
   },
   "type": "module",
