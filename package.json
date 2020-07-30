@@ -10,8 +10,8 @@
   "type": "module",
   "types": "./build/index.cjs.d.ts",
   "scripts": {
-    "check": "standardx ./*.ts && standardx **/*.ts",
-    "fix": "standardx --fix ./*.ts && standardx --fix **/*.ts",
+    "check": "standardx && standardx ./*.ts && standardx **/*.ts && standardx test/deno/yargs-test.ts",
+    "fix": "standardx --fix && standardx --fix ./*.ts && standardx --fix **/*.ts && standardx --fix test/deno/yargs-test.ts",
     "pretest": "rimraf build && tsc -p tsconfig.test.json && npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.js",
     "posttest": "npm run check",
