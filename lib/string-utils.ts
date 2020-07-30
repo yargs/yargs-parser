@@ -5,7 +5,8 @@ export function camelCase (str: string): string {
   } else {
     let camelcase = ''
     let nextChrUpper = false
-    for (let i = 0; i < str.length; i++) {
+    const leadingHyphens = str.match(/^-+/)
+    for (let i = leadingHyphens ? leadingHyphens[0].length : 0; i < str.length; i++) {
       let chr = str.charAt(i)
       if (nextChrUpper) {
         nextChrUpper = false

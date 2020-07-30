@@ -10,15 +10,17 @@
   "type": "module",
   "types": "./build/index.cjs.d.ts",
   "scripts": {
+    "check": "standardx ./*.ts && standardx **/*.ts",
     "fix": "standardx --fix ./*.ts && standardx --fix **/*.ts",
     "pretest": "rimraf build && tsc -p tsconfig.test.json && npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.js",
     "posttest": "npm run check",
     "coverage": "c8 report --check-coverage",
-    "check": "standardx ./*.ts && standardx **/*.ts",
     "precompile": "rimraf build",
-    "compile": "tsc && npm run build:cjs",
-    "build:cjs": "rollup --config=rollup.config.js ./yargs.ts --format cjs --file build/index.cjs",
+    "compile": "tsc",
+    "postcompile": "npm run build:cjs",
+    "build:cjs": "rollup --exports=default --config=rollup.config.js ./yargs.ts --format cjs --file build/index.cjs",
+    "postbuild:cjs": "./scripts/replace-legacy-export.js",
     "prepare": "npm run compile"
   },
   "repository": {
