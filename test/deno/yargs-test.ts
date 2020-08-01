@@ -3,7 +3,7 @@
 import {
   assertEquals
 } from 'https://deno.land/std/testing/asserts.ts'
-import parser from '../../index-deno.ts'
+import parser from '../../deno.ts'
 
 Deno.test('parse string', () => {
   const parsed = parser('--foo --bar 99')

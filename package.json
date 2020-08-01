@@ -4,15 +4,16 @@
   "description": "the mighty option parser used by yargs",
   "main": "build/index.cjs",
   "exports": {
-    "import": "./build/index-node.js",
+    "import": "./build/lib/index.js",
     "require": "./build/index.cjs"
   },
   "type": "module",
+  "module": "./build/lib/index.js",
   "types": "./build/index.cjs.d.ts",
   "scripts": {
     "check": "standardx '**/*.ts' && standardx '**/*.js' && standardx '**/*.cjs'",
     "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
-    "pretest": "rimraf build && tsc -p tsconfig.test.json && npm run build:cjs",
+    "pretest": "rimraf build && tsc -p tsconfig.test.json && cross-env NODE_ENV=test npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.cjs",
     "test:browser": "start-server-and-test 'static' http://localhost:8080/package.json 'node ./test/browser/yargs-test.cjs'",
     "pretest:typescript": "npm run pretest",
@@ -52,6 +53,7 @@
     "@wessberg/rollup-plugin-ts": "^1.2.28",
     "c8": "^7.1.2",
     "chai": "^4.2.0",
+    "cross-env": "^7.0.2",
     "eslint": "^7.0.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
@@ -66,7 +68,7 @@
     "typescript": "^3.7.0"
   },
   "files": [
-    "index.js",
+    "browser.js",
     "build"
   ],
   "engines": {

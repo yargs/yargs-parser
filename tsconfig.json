@@ -9,7 +9,6 @@
     "module": "es2015"
   },  
   "include": [
-    "index-node.ts",
     "lib/**/*.ts"
   ]
 }

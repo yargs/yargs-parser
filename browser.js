@@ -1,6 +1,10 @@
+// Main entrypoint for ESM web browser environments. Avoids using Node.js
+// specific libraries, such as "path".
+//
+// TODO: figure out reasonable web equivalents for "resolve", "normalize", etc.
 import { YargsParser } from './build/lib/yargs-parser.js'
 const parser = new YargsParser({
-  format: (str) => { return str },
+  format: (str, arg) => { return str.replace('%s', arg) },
   normalize: (str) => { return str },
   resolve: (str) => { return str },
   env: {}
