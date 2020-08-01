@@ -13,7 +13,7 @@
     "check": "standardx && standardx ./*.ts && standardx **/*.ts && standardx test/deno/yargs-test.ts",
     "fix": "standardx --fix && standardx --fix ./*.ts && standardx --fix **/*.ts && standardx --fix test/deno/yargs-test.ts",
     "pretest": "rimraf build && tsc -p tsconfig.test.json && npm run build:cjs",
-    "test": "c8 --reporter=text --reporter=html mocha test/*.js",
+    "test": "c8 --reporter=text --reporter=html mocha test/*.cjs ./build/test/*.js",
     "posttest": "npm run check",
     "coverage": "c8 report --check-coverage",
     "precompile": "rimraf build",
@@ -54,9 +54,12 @@
     "eslint-plugin-node": "^11.0.0",
     "gts": "^2.0.0-alpha.4",
     "mocha": "^8.0.0",
+    "node-static": "^0.7.11",
+    "puppeteer": "^5.2.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.22.1",
     "standardx": "^5.0.0",
+    "start-server-and-test": "^1.11.2",
     "typescript": "^3.7.0"
   },
   "files": [

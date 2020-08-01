@@ -1,7 +1,7 @@
 import { format } from 'util'
 import { normalize, resolve } from 'path'
 import { ArgsInput, Arguments, Parser, Options, DetailedArguments } from './lib/yargs-parser-types.js'
-import { YargsParser } from './lib/yargs.js'
+import { YargsParser } from './lib/yargs-parser.js'
 
 // See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our
 // version support policy. The YARGS_MIN_NODE_VERSION is used for testing only.
