@@ -14,6 +14,7 @@
     "fix": "standardx --fix && standardx --fix ./*.ts && standardx --fix **/*.ts && standardx --fix test/deno/yargs-test.ts",
     "pretest": "rimraf build && tsc -p tsconfig.test.json && npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.cjs ./build/test/*.js",
+    "test:browser": "start-server-and-test 'static' http://localhost:8080/package.json 'node ./test/browser/yargs-test.cjs'",
     "posttest": "npm run check",
     "coverage": "c8 report --check-coverage",
     "precompile": "rimraf build",
