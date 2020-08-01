@@ -10,8 +10,8 @@
   "type": "module",
   "types": "./build/index.cjs.d.ts",
   "scripts": {
-    "check": "standardx && standardx ./*.ts && standardx **/*.ts && standardx test/deno/yargs-test.ts",
-    "fix": "standardx --fix && standardx --fix ./*.ts && standardx --fix **/*.ts && standardx --fix test/deno/yargs-test.ts",
+    "check": "standardx '**/*.ts' && standardx '**/*.js' && standardx '**/*.cjs'",
+    "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
     "pretest": "rimraf build && tsc -p tsconfig.test.json && npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.cjs",
     "test:browser": "start-server-and-test 'static' http://localhost:8080/package.json 'node ./test/browser/yargs-test.cjs'",
@@ -74,8 +74,7 @@
   },
   "standardx": {
     "ignore": [
-      "build",
-      "example.mjs"
+      "build"
     ]
   }
 }

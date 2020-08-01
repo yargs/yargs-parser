@@ -1,5 +1,5 @@
 /* global describe, it */
-import { strictEqual } from 'assert';
+import { strictEqual } from 'assert'
 import { tokenizeArgString } from '../../lib/tokenize-arg-string.js'
 
 describe('TokenizeArgString', function () {
@@ -127,5 +127,5 @@ describe('TokenizeArgString', function () {
     const args = tokenizeArgString(['--foo', '-bar'])
     expect(args[0]).to.equal('--foo')
     expect(args[1]).to.equal('-bar')
-  })*/
+  }) */
 })
