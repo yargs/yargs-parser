@@ -9,7 +9,7 @@ async function parse (argv, opts) {
   }
   const page = await browser.newPage()
   opts = encodeURIComponent(JSON.stringify(opts))
-  await page.goto(`http://127.0.0.1:8080/test/browser/yargs-test.html?argv=${encodeURIComponent(argv)}&opts=${opts}`)
+  await page.goto(`http://127.0.0.1:8080/test/browser/yargs-test?argv=${encodeURIComponent(argv)}&opts=${opts}`)
   const element = await page.$('#output')
   return JSON.parse(await page.evaluate(element => element.textContent, element))
 }
