@@ -79,7 +79,6 @@ console.log(argv)
 ```html
 <!doctype html>
 <body>
-  <div id="output"></div>
   <script type="module">
     import parser from "https://unpkg.com/yargs-parser@19.0.0-beta.2/browser.js";
 
