@@ -18,7 +18,7 @@ npm i yargs-parser --save
 ```
 
 ```js
-var argv = require('yargs-parser')(process.argv.slice(2))
+const argv = require('yargs-parser')(process.argv.slice(2))
 console.log(argv)
 ```
 
@@ -30,7 +30,7 @@ node example.js --foo=33 --bar hello
 _or parse a string!_
 
 ```js
-var argv = require('yargs-parser')('--foo=99 --bar=33')
+const argv = require('yargs-parser')('--foo=99 --bar=33')
 console.log(argv)
 ```
 
@@ -41,9 +41,53 @@ console.log(argv)
 Convert an array of mixed types before passing to `yargs-parser`:
 
 ```js
-var parse = require('yargs-parser')
+const parse = require('yargs-parser')
 parse(['-f', 11, '--zoom', 55].join(' '))   // <-- array to string
 parse(['-f', 11, '--zoom', 55].map(String)) // <-- array of strings
+```
+
+## Deno Example
+
+As of `v19` `yargs-parser` supports [Deno](https://github.com/denoland/deno):
+
+```typescript
+import parser from "https://github.com/yargs/yargs-parser/raw/deno/deno.ts";
+
+const argv = parser('--foo=99 --bar=9987930', {
+  string: ['bar']
+})
+console.log(argv)
+```
+
+## ESM Example
+
+As of `v19` `yargs-parser` supports ESM (_both in Node.js and in the browser_):
+
+**Node.js:**
+
+```js
+import parser from 'yargs-parser'
+
+const argv = parser('--foo=99 --bar=9987930', {
+  string: ['bar']
+})
+console.log(argv)
+```
+
+**Browsers:**
+
+```html
+<!doctype html>
+<body>
+  <script type="module">
+    import parser from "https://unpkg.com/yargs-parser@19.0.0-beta.2/browser.js";
+
+    const argv = parser('--foo=99 --bar=9987930', {
+      string: ['bar']
+    })
+    console.log(argv)
+  </script>
+</body>
 ```
 
 ## API

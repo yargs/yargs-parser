@@ -17,6 +17,8 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: node --version
       - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       - run: npm test
   windows:
     runs-on: windows-latest
@@ -26,14 +28,53 @@ jobs:
         with:
           node-version: 12
       - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       - run: npm test
   coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: 13
+          node-version: 14
       - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       - run: npm test
       - run: npm run coverage
+  deno:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      - run: npm run compile
+      - uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.x
+      - run: |
+          deno --version
+          deno test --allow-read test/deno/yargs-test.ts
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm install
+      - run: npm run test:browser
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm install
+      - run: npm run test:typescript

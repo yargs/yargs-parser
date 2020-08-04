@@ -1,4 +1,4 @@
-import type { Dictionary, KeyOf, ValueOf } from './common-types'
+import type { Dictionary, KeyOf, ValueOf } from './common-types.js'
 
 export type ArgsInput = string | any[];
 
@@ -111,6 +111,15 @@ export interface Options {
   __: (format: any, ...param: any[]) => string;
   /** alias lookup table defaults */
   key: Dictionary<any>;
+}
+
+export interface YargsParserMixin {
+  cwd: Function;
+  format: Function;
+  normalize: Function;
+  require: Function;
+  resolve: Function;
+  env: Function;
 }
 
 export type OptionsDefault = ValueOf<Pick<Required<Options>, 'default'>>;
