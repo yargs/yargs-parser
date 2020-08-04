@@ -7,8 +7,28 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: bcoe/release-please-action@v1.2.1
+      - uses: bcoe/release-please-action@v1.6.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           package-name: yargs-parser
+  release-deno:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      - run: npm run compile
+      - name: push Deno release
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git remote add gh-token "https://${{ secrets.GITHUB_TOKEN}}@github.com/yargs/yargs-parser.git"
+          git checkout -b deno
+          git add -f build
+          git commit -a -m 'build: deploy latest Deno build'
+          git push origin +deno

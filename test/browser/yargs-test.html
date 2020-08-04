@@ -1,0 +1,21 @@
+<!doctype html>
+<body>
+  <div id="output"></div>
+  <script type="module">
+    // Import the ESM version of the yargs module:
+    import parser from 'http://127.0.0.1:8080/browser.js';
+
+    // Grab argv from the URL's GET parameters:
+    const match = window.location.href.match(/.*argv=(?<argv>[^&]*)&opts=(?<opts>.*)$/);
+    const argv = decodeURIComponent(match.groups.argv);
+    let opts = {}
+    try {
+      opts = JSON.parse(decodeURIComponent(match.groups.opts))
+    } catch (_err) {}
+    
+    // Run yargs parser in browser context:
+    const parsed = parser(argv, opts);
+    const output = document.getElementById("output");
+    output.innerHTML = JSON.stringify(parsed);
+  </script>
+</body>

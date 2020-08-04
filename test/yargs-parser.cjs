@@ -4,7 +4,7 @@ require('chai').should()
 
 const { expect } = require('chai')
 const fs = require('fs')
-const parser = require('../')
+const parser = require('../build/index.cjs')
 const path = require('path')
 
 describe('yargs-parser', function () {
@@ -598,7 +598,7 @@ describe('yargs-parser', function () {
     })
 
     it('should load options and values from a JS file when config has .js extention', function () {
-      var jsPath = path.resolve(__dirname, './fixtures/settings.js')
+      var jsPath = path.resolve(__dirname, './fixtures/settings.cjs')
       var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: ['settings']
       })
@@ -2116,7 +2116,6 @@ describe('yargs-parser', function () {
       var result = parser([], {
         envPrefix: ''
       })
-
       result.oneFish.should.equal('twofish')
       result.redFish.should.equal('bluefish')
     })

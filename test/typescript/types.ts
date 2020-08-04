@@ -1,6 +1,6 @@
 /* global describe, it */
 
-import * as yargsParser from '../'
+import yargsParser from '../../lib/index.js'
 import * as assert from 'assert'
 
 describe('types', function () {
