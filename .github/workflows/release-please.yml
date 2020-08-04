@@ -30,4 +30,5 @@ jobs:
           git remote add gh-token "https://${{ secrets.GITHUB_TOKEN}}@github.com/yargs/yargs-parser.git"
           git checkout -b deno
           git add -f build
+          git commit -a -m 'build: deploy latest Deno build'
           git push origin +deno
