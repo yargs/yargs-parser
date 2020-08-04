@@ -4,10 +4,14 @@
 // TODO: figure out reasonable web equivalents for "resolve", "normalize", etc.
 import { YargsParser } from './build/lib/yargs-parser.js'
 const parser = new YargsParser({
+  cwd: () => { return '' },
   format: (str, arg) => { return str.replace('%s', arg) },
   normalize: (str) => { return str },
   resolve: (str) => { return str },
-  env: {}
+  require: () => {
+    throw Error('loading config from files not currently supported in browser')
+  },
+  env: () => {}
 })
 
 const yargsParser = function Parser (args, opts) {

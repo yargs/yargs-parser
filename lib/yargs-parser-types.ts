@@ -114,10 +114,12 @@ export interface Options {
 }
 
 export interface YargsParserMixin {
+  cwd: Function;
   format: Function;
   normalize: Function;
+  require: Function;
   resolve: Function;
-  env: { [key: string]: string };
+  env: Function;
 }
 
 export type OptionsDefault = ValueOf<Pick<Required<Options>, 'default'>>;

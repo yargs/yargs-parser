@@ -640,7 +640,7 @@ export class YargsParser {
         if (configPath) {
           try {
             let config = null
-            const resolvedConfigPath = mixin.resolve(process.cwd(), configPath)
+            const resolvedConfigPath = mixin.resolve(mixin.cwd(), configPath)
             const resolveConfig = flags.configs[configKey]
 
             if (typeof resolveConfig === 'function') {
@@ -654,7 +654,7 @@ export class YargsParser {
                 return
               }
             } else {
-              config = require(resolvedConfigPath)
+              config = mixin.require(resolvedConfigPath)
             }
 
             setConfigObject(config)
@@ -701,7 +701,8 @@ export class YargsParser {
       if (typeof envPrefix === 'undefined') return
 
       const prefix = typeof envPrefix === 'string' ? envPrefix : ''
-      Object.keys(mixin.env).forEach(function (envVar) {
+      const env = mixin.env()
+      Object.keys(env).forEach(function (envVar) {
         if (prefix === '' || envVar.lastIndexOf(prefix, 0) === 0) {
           // get array of nested keys and convert them to camel case
           const keys = envVar.split('__').map(function (key, i) {
@@ -712,7 +713,7 @@ export class YargsParser {
           })
 
           if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && !hasKey(argv, keys)) {
-            setArg(keys.join('.'), mixin.env[envVar])
+            setArg(keys.join('.'), env[envVar])
           }
         }
       })

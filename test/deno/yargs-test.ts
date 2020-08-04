@@ -28,3 +28,19 @@ Deno.test('aliases', () => {
   assertEquals(parsed.foo, 99)
   assertEquals(parsed.f, 99)
 })
+
+const jsonPath = './test/fixtures/config.json'
+Deno.test('should load options and values from default config if specified', () => {
+  var argv = parser(['--foo', 'bar'], {
+    alias: {
+      z: 'zoom'
+    },
+    default: {
+      settings: jsonPath
+    },
+    config: 'settings'
+  })
+  assertEquals(argv.herp, 'derp')
+  assertEquals(argv.zoom, 55)
+  assertEquals(argv.zoom, 55)
+})

@@ -1,6 +1,7 @@
 // Main entrypoint for libraries using yargs-parser in Node.js
 // CJS and ESM environments:
 import { format } from 'util'
+import { readFileSync } from 'fs'
 import { normalize, resolve } from 'path'
 import { ArgsInput, Arguments, Parser, Options, DetailedArguments } from './yargs-parser-types.js'
 import { YargsParser } from './yargs-parser.js'
@@ -18,7 +19,26 @@ if (process && process.version) {
 
 // Creates a yargs-parser instance using Node.js standard libraries:
 const env = process ? process.env as { [key: string]: string } : {}
-const parser = new YargsParser({ format, normalize, resolve, env })
+const parser = new YargsParser({
+  cwd: process.cwd,
+  env: () => {
+    return env
+  },
+  format,
+  normalize,
+  resolve,
+  // TODO: figure  out a  way to combine ESM and CJS coverage, such  that
+  // we can exercise all the lines below:
+  require: (path: string) => {
+    if (typeof require !== 'undefined') {
+      return require(path)
+    } else if (path.match(/\.json$/)) {
+      return readFileSync(path, 'utf8')
+    } else {
+      throw Error('only .json config files are supported in ESM')
+    }
+  }
+})
 const yargsParser: Parser = function Parser (args: ArgsInput, opts?: Partial<Options>): Arguments {
   const result = parser.parse(args.slice(), opts)
   return result.argv

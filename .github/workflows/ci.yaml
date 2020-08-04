@@ -59,7 +59,7 @@ jobs:
           deno-version: v1.x
       - run: |
           deno --version
-          deno test test/deno/yargs-test.ts
+          deno test --allow-read test/deno/yargs-test.ts
   browser:
     runs-on: ubuntu-latest
     steps:
