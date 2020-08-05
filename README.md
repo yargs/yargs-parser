@@ -51,7 +51,7 @@ parse(['-f', 11, '--zoom', 55].map(String)) // <-- array of strings
 As of `v19` `yargs-parser` supports [Deno](https://github.com/denoland/deno):
 
 ```typescript
-import parser from "https://github.com/yargs/yargs-parser/raw/deno/deno.ts";
+import parser from "https://deno.land/x/yargs_parser/deno.ts";
 
 const argv = parser('--foo=99 --bar=9987930', {
   string: ['bar']
@@ -80,7 +80,7 @@ console.log(argv)
 <!doctype html>
 <body>
   <script type="module">
-    import parser from "https://unpkg.com/yargs-parser@19.0.0-beta.2/browser.js";
+    import parser from "https://unpkg.com/yargs-parser@19.0.0/browser.js";
 
     const argv = parser('--foo=99 --bar=9987930', {
       string: ['bar']
@@ -92,7 +92,7 @@ console.log(argv)
 
 ## API
 
-### require('yargs-parser')(args, opts={})
+### parser(args, opts={})
 
 Parses command line arguments returning a simple mapping of keys and values.
 
