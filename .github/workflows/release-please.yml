@@ -8,13 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: bcoe/release-please-action@v1.6.3
+        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           package-name: yargs-parser
-  release-deno:
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
@@ -30,5 +28,7 @@ jobs:
           git remote add gh-token "https://${{ secrets.GITHUB_TOKEN}}@github.com/yargs/yargs-parser.git"
           git checkout -b deno
           git add -f build
-          git commit -a -m 'build: deploy latest Deno build'
+          git commit -a -m 'chore: ${{ steps.release.outputs.tag_name }} release'
           git push origin +deno
+          git tag -a ${{ steps.release.outputs.tag_name }}-deno -m 'chore: ${{ steps.release.outputs.tag_name }} release'
+      if: ${{ steps.release.outputs.release_created }}
