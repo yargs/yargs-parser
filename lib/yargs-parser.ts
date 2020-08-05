@@ -325,7 +325,8 @@ export class YargsParser {
 
           // current letter is an alphabetic character and next value is a number
           if (/[A-Za-z]/.test(letters[j]) &&
-            /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) {
+            /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) &&
+            checkAllAliases(next, flags.bools) === false) {
             setArg(letters[j], next)
             broken = true
             break
