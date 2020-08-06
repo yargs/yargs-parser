@@ -3,6 +3,7 @@
 //
 // TODO: find reasonable replacement for require logic.
 import * as path from 'https://deno.land/std/path/mod.ts'
+import { camelCase, decamelize } from './build/lib/string-utils.js'
 import { YargsParser } from './build/lib/yargs-parser.js'
 import { Arguments, ArgsInput, Parser, Options, DetailedArguments } from './build/lib/yargs-parser-types.d.ts'
 
@@ -27,9 +28,10 @@ const yargsParser: Parser = function Parser (args: ArgsInput, opts?: Partial<Opt
   const result = parser.parse(args.slice(), opts)
   return result.argv
 }
-
 yargsParser.detailed = function (args: ArgsInput, opts?: Partial<Options>): DetailedArguments {
   return parser.parse(args.slice(), opts)
 }
+yargsParser.camelCase = camelCase
+yargsParser.decamelize = decamelize
 
 export default yargsParser

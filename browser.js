@@ -2,6 +2,7 @@
 // specific libraries, such as "path".
 //
 // TODO: figure out reasonable web equivalents for "resolve", "normalize", etc.
+import { camelCase, decamelize } from './build/lib/string-utils.js'
 import { YargsParser } from './build/lib/yargs-parser.js'
 const parser = new YargsParser({
   cwd: () => { return '' },
@@ -18,9 +19,10 @@ const yargsParser = function Parser (args, opts) {
   const result = parser.parse(args.slice(), opts)
   return result.argv
 }
-
 yargsParser.detailed = function (args, opts) {
   return parser.parse(args.slice(), opts)
 }
+yargsParser.camelCase = camelCase
+yargsParser.decamelize = decamelize
 
 export default yargsParser

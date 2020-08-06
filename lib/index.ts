@@ -4,6 +4,7 @@ import { format } from 'util'
 import { readFileSync } from 'fs'
 import { normalize, resolve } from 'path'
 import { ArgsInput, Arguments, Parser, Options, DetailedArguments } from './yargs-parser-types.js'
+import { camelCase, decamelize } from './string-utils.js'
 import { YargsParser } from './yargs-parser.js'
 
 // See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our
@@ -46,4 +47,6 @@ const yargsParser: Parser = function Parser (args: ArgsInput, opts?: Partial<Opt
 yargsParser.detailed = function (args: ArgsInput, opts?: Partial<Options>): DetailedArguments {
   return parser.parse(args.slice(), opts)
 }
+yargsParser.camelCase = camelCase
+yargsParser.decamelize = decamelize
 export default yargsParser
