@@ -127,6 +127,8 @@ export type OptionsDefault = ValueOf<Pick<Required<Options>, 'default'>>;
 export interface Parser {
   (args: ArgsInput, opts?: Partial<Options>): Arguments;
   detailed(args: ArgsInput, opts?: Partial<Options>): DetailedArguments;
+  camelCase(str: string): string;
+  decamelize(str: string, joinString?: string): string;
 }
 
 export type StringFlag = Dictionary<string[]>;
