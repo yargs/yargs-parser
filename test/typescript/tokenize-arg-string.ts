@@ -1,6 +1,7 @@
 /* global describe, it */
 import { strictEqual } from 'assert'
 import { tokenizeArgString } from '../../lib/tokenize-arg-string.js'
+import { expect } from 'chai'
 
 describe('TokenizeArgString', function () {
   it('handles unquoted string', function () {
@@ -20,7 +21,7 @@ describe('TokenizeArgString', function () {
     strictEqual(args[0], '--foo')
     strictEqual(args[1], "'hello'")
   })
-/*
+
   it('handles single quoted string with spaces', function () {
     const args = tokenizeArgString("--foo 'hello world' --bar='foo bar'")
     args[0].should.equal('--foo')
@@ -127,5 +128,5 @@ describe('TokenizeArgString', function () {
     const args = tokenizeArgString(['--foo', '-bar'])
     expect(args[0]).to.equal('--foo')
     expect(args[1]).to.equal('-bar')
-  }) */
+  })
 })
