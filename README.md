@@ -1,6 +1,6 @@
 # yargs-parser
 
-[![Build Status](https://travis-ci.org/yargs/yargs-parser.svg)](https://travis-ci.org/yargs/yargs-parser)
+![ci](https://github.com/yargs/yargs-parser/workflows/ci/badge.svg)
 [![NPM version](https://img.shields.io/npm/v/yargs-parser.svg)](https://www.npmjs.com/package/yargs-parser)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 ![nycrc config on GitHub](https://img.shields.io/nycrc/yargs/yargs-parser)
