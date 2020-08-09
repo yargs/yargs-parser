@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/yargs/yargs-parser.svg)](https://travis-ci.org/yargs/yargs-parser)
 [![NPM version](https://img.shields.io/npm/v/yargs-parser.svg)](https://www.npmjs.com/package/yargs-parser)
-[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
-
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+![nycrc config on GitHub](https://img.shields.io/nycrc/yargs/yargs-parser)
 
 The mighty option parser used by [yargs](https://github.com/yargs/yargs).
 
