@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.0.1](https://www.github.com/yargs/yargs-parser/compare/v19.0.0...v19.0.1) (2020-08-09)
+
+
+### Bug Fixes
+
+* **build:** push tag created for deno ([2186a14](https://www.github.com/yargs/yargs-parser/commit/2186a14989749887d56189867602e39e6679f8b0))
+
 ## [19.0.0](https://www.github.com/yargs/yargs-parser/compare/v18.1.3...v19.0.0) (2020-08-09)
 
 
