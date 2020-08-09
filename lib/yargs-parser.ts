@@ -660,7 +660,10 @@ export class YargsParser {
 
             setConfigObject(config)
           } catch (ex) {
-            if (argv[configKey]) error = Error(__('Invalid JSON config file: %s', configPath))
+            // Deno will receive a PermissionDenied error if an attempt is
+            // made to load config without the --allow-read flag:
+            if (ex.name === 'PermissionDenied') error = ex
+            else if (argv[configKey]) error = Error(__('Invalid JSON config file: %s', configPath))
           }
         }
       })
