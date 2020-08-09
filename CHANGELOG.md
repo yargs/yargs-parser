@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [19.0.0](https://www.github.com/yargs/yargs-parser/compare/v18.1.3...v19.0.0) (2020-08-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* adds support for ESM and Deno (#295)
+* **ts:** projects using `@types/yargs-parser` may see variations in type definitions.
+* drops Node 6. begin following Node.js LTS schedule (#278)
+
+### Features
+
+* adds support for ESM and Deno ([#295](https://www.github.com/yargs/yargs-parser/issues/295)) ([195bc4a](https://www.github.com/yargs/yargs-parser/commit/195bc4a7f20c2a8f8e33fbb6ba96ef6e9a0120a1))
+* expose camelCase and decamelize helpers ([#296](https://www.github.com/yargs/yargs-parser/issues/296)) ([39154ce](https://www.github.com/yargs/yargs-parser/commit/39154ceb5bdcf76b5f59a9219b34cedb79b67f26))
+* **deps:** update to latest camelcase/decamelize ([#281](https://www.github.com/yargs/yargs-parser/issues/281)) ([8931ab0](https://www.github.com/yargs/yargs-parser/commit/8931ab08f686cc55286f33a95a83537da2be5516))
+
+
+### Bug Fixes
+
+* boolean numeric short option ([#294](https://www.github.com/yargs/yargs-parser/issues/294)) ([f600082](https://www.github.com/yargs/yargs-parser/commit/f600082c959e092076caf420bbbc9d7a231e2418))
+* raise permission error for Deno if config load fails ([#298](https://www.github.com/yargs/yargs-parser/issues/298)) ([1174e2b](https://www.github.com/yargs/yargs-parser/commit/1174e2b3f0c845a1cd64e14ffc3703e730567a84))
+* **deps:** update dependency decamelize to v3 ([#274](https://www.github.com/yargs/yargs-parser/issues/274)) ([4d98698](https://www.github.com/yargs/yargs-parser/commit/4d98698bc6767e84ec54a0842908191739be73b7))
+* **types:** switch back to using Partial types ([#293](https://www.github.com/yargs/yargs-parser/issues/293)) ([bdc80ba](https://www.github.com/yargs/yargs-parser/commit/bdc80ba59fa13bc3025ce0a85e8bad9f9da24ea7))
+
+
+### Build System
+
+* drops Node 6. begin following Node.js LTS schedule ([#278](https://www.github.com/yargs/yargs-parser/issues/278)) ([9014ed7](https://www.github.com/yargs/yargs-parser/commit/9014ed722a32768b96b829e65a31705db5c1458a))
+
+
+### Code Refactoring
+
+* **ts:** move index.js to TypeScript ([#292](https://www.github.com/yargs/yargs-parser/issues/292)) ([f78d2b9](https://www.github.com/yargs/yargs-parser/commit/f78d2b97567ac4828624406e420b4047c710b789))
+
 ### [18.1.3](https://www.github.com/yargs/yargs-parser/compare/v18.1.2...v18.1.3) (2020-04-16)
 
 
