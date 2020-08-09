@@ -31,4 +31,5 @@ jobs:
           git commit -a -m 'chore: ${{ steps.release.outputs.tag_name }} release'
           git push origin +deno
           git tag -a ${{ steps.release.outputs.tag_name }}-deno -m 'chore: ${{ steps.release.outputs.tag_name }} release'
+          git push origin ${{ steps.release.outputs.tag_name }}-deno
         if: ${{ steps.release.outputs.release_created }}
