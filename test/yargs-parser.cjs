@@ -3636,6 +3636,32 @@ describe('yargs-parser', function () {
         'test-value': 1
       })
     })
+
+    // See: https://github.com/yargs/yargs-parser/issues/223
+    it('strip-dashed removes subkeys made by dot-notation', function () {
+      var argv = parser(['--dashed-will-be-stripped', '--here.it-will-too',
+        '--foo.not-dashed.also-not-dashed', '--foo.definitley-not-dashed'], {
+        configuration: {
+          'strip-dashed': true
+        }
+      })
+      argv.should.not.have.property('dashed-will-be-stripped')
+      argv.here.should.not.have.property('it-will-too')
+      argv.here.should.have.property('itWillToo')
+      argv.foo.should.not.have.property('not-dashed')
+      argv.foo.notDashed.should.not.have.property('also-not-dashed')
+      argv.foo.notDashed.should.have.property('alsoNotDashed')
+    })
+
+    it('strip-dashed removes dotted keys with dot-notation disabled', function () {
+      var argv = parser(['--foo.not-dashed'], {
+        configuration: {
+          'strip-dashed': true,
+          'dot-notation': false
+        }
+      })
+      argv.should.not.have.property('foo.not-dashed')
+    })
   })
 
   describe('prototype collisions', () => {

@@ -414,9 +414,26 @@ export class YargsParser {
     })
 
     if (configuration['camel-case-expansion'] && configuration['strip-dashed']) {
-      Object.keys(argv).filter(key => key !== '--' && key.includes('-')).forEach(key => {
-        delete argv[key]
-      })
+      if (configuration['dot-notation']) {
+        Object.keys(flags.aliases)
+          .filter(key => key !== '--' && key.includes('-'))
+          .map(key => key.split('.'))
+          .forEach(keyPath => {
+            var obj = argv
+            for (const subkey of keyPath) {
+              if (subkey.includes('-')) {
+                delete obj[subkey]
+                break
+              } else {
+                obj = obj[subkey]
+              }
+            }
+          })
+      } else {
+        Object.keys(argv).filter(key => key !== '--' && key.includes('-')).forEach(key => {
+          delete argv[key]
+        })
+      }
     }
 
     if (configuration['strip-aliased']) {
