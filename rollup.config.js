@@ -1,3 +1,4 @@
+import cleanup from 'rollup-plugin-cleanup'
 import ts from '@wessberg/rollup-plugin-ts'
 import transformDefaultExport from 'ts-transform-default-export'
 
@@ -17,6 +18,10 @@ export default {
       transformers: ({ program }) => ({
         afterDeclarations: transformDefaultExport(program)
       })
+    }),
+    cleanup({
+      comments: 'none',
+      extensions: ['*']
     })
   ]
 }
