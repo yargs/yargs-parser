@@ -17,10 +17,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+          registry-url: 'https://external-dot-oss-automation.appspot.com/'
       - run: npm install
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       - run: npm run compile
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        if: ${{ steps.release.outputs.release_created }}
       - name: push Deno release
         run: |
           git config user.name github-actions[bot]
