@@ -17,15 +17,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-          registry-url: 'https://external-dot-oss-automation.appspot.com/'
       - run: npm install
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       - run: npm run compile
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: ${{ steps.release.outputs.release_created }}
       - name: push Deno release
         run: |
           git config user.name github-actions[bot]
@@ -37,4 +32,15 @@ jobs:
           git push origin +deno
           git tag -a ${{ steps.release.outputs.tag_name }}-deno -m 'chore: ${{ steps.release.outputs.tag_name }} release'
           git push origin ${{ steps.release.outputs.tag_name }}-deno
+        if: ${{ steps.release.outputs.release_created }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: 'https://external-dot-oss-automation.appspot.com/'
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm install
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         if: ${{ steps.release.outputs.release_created }}
