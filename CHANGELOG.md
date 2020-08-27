@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.0.2](https://www.github.com/yargs/yargs-parser/compare/v19.0.1...v19.0.2) (2020-08-27)
+
+
+### Bug Fixes
+
+* **types:** envPrefix should be optional ([#305](https://www.github.com/yargs/yargs-parser/issues/305)) ([ae3f180](https://www.github.com/yargs/yargs-parser/commit/ae3f180e14df2de2fd962145f4518f9aa0e76523))
+
 ### [19.0.1](https://www.github.com/yargs/yargs-parser/compare/v19.0.0...v19.0.1) (2020-08-09)
 
 
