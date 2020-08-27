@@ -1,4 +1,5 @@
 import ts from '@wessberg/rollup-plugin-ts'
+import transformDefaultExport from "ts-transform-default-export";
 
 const output = {
   format: 'cjs',
@@ -12,6 +13,10 @@ export default {
   input: './lib/index.ts',
   output,
   plugins: [
-    ts({ /* options */ })
+    ts({
+      transformers: ({ program }) => ({
+        afterDeclarations: transformDefaultExport(program),
+      }),
+    })
   ]
 }
