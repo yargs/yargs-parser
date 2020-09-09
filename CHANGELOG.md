@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [19.0.5](https://www.github.com/yargs/yargs-parser/compare/v19.0.4...v19.0.5) (2020-09-09)
+
+
+### Bug Fixes
+
+* only strip camel case if hyphenated ([#316](https://www.github.com/yargs/yargs-parser/issues/316)) ([95a9e78](https://www.github.com/yargs/yargs-parser/commit/95a9e785127b9bbf2d1db1f1f808ca1fb100e82a)), closes [#315](https://www.github.com/yargs/yargs-parser/issues/315)
+
 ### [19.0.4](https://www.github.com/yargs/yargs-parser/compare/v19.0.3...v19.0.4) (2020-08-27)
 
 
