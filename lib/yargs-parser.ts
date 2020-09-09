@@ -421,7 +421,7 @@ export class YargsParser {
 
     if (configuration['strip-aliased']) {
       ;([] as string[]).concat(...Object.keys(aliases).map(k => aliases[k])).forEach(alias => {
-        if (configuration['camel-case-expansion']) {
+        if (configuration['camel-case-expansion'] && alias.includes('-')) {
           delete argv[alias.split('.').map(prop => camelCase(prop)).join('.')]
         }
 

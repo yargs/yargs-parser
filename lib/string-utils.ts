@@ -30,7 +30,7 @@ export function decamelize (str: string, joinString?: string): string {
   for (let i = 0; i < str.length; i++) {
     const chrLower = lowercase.charAt(i)
     const chrString = str.charAt(i)
-    if (chrLower !== chrString) {
+    if (chrLower !== chrString && i > 0) {
       notCamelcase += `${joinString}${lowercase.charAt(i)}`
     } else {
       notCamelcase += chrString
