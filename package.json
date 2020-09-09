@@ -9,7 +9,6 @@
   },
   "type": "module",
   "module": "./build/lib/index.js",
-  "types": "./build/index.cjs.d.ts",
   "scripts": {
     "check": "standardx '**/*.ts' && standardx '**/*.js' && standardx '**/*.cjs'",
     "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
@@ -70,7 +69,8 @@
   },
   "files": [
     "browser.js",
-    "build"
+    "build",
+    "!*.d.ts"
   ],
   "engines": {
     "node": ">=10"
