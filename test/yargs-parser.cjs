@@ -3636,6 +3636,23 @@ describe('yargs-parser', function () {
         'test-value': 1
       })
     })
+
+    it('only removes camel case expansion if keys have hyphen', function () {
+      const argv = parser(['--foo', '1', '-a', '2'], {
+        configuration: {
+          'strip-aliased': true
+        },
+        alias: {
+          aliased1: ['Foo'],
+          aliased2: ['A']
+        }
+      })
+      argv.should.deep.equal({
+        _: [],
+        foo: 1,
+        a: 2
+      })
+    })
   })
 
   describe('prototype collisions', () => {
