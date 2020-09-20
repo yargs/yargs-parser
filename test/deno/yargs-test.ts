@@ -54,3 +54,12 @@ Deno.test('convert hyphenated string to camelcase', () => {
 Deno.test('convert camelcase string to hyphenated', () => {
   assertEquals(parser.decamelize('helloWorld'), 'hello-world')
 })
+
+Deno.test('it detects strings that could be parsed as numbers', () => {
+  assertEquals(parser.looksLikeNumber('3293'), true)
+  assertEquals(parser.looksLikeNumber('0x10'), true)
+  assertEquals(parser.looksLikeNumber('0x10'), true)
+
+  assertEquals(parser.looksLikeNumber('0100'), false)
+  assertEquals(parser.looksLikeNumber('apple'), false)
+})
