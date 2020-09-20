@@ -131,6 +131,7 @@ export interface Parser {
   detailed(args: ArgsInput, opts?: Partial<Options>): DetailedArguments;
   camelCase(str: string): string;
   decamelize(str: string, joinString?: string): string;
+  looksLikeNumber(x: null | undefined | number | string): boolean;
 }
 
 export type StringFlag = Dictionary<string[]>;

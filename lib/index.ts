@@ -4,7 +4,7 @@ import { format } from 'util'
 import { readFileSync } from 'fs'
 import { normalize, resolve } from 'path'
 import { ArgsInput, Arguments, Parser, Options, DetailedArguments } from './yargs-parser-types.js'
-import { camelCase, decamelize } from './string-utils.js'
+import { camelCase, decamelize, looksLikeNumber } from './string-utils.js'
 import { YargsParser } from './yargs-parser.js'
 
 // See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our
@@ -49,4 +49,5 @@ yargsParser.detailed = function (args: ArgsInput, opts?: Partial<Options>): Deta
 }
 yargsParser.camelCase = camelCase
 yargsParser.decamelize = decamelize
+yargsParser.looksLikeNumber = looksLikeNumber
 export default yargsParser
