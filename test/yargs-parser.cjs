@@ -3654,7 +3654,7 @@ describe('yargs-parser', function () {
     })
 
     it('strip-dashed removes dotted keys with dot-notation disabled', function () {
-      var argv = parser(['--foo.not-dashed'], {
+      const argv = parser(['--foo.not-dashed'], {
         configuration: {
           'strip-dashed': true,
           'dot-notation': false
