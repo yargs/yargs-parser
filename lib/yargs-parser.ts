@@ -22,7 +22,7 @@ import type {
   YargsParserMixin
 } from './yargs-parser-types.js'
 import type { Dictionary, ValueOf } from './common-types.js'
-import { camelCase, decamelize } from './string-utils.js'
+import { camelCase, decamelize, looksLikeNumber } from './string-utils.js'
 
 let mixin: YargsParserMixin
 export class YargsParser {
@@ -67,6 +67,7 @@ export class YargsParser {
       'nargs-eats-options': false,
       'negation-prefix': 'no-',
       'parse-numbers': true,
+      'parse-positional-numbers': true,
       'populate--': false,
       'set-placeholder-key': false,
       'short-option-groups': true,
@@ -438,7 +439,7 @@ export class YargsParser {
 
     if (configuration['strip-aliased']) {
       ;([] as string[]).concat(...Object.keys(aliases).map(k => aliases[k])).forEach(alias => {
-        if (configuration['camel-case-expansion']) {
+        if (configuration['camel-case-expansion'] && alias.includes('-')) {
           delete argv[alias.split('.').map(prop => camelCase(prop)).join('.')]
         }
 
@@ -635,11 +636,14 @@ export class YargsParser {
     }
 
     function maybeCoerceNumber (key: string, value: string | number | null | undefined) {
+      if (!configuration['parse-positional-numbers'] && key === '_') return value
       if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.bools) && !Array.isArray(value)) {
-        const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
+        const shouldCoerceNumber = looksLikeNumber(value) && configuration['parse-numbers'] && (
           Number.isSafeInteger(Math.floor(parseFloat(`${value}`)))
         )
-        if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
+        if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) {
+          value = Number(value)
+        }
       }
       return value
     }
@@ -1017,17 +1021,6 @@ export class YargsParser {
       return type
     }
 
-    function isNumber (x: null | undefined | number | string): boolean {
-      if (x === null || x === undefined) return false
-      // if loaded from config, may already be a number.
-      if (typeof x === 'number') return true
-      // hexadecimal.
-      if (/^0x[0-9a-f]+$/i.test(x)) return true
-      // don't treat 0123 as a number; as it drops the leading '0'.
-      if (x.length > 1 && x[0] === '0') return false
-      return /^[-]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
-    }
-
     function isUndefined (num: any): num is undefined {
       return num === undefined
     }
@@ -1048,12 +1041,12 @@ export class YargsParser {
     }
 
     return {
-      argv: Object.assign(argvReturn, argv),
-      error: error,
       aliases: Object.assign({}, flags.aliases),
-      newAliases: Object.assign({}, newAliases),
+      argv: Object.assign(argvReturn, argv),
+      configuration: configuration,
       defaulted: Object.assign({}, defaulted),
-      configuration: configuration
+      error: error,
+      newAliases: Object.assign({}, newAliases)
     }
   }
 }

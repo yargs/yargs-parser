@@ -49,6 +49,8 @@ export interface Configuration {
   'nargs-eats-options': boolean;
   /** The prefix to use for negated boolean variables. Default is `'no-'` */
   'negation-prefix': string;
+  /** Should positional values that look like numbers be parsed? Default is `true` */
+  'parse-positional-numbers': boolean;
   /** Should keys that look like numbers be treated as such? Default is `true` */
   'parse-numbers': boolean;
   /** Should unparsed flags be stored in -- or _? Default is `false` */
@@ -98,7 +100,7 @@ export interface Options {
   /** Provide default values for keys: `{ default: { x: 33, y: 'hello world!' } }`. */
   default: Dictionary<any>;
   /** Environment variables (`process.env`) with the prefix provided should be parsed. */
-  envPrefix: string;
+  envPrefix?: string;
   /** Specify that a key requires n arguments: `{ narg: {x: 2} }`. */
   narg: Dictionary<number>;
   /** `path.normalize()` will be applied to values set to this key. */
@@ -129,6 +131,7 @@ export interface Parser {
   detailed(args: ArgsInput, opts?: Partial<Options>): DetailedArguments;
   camelCase(str: string): string;
   decamelize(str: string, joinString?: string): string;
+  looksLikeNumber(x: null | undefined | number | string): boolean;
 }
 
 export type StringFlag = Dictionary<string[]>;

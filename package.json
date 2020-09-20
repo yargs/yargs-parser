@@ -1,6 +1,6 @@
 {
   "name": "yargs-parser",
-  "version": "19.0.1",
+  "version": "20.1.0",
   "description": "the mighty option parser used by yargs",
   "main": "build/index.cjs",
   "exports": {
@@ -9,7 +9,6 @@
   },
   "type": "module",
   "module": "./build/lib/index.js",
-  "types": "./build/index.cjs.d.ts",
   "scripts": {
     "check": "standardx '**/*.ts' && standardx '**/*.js' && standardx '**/*.cjs'",
     "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
@@ -24,7 +23,6 @@
     "compile": "tsc",
     "postcompile": "npm run build:cjs",
     "build:cjs": "rollup -c",
-    "postbuild:cjs": "node scripts/replace-legacy-export.cjs",
     "prepare": "npm run compile"
   },
   "repository": {
@@ -62,14 +60,17 @@
     "puppeteer": "^5.2.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.22.1",
+    "rollup-plugin-cleanup": "^3.1.1",
     "serve": "^11.3.2",
     "standardx": "^5.0.0",
     "start-server-and-test": "^1.11.2",
+    "ts-transform-default-export": "^1.0.2",
     "typescript": "^4.0.0"
   },
   "files": [
     "browser.js",
-    "build"
+    "build",
+    "!*.d.ts"
   ],
   "engines": {
     "node": ">=10"

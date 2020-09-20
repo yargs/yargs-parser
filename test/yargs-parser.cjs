@@ -2444,6 +2444,24 @@ describe('yargs-parser', function () {
       })
     })
 
+    describe('parse-positional-numbers', () => {
+      it('does not parse positionals into numbers when false', function () {
+        var parsed = parser(['5.0', '3'], {
+          configuration: {
+            'parse-positional-numbers': false
+          }
+        })
+        expect(parsed._[0]).to.equal('5.0')
+        expect(parsed._[1]).to.equal('3')
+      })
+
+      it('parses positionals into numbers by default', function () {
+        var parsed = parser(['5.0', '3'])
+        expect(parsed._[0]).to.equal(5)
+        expect(parsed._[1]).to.equal(3)
+      })
+    })
+
     describe('parse numbers', function () {
       it('does not coerce defaults into numbers', function () {
         var parsed = parser([], {
@@ -3661,6 +3679,23 @@ describe('yargs-parser', function () {
         }
       })
       argv.should.not.have.property('foo.not-dashed')
+    })
+    
+    it('only removes camel case expansion if keys have hyphen', function () {
+      const argv = parser(['--foo', '1', '-a', '2'], {
+        configuration: {
+          'strip-aliased': true
+        },
+        alias: {
+          aliased1: ['Foo'],
+          aliased2: ['A']
+        }
+      })
+      argv.should.deep.equal({
+        _: [],
+        foo: 1,
+        a: 2
+      })
     })
   })
 

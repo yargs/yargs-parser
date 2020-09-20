@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [20.1.0](https://www.github.com/yargs/yargs-parser/compare/v20.0.0...v20.1.0) (2020-09-20)
+
+
+### Features
+
+* adds parse-positional-numbers configuration ([#321](https://www.github.com/yargs/yargs-parser/issues/321)) ([9cec00a](https://www.github.com/yargs/yargs-parser/commit/9cec00a622251292ffb7dce6f78f5353afaa0d4c))
+
+
+### Bug Fixes
+
+* **build:** update release-please; make labels kick off builds ([#323](https://www.github.com/yargs/yargs-parser/issues/323)) ([09f448b](https://www.github.com/yargs/yargs-parser/commit/09f448b4cd66e25d2872544718df46dab8af062a))
+
+## [20.0.0](https://www.github.com/yargs/yargs-parser/compare/v19.0.4...v20.0.0) (2020-09-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* do not ship type definitions (#318)
+
+### Bug Fixes
+
+* only strip camel case if hyphenated ([#316](https://www.github.com/yargs/yargs-parser/issues/316)) ([95a9e78](https://www.github.com/yargs/yargs-parser/commit/95a9e785127b9bbf2d1db1f1f808ca1fb100e82a)), closes [#315](https://www.github.com/yargs/yargs-parser/issues/315)
+
+
+### Code Refactoring
+
+* do not ship type definitions ([#318](https://www.github.com/yargs/yargs-parser/issues/318)) ([8fbd56f](https://www.github.com/yargs/yargs-parser/commit/8fbd56f1d0b6c44c30fca62708812151ca0ce330))
+
+### [19.0.4](https://www.github.com/yargs/yargs-parser/compare/v19.0.3...v19.0.4) (2020-08-27)
+
+
+### Bug Fixes
+
+* **build:** fixing publication ([#310](https://www.github.com/yargs/yargs-parser/issues/310)) ([5d3c6c2](https://www.github.com/yargs/yargs-parser/commit/5d3c6c29a9126248ba601920d9cf87c78e161ff5))
+
+### [19.0.3](https://www.github.com/yargs/yargs-parser/compare/v19.0.2...v19.0.3) (2020-08-27)
+
+
+### Bug Fixes
+
+* **build:** switch to action for publish ([#308](https://www.github.com/yargs/yargs-parser/issues/308)) ([5c2f305](https://www.github.com/yargs/yargs-parser/commit/5c2f30585342bcd8aaf926407c863099d256d174))
+
+### [19.0.2](https://www.github.com/yargs/yargs-parser/compare/v19.0.1...v19.0.2) (2020-08-27)
+
+
+### Bug Fixes
+
+* **types:** envPrefix should be optional ([#305](https://www.github.com/yargs/yargs-parser/issues/305)) ([ae3f180](https://www.github.com/yargs/yargs-parser/commit/ae3f180e14df2de2fd962145f4518f9aa0e76523))
+
 ### [19.0.1](https://www.github.com/yargs/yargs-parser/compare/v19.0.0...v19.0.1) (2020-08-09)
 
 
