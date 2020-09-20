@@ -243,6 +243,25 @@ node example.js --foo=99.3
 { _: [], foo: "99.3" }
 ```
 
+### parse positional numbers
+
+* default: `true`
+* key: `parse-positional-numbers`
+
+Should positional keys that look like numbers be treated as such.
+
+```sh
+node example.js 99.3
+{ _: [99] }
+```
+
+_if disabled:_
+
+```sh
+node example.js 99.3
+{ _: ['99.3'] }
+```
+
 ### boolean negation
 
 * default: `true`

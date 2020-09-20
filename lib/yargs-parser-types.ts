@@ -49,6 +49,8 @@ export interface Configuration {
   'nargs-eats-options': boolean;
   /** The prefix to use for negated boolean variables. Default is `'no-'` */
   'negation-prefix': string;
+  /** Should positional values that look like numbers be parsed? Default is `true` */
+  'parse-positional-numbers': boolean;
   /** Should keys that look like numbers be treated as such? Default is `true` */
   'parse-numbers': boolean;
   /** Should unparsed flags be stored in -- or _? Default is `false` */

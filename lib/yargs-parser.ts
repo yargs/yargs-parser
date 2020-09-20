@@ -67,6 +67,7 @@ export class YargsParser {
       'nargs-eats-options': false,
       'negation-prefix': 'no-',
       'parse-numbers': true,
+      'parse-positional-numbers': true,
       'populate--': false,
       'set-placeholder-key': false,
       'short-option-groups': true,
@@ -618,11 +619,14 @@ export class YargsParser {
     }
 
     function maybeCoerceNumber (key: string, value: string | number | null | undefined) {
+      if (!configuration['parse-positional-numbers'] && key === '_') return value
       if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.bools) && !Array.isArray(value)) {
         const shouldCoerceNumber = isNumber(value) && configuration['parse-numbers'] && (
           Number.isSafeInteger(Math.floor(parseFloat(`${value}`)))
         )
-        if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) value = Number(value)
+        if (shouldCoerceNumber || (!isUndefined(value) && checkAllAliases(key, flags.numbers))) {
+          value = Number(value)
+        }
       }
       return value
     }
@@ -1031,12 +1035,12 @@ export class YargsParser {
     }
 
     return {
-      argv: Object.assign(argvReturn, argv),
-      error: error,
       aliases: Object.assign({}, flags.aliases),
-      newAliases: Object.assign({}, newAliases),
+      argv: Object.assign(argvReturn, argv),
+      configuration: configuration,
       defaulted: Object.assign({}, defaulted),
-      configuration: configuration
+      error: error,
+      newAliases: Object.assign({}, newAliases)
     }
   }
 }
