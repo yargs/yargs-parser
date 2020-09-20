@@ -3639,7 +3639,7 @@ describe('yargs-parser', function () {
 
     // See: https://github.com/yargs/yargs-parser/issues/223
     it('strip-dashed removes subkeys made by dot-notation', function () {
-      var argv = parser(['--dashed-will-be-stripped', '--here.it-will-too',
+      const argv = parser(['--dashed-will-be-stripped', '--here.it-will-too',
         '--foo.not-dashed.also-not-dashed', '--foo.definitley-not-dashed'], {
         configuration: {
           'strip-dashed': true
