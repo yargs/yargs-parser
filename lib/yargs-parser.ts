@@ -419,7 +419,7 @@ export class YargsParser {
           .filter(key => key !== '--' && key.includes('-'))
           .map(key => key.split('.'))
           .forEach(keyPath => {
-            var obj = argv
+            let obj = argv
             for (const subkey of keyPath) {
               if (subkey.includes('-')) {
                 delete obj[subkey]
