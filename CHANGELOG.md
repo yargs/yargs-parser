@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [20.1.0](https://www.github.com/yargs/yargs-parser/compare/v20.0.0...v20.1.0) (2020-09-20)
+
+
+### Features
+
+* adds parse-positional-numbers configuration ([#321](https://www.github.com/yargs/yargs-parser/issues/321)) ([9cec00a](https://www.github.com/yargs/yargs-parser/commit/9cec00a622251292ffb7dce6f78f5353afaa0d4c))
+
+
+### Bug Fixes
+
+* **build:** update release-please; make labels kick off builds ([#323](https://www.github.com/yargs/yargs-parser/issues/323)) ([09f448b](https://www.github.com/yargs/yargs-parser/commit/09f448b4cd66e25d2872544718df46dab8af062a))
+
 ## [20.0.0](https://www.github.com/yargs/yargs-parser/compare/v19.0.4...v20.0.0) (2020-09-09)
 
 
