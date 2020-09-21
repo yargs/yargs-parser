@@ -212,7 +212,7 @@ export class YargsParser {
 
       // any unknown option (except for end-of-options, "--")
       if (arg !== '--' && isUnknownOptionAsArg(arg)) {
-        argv._.push(arg)
+        pushPositional(arg)
       // -- separated by =
       } else if (arg.match(/^--.+=/) || (
         !configuration['short-option-groups'] && arg.match(/^-.+=/)
@@ -382,10 +382,7 @@ export class YargsParser {
         notFlags = args.slice(i)
         break
       } else {
-        const maybeCoercedNumber = maybeCoerceNumber('_', arg)
-        if (typeof maybeCoercedNumber === 'string' || typeof maybeCoercedNumber === 'number') {
-          argv._.push(maybeCoercedNumber)
-        }
+        pushPositional(arg)
       }
     }
 
@@ -428,6 +425,14 @@ export class YargsParser {
 
         delete argv[alias]
       })
+    }
+
+    // Push argument into positional array, applying numeric coercion:
+    function pushPositional (arg: string) {
+      const maybeCoercedNumber = maybeCoerceNumber('_', arg)
+      if (typeof maybeCoercedNumber === 'string' || typeof maybeCoercedNumber === 'number') {
+        argv._.push(maybeCoercedNumber)
+      }
     }
 
     // how many arguments should we consume, based
