@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [20.2.0](https://www.github.com/yargs/yargs-parser/compare/v20.1.0...v20.2.0) (2020-09-21)
+
+
+### Features
+
+* **string-utils:** export looksLikeNumber helper ([#324](https://www.github.com/yargs/yargs-parser/issues/324)) ([c8580a2](https://www.github.com/yargs/yargs-parser/commit/c8580a2327b55f6342acecb6e72b62963d506750))
+
+
+### Bug Fixes
+
+* **unknown-options-as-args:** convert positionals that look like numbers ([#326](https://www.github.com/yargs/yargs-parser/issues/326)) ([f85ebb4](https://www.github.com/yargs/yargs-parser/commit/f85ebb4face9d4b0f56147659404cbe0002f3dad))
+
 ## [20.1.0](https://www.github.com/yargs/yargs-parser/compare/v20.0.0...v20.1.0) (2020-09-20)
 
 
