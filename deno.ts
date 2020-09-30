@@ -5,7 +5,7 @@
 import * as path from 'https://deno.land/std/path/mod.ts'
 import { camelCase, decamelize, looksLikeNumber } from './build/lib/string-utils.js'
 import { YargsParser } from './build/lib/yargs-parser.js'
-import { Arguments, ArgsInput, Parser, Options, DetailedArguments } from './build/lib/yargs-parser-types.d.ts'
+import type { Arguments, ArgsInput, Parser, Options, DetailedArguments } from './build/lib/yargs-parser-types.d.ts'
 
 const parser = new YargsParser({
   cwd: Deno.cwd,
