@@ -3072,7 +3072,7 @@ describe('yargs-parser', function () {
           }
         })
         argv.should.deep.equal({
-          _: ['-u.arg', '2'],
+          _: ['-u.arg', 2],
           k: {
             arg: 1
           }
@@ -3110,7 +3110,7 @@ describe('yargs-parser', function () {
           }
         })
         argv.should.deep.equal({
-          _: ['-u', '2'],
+          _: ['-u', 2],
           k: 1
         })
       })
@@ -3256,6 +3256,17 @@ describe('yargs-parser', function () {
           _: ['--hasOwnProperty=33'],
           'known-arg': 1,
           knownArg: 1
+        })
+      })
+
+      it('should coerce unknown options that look numeric into numbers', () => {
+        const argv = parser('--known-arg 33', {
+          boolean: ['known-arg']
+        })
+        argv.should.deep.equal({
+          _: [33],
+          'known-arg': true,
+          knownArg: true
         })
       })
     })

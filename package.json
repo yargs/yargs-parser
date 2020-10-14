@@ -1,12 +1,15 @@
 {
   "name": "yargs-parser",
-  "version": "20.1.0",
+  "version": "20.2.1",
   "description": "the mighty option parser used by yargs",
   "main": "build/index.cjs",
-  "exports": {
-    "import": "./build/lib/index.js",
-    "require": "./build/index.cjs"
-  },
+  "exports": [
+    {
+      "import": "./build/lib/index.js",
+      "require": "./build/index.cjs"
+    },
+    "./build/index.cjs"
+  ],
   "type": "module",
   "module": "./build/lib/index.js",
   "scripts": {
@@ -55,7 +58,7 @@
     "eslint": "^7.0.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
-    "gts": "^2.0.0-alpha.4",
+    "gts": "^3.0.0",
     "mocha": "^8.0.0",
     "puppeteer": "^5.2.1",
     "rimraf": "^3.0.2",
