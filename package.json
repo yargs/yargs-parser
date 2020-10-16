@@ -3,13 +3,15 @@
   "version": "20.2.2",
   "description": "the mighty option parser used by yargs",
   "main": "build/index.cjs",
-  "exports": [
-    {
-      "import": "./build/lib/index.js",
-      "require": "./build/index.cjs"
-    },
-    "./build/index.cjs"
-  ],
+  "exports": {
+    ".": [
+      {
+        "import": "./build/lib/index.js",
+        "require": "./build/index.cjs"
+      },
+      "./build/index.cjs"
+    ]
+  },
   "type": "module",
   "module": "./build/lib/index.js",
   "scripts": {
