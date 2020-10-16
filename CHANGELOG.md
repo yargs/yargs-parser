@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [20.2.3](https://www.github.com/yargs/yargs-parser/compare/v20.2.2...v20.2.3) (2020-10-16)
+
+
+### Bug Fixes
+
+* **exports:** node 13.0 and 13.1 require the dotted object form _with_ a string fallback ([#336](https://www.github.com/yargs/yargs-parser/issues/336)) ([3ae7242](https://www.github.com/yargs/yargs-parser/commit/3ae7242040ff876d28dabded60ac226e00150c88))
+
 ### [20.2.2](https://www.github.com/yargs/yargs-parser/compare/v20.2.1...v20.2.2) (2020-10-14)
 
 
