@@ -50,7 +50,7 @@ describe('TokenizeArgString', function () {
   })
 
   it('handles quoted string with embedded quotes', function () {
-    var args = tokenizeArgString('--foo "hello \'world\'" --bar=\'foo "bar"\'')
+    const args = tokenizeArgString('--foo "hello \'world\'" --bar=\'foo "bar"\'')
     strictEqual(args[0], '--foo')
     strictEqual(args[1], '"hello \'world\'"')
     strictEqual(args[2], '--bar=\'foo "bar"\'')
@@ -117,7 +117,7 @@ describe('TokenizeArgString', function () {
   })
 
   it('handles array with quoted string with embedded quotes', function () {
-    var args = tokenizeArgString(['--foo', '"hello \'world\'"', '--bar=\'foo "bar"\''])
+    const args = tokenizeArgString(['--foo', '"hello \'world\'"', '--bar=\'foo "bar"\''])
     strictEqual(args[0], '--foo')
     strictEqual(args[1], '"hello \'world\'"')
     strictEqual(args[2], '--bar=\'foo "bar"\'')
