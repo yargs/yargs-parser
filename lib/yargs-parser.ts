@@ -9,6 +9,7 @@ import type {
   DefaultValuesForType,
   DefaultValuesForTypeKey,
   DetailedArguments,
+  Dictionary,
   Flag,
   Flags,
   FlagsKey,
@@ -19,9 +20,9 @@ import type {
   CoercionsFlag,
   Options,
   OptionsDefault,
+  ValueOf,
   YargsParserMixin
 } from './yargs-parser-types.js'
-import type { Dictionary, ValueOf } from './common-types.js'
 import { camelCase, decamelize, looksLikeNumber } from './string-utils.js'
 
 let mixin: YargsParserMixin
