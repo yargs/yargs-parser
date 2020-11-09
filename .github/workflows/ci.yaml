@@ -21,6 +21,7 @@ jobs:
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       - run: npm test
+      - run: npm run check
   windows:
     runs-on: windows-latest
     steps:
