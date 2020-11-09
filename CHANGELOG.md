@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [20.2.4](https://www.github.com/yargs/yargs-parser/compare/v20.2.3...v20.2.4) (2020-11-09)
+
+
+### Bug Fixes
+
+* **deno:** address import issues in Deno ([#339](https://www.github.com/yargs/yargs-parser/issues/339)) ([3b54e5e](https://www.github.com/yargs/yargs-parser/commit/3b54e5eef6e9a7b7c6eec7c12bab3ba3b8ba8306))
+
 ### [20.2.3](https://www.github.com/yargs/yargs-parser/compare/v20.2.2...v20.2.3) (2020-10-16)
 
 
