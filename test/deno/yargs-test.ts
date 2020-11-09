@@ -32,7 +32,7 @@ Deno.test('aliases', () => {
 
 const jsonPath = './test/fixtures/config.json'
 Deno.test('should load options and values from default config if specified', () => {
-  var argv = parser(['--foo', 'bar'], {
+  const argv = parser(['--foo', 'bar'], {
     alias: {
       z: 'zoom'
     },
