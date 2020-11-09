@@ -9,26 +9,26 @@ const path = require('path')
 
 describe('yargs-parser', function () {
   it('should parse a "short boolean"', function () {
-    var parse = parser(['-b'])
+    const parse = parser(['-b'])
     parse.should.not.have.property('--')
     parse.should.have.property('b').to.be.ok.and.be.a('boolean')
     parse.should.have.property('_').with.length(0)
   })
 
   it('should parse a "long boolean"', function () {
-    var parse = parser('--bool')
+    const parse = parser('--bool')
     parse.should.not.have.property('--')
     parse.should.have.property('bool', true)
     parse.should.have.property('_').with.length(0)
   })
 
   it('should place bare options in the _ array', function () {
-    var parse = parser('foo bar baz')
+    const parse = parser('foo bar baz')
     parse.should.have.property('_').and.deep.equal(['foo', 'bar', 'baz'])
   })
 
   it('should set the value of the final option in a group to the next supplied value', function () {
-    var parse = parser(['-cats', 'meow'])
+    const parse = parser(['-cats', 'meow'])
     parse.should.have.property('c', true)
     parse.should.have.property('a', true)
     parse.should.have.property('t', true)
@@ -37,39 +37,39 @@ describe('yargs-parser', function () {
   })
 
   it('should set the value of a single long option to the next supplied value', function () {
-    var parse = parser(['--pow', 'xixxle'])
+    const parse = parser(['--pow', 'xixxle'])
     parse.should.have.property('pow', 'xixxle')
     parse.should.have.property('_').with.length(0)
   })
 
   it('should set the value of a single long option to the next supplied value, even if the value is empty', function () {
-    var parse = parser(['--pow', ''])
+    const parse = parser(['--pow', ''])
     parse.should.have.property('pow', '')
     parse.should.have.property('_').with.length(0)
   })
 
   it('should set the value of a single long option if an = was used', function () {
-    var parse = parser(['--pow=xixxle'])
+    const parse = parser(['--pow=xixxle'])
     parse.should.have.property('pow', 'xixxle')
     parse.should.have.property('_').with.length(0)
   })
 
   it('should set the value of multiple long options to the next supplied values relative to each', function () {
-    var parse = parser(['--host', 'localhost', '--port', '555'])
+    const parse = parser(['--host', 'localhost', '--port', '555'])
     parse.should.have.property('host', 'localhost')
     parse.should.have.property('port', 555)
     parse.should.have.property('_').with.length(0)
   })
 
   it('should set the value of multiple long options if = signs were used', function () {
-    var parse = parser(['--host=localhost', '--port=555'])
+    const parse = parser(['--host=localhost', '--port=555'])
     parse.should.have.property('host', 'localhost')
     parse.should.have.property('port', 555)
     parse.should.have.property('_').with.length(0)
   })
 
   it('should still set values appropriately if a mix of short, long, and grouped short options are specified', function () {
-    var parse = parser(['-h', 'localhost', '-fp', '555', 'script.js'])
+    const parse = parser(['-h', 'localhost', '-fp', '555', 'script.js'])
     parse.should.have.property('f', true)
     parse.should.have.property('p', 555)
     parse.should.have.property('h', 'localhost')
@@ -77,20 +77,20 @@ describe('yargs-parser', function () {
   })
 
   it('should still set values appropriately if a mix of short and long options are specified', function () {
-    var parse = parser(['-h', 'localhost', '--port', '555'])
+    const parse = parser(['-h', 'localhost', '--port', '555'])
     parse.should.have.property('h', 'localhost')
     parse.should.have.property('port', 555)
     parse.should.have.property('_').with.length(0)
   })
 
   it('should explicitly set a boolean option to false if preceded by "--no-"', function () {
-    var parse = parser(['--no-moo'])
+    const parse = parser(['--no-moo'])
     parse.should.have.property('moo', false)
     parse.should.have.property('_').with.length(0)
   })
 
   it('should still set values appropriately if we supply a comprehensive list of various types of options', function () {
-    var parse = parser([
+    const parse = parser([
       '--name=meowmers', 'bare', '-cats', 'woo',
       '-h', 'awesome', '--multi=quux',
       '--key', 'value',
@@ -116,7 +116,7 @@ describe('yargs-parser', function () {
   })
 
   it('should parse numbers appropriately', function () {
-    var argv = parser([
+    const argv = parser([
       '-x', '1234',
       '-y', '5.67',
       '-z', '1e7',
@@ -135,7 +135,7 @@ describe('yargs-parser', function () {
 
   // addresses: https://github.com/yargs/yargs-parser/issues/33
   it('should handle parsing negative #s', function () {
-    var argv = parser([
+    const argv = parser([
       '-33', '-177', '33',
       '--n1', '-33',
       '-n', '-44',
@@ -160,7 +160,7 @@ describe('yargs-parser', function () {
   })
 
   it('should handle negative (and positive) numbers with decimal places, with or without a leading 0', function () {
-    var argv = parser([
+    const argv = parser([
       '-0.1', '-1.1', '-.5', '-.1', '.1', '.5',
       '--bounds', '-5.1', '-.1', '.1',
       '--other', '.9', '-.5'
@@ -175,13 +175,13 @@ describe('yargs-parser', function () {
   })
 
   it('should set the value of a single short option to the next supplied value, even if the value is empty', function () {
-    var parse = parser(['-p', ''])
+    const parse = parser(['-p', ''])
     parse.should.have.property('p', '')
     parse.should.have.property('_').with.length(0)
   })
 
   it('should not set the next value as the value of a short option if that option is explicitly defined as a boolean', function () {
-    var parse = parser(['-t', 'moo'], {
+    const parse = parser(['-t', 'moo'], {
       boolean: 't'
     })
     parse.should.have.property('t', true).and.be.a('boolean')
@@ -189,7 +189,7 @@ describe('yargs-parser', function () {
   })
 
   it('should set boolean options values if the next value is "true" or "false"', function () {
-    var parse = parser(['--verbose', 'false', 'moo', '-t', 'true'], {
+    const parse = parser(['--verbose', 'false', 'moo', '-t', 'true'], {
       boolean: ['t', 'verbose'],
       default: {
         verbose: true
@@ -201,7 +201,7 @@ describe('yargs-parser', function () {
   })
 
   it('should not set boolean options values if the next value only contains the words "true" or "false"', function () {
-    var parse = parser(['--verbose', 'aaatrueaaa', 'moo', '-t', 'aaafalseaaa'], {
+    const parse = parser(['--verbose', 'aaatrueaaa', 'moo', '-t', 'aaafalseaaa'], {
       boolean: ['t', 'verbose']
     })
     parse.should.have.property('verbose', true).and.be.a('boolean')
@@ -210,7 +210,7 @@ describe('yargs-parser', function () {
   })
 
   it('should not use next value for boolean/number/string configured with zero narg', function () {
-    var parse = parser(['--bool', 'false', '--nr', '7', '--str', 'foo'], {
+    const parse = parser(['--bool', 'false', '--nr', '7', '--str', 'foo'], {
       boolean: ['bool'],
       number: ['nr'],
       string: ['str'],
@@ -223,7 +223,7 @@ describe('yargs-parser', function () {
   })
 
   it('should allow defining options as boolean in groups', function () {
-    var parse = parser(['-x', '-z', 'one', 'two', 'three'], {
+    const parse = parser(['-x', '-z', 'one', 'two', 'three'], {
       boolean: ['x', 'y', 'z']
     })
     parse.should.have.property('x', true).and.be.a('boolean')
@@ -233,7 +233,7 @@ describe('yargs-parser', function () {
   })
 
   it('should correctly parse dot-notation boolean flags', function () {
-    var parse = parser(['--nested', '--n.v', '--n.y', 'foo'], {
+    const parse = parser(['--nested', '--n.v', '--n.y', 'foo'], {
       boolean: ['nested', 'n.v']
     })
 
@@ -245,7 +245,7 @@ describe('yargs-parser', function () {
   })
 
   it('should preserve newlines in option values', function () {
-    var args = parser(['-s', 'X\nX'])
+    let args = parser(['-s', 'X\nX'])
     args.should.have.property('_').with.length(0)
     args.should.have.property('s', 'X\nX')
     // reproduce in bash:
@@ -258,25 +258,25 @@ describe('yargs-parser', function () {
   })
 
   it('should not convert numbers to type number if explicitly defined as strings', function () {
-    var s = parser(['-s', '0001234'], {
+    const s = parser(['-s', '0001234'], {
       string: 's'
     }).s
     s.should.be.a('string').and.equal('0001234')
-    var x = parser(['-x', '56'], {
+    const x = parser(['-x', '56'], {
       string: ['x']
     }).x
     x.should.be.a('string').and.equal('56')
   })
 
   it('should default numbers to undefined', function () {
-    var n = parser(['-n'], {
+    const n = parser(['-n'], {
       number: ['n']
     }).n
     expect(n).to.equal(undefined)
   })
 
   it('should default number to NaN if value is not a valid number', function () {
-    var n = parser(['-n', 'string'], {
+    const n = parser(['-n', 'string'], {
       number: ['n']
     }).n
     expect(n).to.deep.equal(NaN)
@@ -284,7 +284,7 @@ describe('yargs-parser', function () {
 
   // Fixes: https://github.com/bcoe/yargs/issues/68
   it('should parse flag arguments with no right-hand value as strings, if defined as strings', function () {
-    var s = parser(['-s'], {
+    let s = parser(['-s'], {
       string: ['s']
     }).s
     s.should.be.a('string').and.equal('')
@@ -301,7 +301,7 @@ describe('yargs-parser', function () {
   })
 
   it('should leave all non-hyphenated values as strings if _ is defined as a string', function () {
-    var s = parser(['  ', '  '], {
+    const s = parser(['  ', '  '], {
       string: ['_']
     })._
     s.should.have.length(2)
@@ -311,7 +311,7 @@ describe('yargs-parser', function () {
 
   describe('normalize', function () {
     it('should normalize redundant paths', function () {
-      var a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep)], {
+      const a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep)], {
         alias: {
           s: ['save']
         },
@@ -322,7 +322,7 @@ describe('yargs-parser', function () {
     })
 
     it('should normalize redundant paths when a value is later assigned', function () {
-      var a = parser(['-s'], {
+      const a = parser(['-s'], {
         normalize: ['s']
       })
       a.should.have.property('s', true)
@@ -331,20 +331,20 @@ describe('yargs-parser', function () {
     })
 
     it('should normalize when key is also an array', function () {
-      var a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep), ['', 'path', 'to', 'new', 'dir', '..', '..', ''].join(path.sep)], {
+      const a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep), ['', 'path', 'to', 'new', 'dir', '..', '..', ''].join(path.sep)], {
         alias: {
           s: ['save']
         },
         normalize: 's',
         array: 's'
       })
-      var expected = [path.sep, ['', 'path', 'to', ''].join(path.sep)]
+      const expected = [path.sep, ['', 'path', 'to', ''].join(path.sep)]
       a.should.have.property('s').and.deep.equal(expected)
       a.should.have.property('save').and.deep.equal(expected)
     })
 
     it('should allow normalized keys to be enumerated', () => {
-      var a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep)], {
+      const a = parser(['-s', ['', 'tmp', '..', ''].join(path.sep)], {
         alias: {
           s: ['save']
         },
@@ -356,7 +356,7 @@ describe('yargs-parser', function () {
 
   describe('alias', function () {
     it('should set alias value to the same value as the full option', function () {
-      var argv = parser(['-f', '11', '--zoom', '55'], {
+      const argv = parser(['-f', '11', '--zoom', '55'], {
         alias: {
           z: ['zoom']
         }
@@ -367,7 +367,7 @@ describe('yargs-parser', function () {
     })
 
     it('should allow multiple aliases to be specified', function () {
-      var argv = parser(['-f', '11', '--zoom', '55'], {
+      const argv = parser(['-f', '11', '--zoom', '55'], {
         alias: {
           z: ['zm', 'zoom']
         }
@@ -381,7 +381,7 @@ describe('yargs-parser', function () {
 
     // regression, see https://github.com/chevex/yargs/issues/63
     it('should not add the same key to argv multiple times, when creating camel-case aliases', function () {
-      var argv = parser(['--health-check=banana', '--second-key', 'apple', '-t=blarg'], {
+      const argv = parser(['--health-check=banana', '--second-key', 'apple', '-t=blarg'], {
         alias: {
           h: ['health-check'],
           'second-key': ['s'],
@@ -410,7 +410,7 @@ describe('yargs-parser', function () {
     })
 
     it('should allow transitive aliases to be specified', function () {
-      var argv = parser(['-f', '11', '--zoom', '55'], {
+      const argv = parser(['-f', '11', '--zoom', '55'], {
         alias: {
           z: 'zm',
           zm: 'zoom'
@@ -424,7 +424,7 @@ describe('yargs-parser', function () {
     })
 
     it('should merge two lists of aliases if they collide', function () {
-      var argv = parser(['-f', '11', '--zoom', '55'], {
+      const argv = parser(['-f', '11', '--zoom', '55'], {
         alias: {
           z: 'zm',
           zoom: 'zoop',
@@ -440,7 +440,7 @@ describe('yargs-parser', function () {
     })
 
     it('should set single-digit boolean alias', function () {
-      var argv = parser(['-f', '11', '-0'], {
+      const argv = parser(['-f', '11', '-0'], {
         alias: {
           0: 'print0'
         },
@@ -453,13 +453,13 @@ describe('yargs-parser', function () {
     })
 
     it('should not set single-digit alias if no alias defined', function () {
-      var argv = parser(['-f', '11', '-0', '-1'])
+      const argv = parser(['-f', '11', '-0', '-1'])
       argv.should.have.property('f', 11)
       argv._.should.deep.equal([-0, -1])
     })
 
     it('should not set single-digit boolean alias if no boolean defined', function () {
-      var argv = parser(['-f', '11', '-9'], {
+      const argv = parser(['-f', '11', '-9'], {
         alias: {
           0: 'print0'
         }
@@ -469,7 +469,7 @@ describe('yargs-parser', function () {
     })
 
     it('should be able to negate set single-digit boolean alias', function () {
-      var argv = parser(['--no-9'], {
+      const argv = parser(['--no-9'], {
         alias: {
           9: 'max'
         },
@@ -482,7 +482,7 @@ describe('yargs-parser', function () {
   })
 
   it('should assign data after forward slash to the option before the slash', function () {
-    var parse = parser(['-I/foo/bar/baz'])
+    let parse = parser(['-I/foo/bar/baz'])
     parse.should.have.property('_').with.length(0)
     parse.should.have.property('I', '/foo/bar/baz')
     parse = parser(['-xyz/foo/bar/baz'])
@@ -496,7 +496,7 @@ describe('yargs-parser', function () {
   describe('config', function () {
     // See: https://github.com/chevex/yargs/issues/12
     it('should load options and values from default config if specified', function () {
-      var argv = parser(['--foo', 'bar'], {
+      const argv = parser(['--foo', 'bar'], {
         alias: {
           z: 'zoom'
         },
@@ -512,7 +512,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use value from config file, if argv value is using default value', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         alias: {
           z: 'zoom'
         },
@@ -529,7 +529,7 @@ describe('yargs-parser', function () {
     })
 
     it('should combine values from config file and argv, if argv value is an array', function () {
-      var argv = parser(['--foo', 'bar'], {
+      const argv = parser(['--foo', 'bar'], {
         config: ['settings'],
         array: ['foo'],
         default: {
@@ -544,7 +544,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use value from config file, if argv key is a boolean', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         config: ['settings'],
         default: {
           settings: jsonPath
@@ -556,7 +556,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use value from cli, if cli overrides boolean argv key', function () {
-      var argv = parser(['--no-truthy'], {
+      const argv = parser(['--no-truthy'], {
         config: ['settings'],
         default: {
           settings: jsonPath
@@ -568,7 +568,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use cli value, if cli value is set and both cli and default value match', function () {
-      var argv = parser(['--foo', 'banana'], {
+      const argv = parser(['--foo', 'banana'], {
         alias: {
           z: 'zoom'
         },
@@ -585,7 +585,7 @@ describe('yargs-parser', function () {
     })
 
     it("should allow config to be set as flag in 'option'", function () {
-      var argv = parser(['--settings', jsonPath, '--foo', 'bar'], {
+      const argv = parser(['--settings', jsonPath, '--foo', 'bar'], {
         alias: {
           z: 'zoom'
         },
@@ -598,8 +598,8 @@ describe('yargs-parser', function () {
     })
 
     it('should load options and values from a JS file when config has .js extention', function () {
-      var jsPath = path.resolve(__dirname, './fixtures/settings.cjs')
-      var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
+      const jsPath = path.resolve(__dirname, './fixtures/settings.cjs')
+      const argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: ['settings']
       })
 
@@ -609,7 +609,7 @@ describe('yargs-parser', function () {
     })
 
     it('should raise an appropriate error if JSON file is not found', function () {
-      var argv = parser.detailed(['--settings', 'fake.json', '--foo', 'bar'], {
+      const argv = parser.detailed(['--settings', 'fake.json', '--foo', 'bar'], {
         alias: {
           z: 'zoom'
         },
@@ -621,7 +621,7 @@ describe('yargs-parser', function () {
 
     // see: https://github.com/bcoe/yargs/issues/172
     it('should not raise an exception if config file is set as default argument value', function () {
-      var argv = parser.detailed([], {
+      const argv = parser.detailed([], {
         default: {
           config: 'foo.json'
         },
@@ -632,8 +632,8 @@ describe('yargs-parser', function () {
     })
 
     it('should load nested options from config file', function () {
-      var jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
-      var argv = parser(['--settings', jsonPath, '--nested.foo', 'bar'], {
+      const jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
+      const argv = parser(['--settings', jsonPath, '--nested.foo', 'bar'], {
         config: ['settings']
       })
 
@@ -646,8 +646,8 @@ describe('yargs-parser', function () {
     })
 
     it('should use nested value from config file, if argv value is using default value', function () {
-      var jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
-      var argv = parser(['--settings', jsonPath], {
+      const jsonPath = path.resolve(__dirname, './fixtures/nested_config.json')
+      const argv = parser(['--settings', jsonPath], {
         config: ['settings'],
         default: {
           'nested.foo': 'banana'
@@ -663,18 +663,18 @@ describe('yargs-parser', function () {
     })
 
     it('allows a custom parsing function to be provided', function () {
-      var jsPath = path.resolve(__dirname, './fixtures/config.txt')
-      var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
+      const jsPath = path.resolve(__dirname, './fixtures/config.txt')
+      const argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: {
           settings: function (configPath) {
             // as an example, parse an environment
             // variable style config:
             // FOO=99
             // BATMAN=grumpy
-            var config = {}
-            var txt = fs.readFileSync(configPath, 'utf-8')
+            const config = {}
+            const txt = fs.readFileSync(configPath, 'utf-8')
             txt.split(/\r?\n/).forEach(function (l) {
-              var kv = l.split('=')
+              const kv = l.split('=')
               config[kv[0].toLowerCase()] = kv[1]
             })
             return config
@@ -688,8 +688,8 @@ describe('yargs-parser', function () {
     })
 
     it('allows a custom parsing function to be provided as an alias', function () {
-      var jsPath = path.resolve(__dirname, './fixtures/config.json')
-      var argv = parser(['--settings', jsPath, '--foo', 'bar'], {
+      const jsPath = path.resolve(__dirname, './fixtures/config.json')
+      const argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: {
           s: function (configPath) {
             return JSON.parse(fs.readFileSync(configPath, 'utf-8'))
@@ -705,7 +705,7 @@ describe('yargs-parser', function () {
     })
 
     it('outputs an error returned by the parsing function', function () {
-      var argv = parser.detailed(['--settings=./package.json'], {
+      const argv = parser.detailed(['--settings=./package.json'], {
         config: {
           settings: function (configPath) {
             return Error('someone set us up the bomb')
@@ -717,7 +717,7 @@ describe('yargs-parser', function () {
     })
 
     it('outputs an error if thrown by the parsing function', function () {
-      var argv = parser.detailed(['--settings=./package.json'], {
+      const argv = parser.detailed(['--settings=./package.json'], {
         config: {
           settings: function (configPath) {
             throw Error('someone set us up the bomb')
@@ -750,7 +750,7 @@ describe('yargs-parser', function () {
 
   describe('config objects', function () {
     it('should load options from config object', function () {
-      var argv = parser(['--foo', 'bar'], {
+      const argv = parser(['--foo', 'bar'], {
         configObjects: [{
           apple: 'apple',
           banana: 42,
@@ -766,7 +766,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use value from config object, if argv value is using default value', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         configObjects: [{
           apple: 'apple',
           banana: 42,
@@ -783,7 +783,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use value from config object to all aliases', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         configObjects: [{
           apple: 'apple',
           banana: 42,
@@ -803,7 +803,7 @@ describe('yargs-parser', function () {
     })
 
     it('should load nested options from config object', function () {
-      var argv = parser(['--nested.foo', 'bar'], {
+      const argv = parser(['--nested.foo', 'bar'], {
         configObjects: [{
           a: 'a',
           nested: {
@@ -823,7 +823,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use nested value from config object, if argv value is using default value', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         configObjects: [{
           a: 'a',
           nested: {
@@ -846,7 +846,7 @@ describe('yargs-parser', function () {
     })
 
     it('should load objects with first object having greatest priority', function () {
-      var argv = parser(['--foo', 'bar'], {
+      const argv = parser(['--foo', 'bar'], {
         configObjects: [{
           bar: 'baz'
         }, {
@@ -860,7 +860,7 @@ describe('yargs-parser', function () {
     })
 
     it('should combine array typed options with alias and camel-case', function () {
-      var argv = parser(['--camEl', 'foo', '--camEl', 'bar', '-a', 'red'], {
+      const argv = parser(['--camEl', 'foo', '--camEl', 'bar', '-a', 'red'], {
         array: ['cam-el', 'apple'],
         alias: { apple: 'a' },
         configObjects: [{ camEl: 'baz' }, { a: 'sweet' }],
@@ -877,7 +877,7 @@ describe('yargs-parser', function () {
 
   describe('dot notation', function () {
     it('should allow object graph traversal via dot notation', function () {
-      var argv = parser([
+      const argv = parser([
         '--foo.bar', '3', '--foo.baz', '4',
         '--foo.quux.quibble', '5', '--foo.quux.o_O',
         '--beep.boop'
@@ -894,7 +894,7 @@ describe('yargs-parser', function () {
     })
 
     it('should apply defaults to dot notation arguments', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         default: {
           'foo.bar': 99
         }
@@ -905,7 +905,7 @@ describe('yargs-parser', function () {
 
     // see #279
     it('should allow default to be overridden when an alias is provided', function () {
-      var argv = parser(['--foo.bar', '200'], {
+      const argv = parser(['--foo.bar', '200'], {
         default: {
           'foo.bar': 99
         }
@@ -916,7 +916,7 @@ describe('yargs-parser', function () {
 
     // see #279
     it('should also override alias', function () {
-      var argv = parser(['--foo.bar', '200'], {
+      const argv = parser(['--foo.bar', '200'], {
         alias: {
           'foo.bar': ['f']
         },
@@ -930,7 +930,7 @@ describe('yargs-parser', function () {
 
     // see #279
     it('should not set an undefined dot notation key', function () {
-      var argv = parser(['--foo.bar', '200'], {
+      const argv = parser(['--foo.bar', '200'], {
         default: {
           'foo.bar': 99
         },
@@ -943,7 +943,7 @@ describe('yargs-parser', function () {
     })
 
     it('should respect .string() for dot notation arguments', function () {
-      var argv = parser(['--foo.bar', '99', '--bar.foo=99'], {
+      const argv = parser(['--foo.bar', '99', '--bar.foo=99'], {
         string: ['foo.bar']
       })
 
@@ -952,7 +952,7 @@ describe('yargs-parser', function () {
     })
 
     it('should populate aliases when dot notation is used', function () {
-      var argv = parser(['--foo.bar', '99'], {
+      const argv = parser(['--foo.bar', '99'], {
         alias: {
           foo: ['f']
         }
@@ -964,7 +964,7 @@ describe('yargs-parser', function () {
 
     // see #267
     it('should populate aliases when dot notation is used on camel-cased option', function () {
-      var argv = parser(['--foo-baz.bar', '99'], {
+      const argv = parser(['--foo-baz.bar', '99'], {
         alias: {
           'foo-baz': ['f']
         }
@@ -976,7 +976,7 @@ describe('yargs-parser', function () {
     })
 
     it('should populate aliases when nested dot notation is used', function () {
-      var argv = parser(['--foo.bar.snuh', '99', '--foo.apple', '33', '--foo.bar.cool', '11'], {
+      const argv = parser(['--foo.bar.snuh', '99', '--foo.apple', '33', '--foo.bar.cool', '11'], {
         alias: {
           foo: ['f']
         }
@@ -993,17 +993,17 @@ describe('yargs-parser', function () {
     })
 
     it("should allow flags to use dot notation, when separated by '='", function () {
-      var argv = parser(['-f.foo=99'])
+      const argv = parser(['-f.foo=99'])
       argv.f.foo.should.eql(99)
     })
 
     it("should allow flags to use dot notation, when separated by ' '", function () {
-      var argv = parser(['-f.foo', '99'])
+      const argv = parser(['-f.foo', '99'])
       argv.f.foo.should.eql(99)
     })
 
     it('should allow flags to use dot notation when no right-hand-side is given', function () {
-      var argv = parser(['-f.foo', '99', '-f.bar'])
+      const argv = parser(['-f.foo', '99', '-f.bar'])
       argv.f.foo.should.eql(99)
       argv.f.bar.should.eql(true)
     })
@@ -1017,8 +1017,8 @@ describe('yargs-parser', function () {
   })
 
   it('should set boolean and alias using explicit true', function () {
-    var aliased = ['-h', 'true']
-    var aliasedArgv = parser(aliased, {
+    const aliased = ['-h', 'true']
+    const aliasedArgv = parser(aliased, {
       boolean: ['h'],
       alias: {
         h: ['herp']
@@ -1032,7 +1032,7 @@ describe('yargs-parser', function () {
 
   // regression, see https://github.com/substack/node-optimist/issues/71
   it('should set boolean and --x=true', function () {
-    var parsed = parser(['--boool', '--other=true'], {
+    let parsed = parser(['--boool', '--other=true'], {
       boolean: ['boool']
     })
     parsed.should.have.property('boool', true)
@@ -1046,7 +1046,7 @@ describe('yargs-parser', function () {
 
   // regression, see https://github.com/chevex/yargs/issues/66
   it('should set boolean options values if next value is "true" or "false" with = as separator', function () {
-    var argv = parser(['--bool=false'], {
+    const argv = parser(['--bool=false'], {
       boolean: ['b'],
       alias: {
         b: ['bool']
@@ -1061,20 +1061,20 @@ describe('yargs-parser', function () {
 
   describe('short options', function () {
     it('should set the value of multiple single short options to the next supplied values relative to each', function () {
-      var parse = parser(['-h', 'localhost', '-p', '555'])
+      const parse = parser(['-h', 'localhost', '-p', '555'])
       parse.should.have.property('h', 'localhost')
       parse.should.have.property('p', 555)
       parse.should.have.property('_').with.length(0)
     })
 
     it('should set the value of a single short option to the next supplied value', function () {
-      var parse = parser(['-h', 'localhost'])
+      const parse = parser(['-h', 'localhost'])
       parse.should.have.property('h', 'localhost')
       parse.should.have.property('_').with.length(0)
     })
 
     it('should expand grouped short options to a hash with a key for each', function () {
-      var parse = parser(['-cats'])
+      const parse = parser(['-cats'])
       parse.should.have.property('c', true)
       parse.should.have.property('a', true)
       parse.should.have.property('t', true)
@@ -1083,12 +1083,12 @@ describe('yargs-parser', function () {
     })
 
     it('should set n to the numeric value 123', function () {
-      var argv = parser(['-n123'])
+      const argv = parser(['-n123'])
       argv.should.have.property('n', 123)
     })
 
     it('should set n to the numeric value 123, with n at the end of a group', function () {
-      var argv = parser(['-ab5n123'])
+      const argv = parser(['-ab5n123'])
       argv.should.have.property('a', true)
       argv.should.have.property('b', true)
       argv.should.have.property('5', true)
@@ -1097,12 +1097,12 @@ describe('yargs-parser', function () {
     })
 
     it('should set n to the numeric value 123, with = as separator', function () {
-      var argv = parser(['-n=123'])
+      const argv = parser(['-n=123'])
       argv.should.have.property('n', 123)
     })
 
     it('should set n to the numeric value 123, with n at the end of a group and = as separator', function () {
-      var argv = parser(['-ab5n=123'])
+      const argv = parser(['-ab5n=123'])
       argv.should.have.property('a', true)
       argv.should.have.property('b', true)
       argv.should.have.property('5', true)
@@ -1113,7 +1113,7 @@ describe('yargs-parser', function () {
 
   describe('whitespace', function () {
     it('should be whitespace', function () {
-      var argv = parser(['-x', '\t'])
+      const argv = parser(['-x', '\t'])
       argv.should.have.property('x', '\t')
     })
   })
@@ -1121,7 +1121,7 @@ describe('yargs-parser', function () {
   describe('boolean modifier function', function () {
     it('should prevent yargs from sucking in the next option as the value of the first option', function () {
       // Arrange & Act
-      var result = parser(['-b', '123'], {
+      const result = parser(['-b', '123'], {
         boolean: ['b']
       })
       // Assert
@@ -1153,7 +1153,7 @@ describe('yargs-parser', function () {
   describe('defaults', function () {
     function checkNoArgs (opts, hasAlias) {
       it('should set defaults if no args', function () {
-        var result = parser([], opts)
+        const result = parser([], opts)
         result.should.have.property('flag', true)
         if (hasAlias) {
           result.should.have.property('f', true)
@@ -1163,7 +1163,7 @@ describe('yargs-parser', function () {
 
     function checkExtraArg (opts, hasAlias) {
       it('should set defaults if one extra arg', function () {
-        var result = parser(['extra'], opts)
+        const result = parser(['extra'], opts)
         result.should.have.property('flag', true)
         result.should.have.property('_').and.deep.equal(['extra'])
         if (hasAlias) {
@@ -1174,7 +1174,7 @@ describe('yargs-parser', function () {
 
     function checkStringArg (opts, hasAlias) {
       it('should set defaults even if arg looks like a string', function () {
-        var result = parser(['--flag', 'extra'], opts)
+        const result = parser(['--flag', 'extra'], opts)
         result.should.have.property('flag', true)
         result.should.have.property('_').and.deep.equal(['extra'])
         if (hasAlias) {
@@ -1184,7 +1184,7 @@ describe('yargs-parser', function () {
     }
 
     describe('for options with aliases', function () {
-      var opts = {
+      const opts = {
         alias: {
           flag: ['f']
         },
@@ -1198,7 +1198,7 @@ describe('yargs-parser', function () {
     })
 
     describe('for typed options without aliases', function () {
-      var opts = {
+      const opts = {
         boolean: ['flag'],
         default: {
           flag: true
@@ -1211,7 +1211,7 @@ describe('yargs-parser', function () {
     })
 
     describe('for typed options with aliases', function () {
-      var opts = {
+      const opts = {
         alias: {
           flag: ['f']
         },
@@ -1229,7 +1229,7 @@ describe('yargs-parser', function () {
     describe('for boolean options', function () {
       [true, false, undefined, null].forEach(function (def) {
         describe('with explicit ' + def + ' default', function () {
-          var opts = {
+          const opts = {
             default: {
               flag: def
             },
@@ -1251,7 +1251,7 @@ describe('yargs-parser', function () {
       })
 
       describe('without any default value', function () {
-        var opts = null
+        let opts = null
 
         beforeEach(function () {
           opts = {
@@ -1274,7 +1274,7 @@ describe('yargs-parser', function () {
 
       // Fixes: https://github.com/bcoe/yargs/issues/341
       it('should apply defaults to camel-case form of argument', function () {
-        var argv = parser([], {
+        const argv = parser([], {
           default: {
             'foo-bar': 99
           }
@@ -1285,7 +1285,7 @@ describe('yargs-parser', function () {
 
       // Fixes: https://github.com/yargs/yargs-parser/issues/77
       it('should combine dot-notation and camel-case expansion', function () {
-        var argv = parser(['--dot-notation.foo.bar'])
+        const argv = parser(['--dot-notation.foo.bar'])
 
         argv.should.satisfy(function (args) {
           return args.dotNotation.foo.bar
@@ -1294,7 +1294,7 @@ describe('yargs-parser', function () {
     })
 
     it('should define option as boolean and set default to true', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         boolean: ['sometrue'],
         default: {
           sometrue: true
@@ -1304,7 +1304,7 @@ describe('yargs-parser', function () {
     })
 
     it('should define option as boolean and set default to false', function () {
-      var argv = parser([], {
+      const argv = parser([], {
         default: {
           somefalse: false
         },
@@ -1314,7 +1314,7 @@ describe('yargs-parser', function () {
     })
 
     it('should set boolean options to false by default', function () {
-      var parse = parser(['moo'], {
+      const parse = parser(['moo'], {
         boolean: ['t', 'verbose'],
         default: {
           verbose: false,
@@ -1328,7 +1328,7 @@ describe('yargs-parser', function () {
 
     describe('track defaulted', function () {
       it('should log defaulted options - not specified by user', function () {
-        var parsed = parser.detailed('', {
+        const parsed = parser.detailed('', {
           default: { foo: 'abc', 'bar.prop': 33, baz: 'x' },
           configObjects: [{ baz: 'xyz' }]
         })
@@ -1337,7 +1337,7 @@ describe('yargs-parser', function () {
       })
 
       it('should not log defaulted options - specified without value', function () {
-        var parsed = parser.detailed('--foo --bar.prop', {
+        const parsed = parser.detailed('--foo --bar.prop', {
           default: { foo: 'abc', 'bar.prop': 33 }
         })
         parsed.argv.should.deep.equal({ _: [], foo: 'abc', bar: { prop: 33 } })
@@ -1345,7 +1345,7 @@ describe('yargs-parser', function () {
       })
 
       it('should log defaulted options - no aliases included', function () {
-        var parsed = parser.detailed('', {
+        const parsed = parser.detailed('', {
           default: { kaa: 'abc' },
           alias: { foo: 'kaa' }
         })
@@ -1354,7 +1354,7 @@ describe('yargs-parser', function () {
       })
 
       it('setting an alias excludes associated key from defaulted', function () {
-        var parsed = parser.detailed('--foo abc', {
+        const parsed = parser.detailed('--foo abc', {
           default: { kaa: 'abc' },
           alias: { foo: 'kaa' }
         })
@@ -1369,7 +1369,7 @@ describe('yargs-parser', function () {
       if (!strict) {
         // Skip this test in strict mode because this option is not specified
         it('should provide options with dashes as camelCase properties', function () {
-          var result = parser(['--some-option'])
+          const result = parser(['--some-option'])
 
           result.should.have.property('some-option').that.is.a('boolean').and.is.true // eslint-disable-line
           result.should.have.property('someOption').that.is.a('boolean').and.is.true // eslint-disable-line
@@ -1377,7 +1377,7 @@ describe('yargs-parser', function () {
       }
 
       it('should provide count options with dashes as camelCase properties', function () {
-        var result = parser(['--some-option', '--some-option', '--some-option'], {
+        const result = parser(['--some-option', '--some-option', '--some-option'], {
           count: ['some-option']
         })
 
@@ -1386,7 +1386,7 @@ describe('yargs-parser', function () {
       })
 
       it('should provide options with dashes and aliases as camelCase properties', function () {
-        var result = parser(['--some-option'], {
+        const result = parser(['--some-option'], {
           alias: {
             'some-horse': 'o'
           }
@@ -1397,7 +1397,7 @@ describe('yargs-parser', function () {
       })
 
       it('should provide defaults of options with dashes as camelCase properties', function () {
-        var result = parser([], {
+        const result = parser([], {
           default: {
             'some-option': 'asdf'
           }
@@ -1408,7 +1408,7 @@ describe('yargs-parser', function () {
       })
 
       it('should provide aliases of options with dashes as camelCase properties', function () {
-        var result = parser([], {
+        const result = parser([], {
           default: {
             'some-option': 'asdf'
           },
@@ -1423,7 +1423,7 @@ describe('yargs-parser', function () {
       })
 
       it('should not apply camel-case logic to 1-character options', function () {
-        var result = parser(['-p', 'hello'], {
+        const result = parser(['-p', 'hello'], {
           alias: {
             p: 'parallel',
             P: 'parallel-series'
@@ -1438,7 +1438,7 @@ describe('yargs-parser', function () {
       })
 
       it('should provide aliases of options with dashes as camelCase properties', function () {
-        var result = parser([], {
+        const result = parser([], {
           alias: {
             o: ['some-option']
           },
@@ -1453,7 +1453,7 @@ describe('yargs-parser', function () {
       })
 
       it('should provide aliases with dashes as camelCase properties', function () {
-        var result = parser(['--some-option', 'val'], {
+        const result = parser(['--some-option', 'val'], {
           alias: {
             o: 'some-option'
           }
@@ -1466,7 +1466,7 @@ describe('yargs-parser', function () {
 
       // https://github.com/yargs/yargs-parser/issues/95
       it('should not duplicate option values when equivalent dashed aliases are provided', function () {
-        var result = parser(['--someOption', 'val'], {
+        const result = parser(['--someOption', 'val'], {
           alias: {
             someOption: 'some-option'
           }
@@ -1488,24 +1488,24 @@ describe('yargs-parser', function () {
 
   describe('-', function () {
     it('should set - as value of n', function () {
-      var argv = parser(['-n', '-'])
+      const argv = parser(['-n', '-'])
       argv.should.have.property('n', '-')
       argv.should.have.property('_').with.length(0)
     })
 
     it('should set - as a non-hyphenated value', function () {
-      var argv = parser(['-'])
+      const argv = parser(['-'])
       argv.should.have.property('_').and.deep.equal(['-'])
     })
 
     it('should set - as a value of f', function () {
-      var argv = parser(['-f-'])
+      const argv = parser(['-f-'])
       argv.should.have.property('f', '-')
       argv.should.have.property('_').with.length(0)
     })
 
     it('should set b to true and set - as a non-hyphenated value when b is set as a boolean', function () {
-      var argv = parser(['-b', '-'], {
+      const argv = parser(['-b', '-'], {
         boolean: ['b']
       })
 
@@ -1514,7 +1514,7 @@ describe('yargs-parser', function () {
     })
 
     it('should set - as the value of s when s is set as a string', function () {
-      var argv = parser(['-s', '-'], {
+      const argv = parser(['-s', '-'], {
         string: ['s']
       })
 
@@ -1525,7 +1525,7 @@ describe('yargs-parser', function () {
 
   describe('count', function () {
     it('should count the number of times a boolean is present', function () {
-      var parsed
+      let parsed
 
       parsed = parser(['-x'], {
         count: ['verbose']
@@ -1568,7 +1568,7 @@ describe('yargs-parser', function () {
     })
 
     it('should not consume the next argument', function () {
-      var parsed = parser(['-v', 'moo'], {
+      let parsed = parser(['-v', 'moo'], {
         count: 'v'
       })
       parsed.v.should.equal(1)
@@ -1582,7 +1582,7 @@ describe('yargs-parser', function () {
     })
 
     it('should use a default value as is when no arg given', function () {
-      var parsed = parser([], {
+      let parsed = parser([], {
         count: 'v',
         default: { v: 3 }
       })
@@ -1614,7 +1614,7 @@ describe('yargs-parser', function () {
     })
 
     it('should ignore a default value when arg given', function () {
-      var parsed = parser(['-vv', '-v', '-v'], {
+      const parsed = parser(['-vv', '-v', '-v'], {
         count: 'v',
         default: { v: 1 }
       })
@@ -1622,7 +1622,7 @@ describe('yargs-parser', function () {
     })
 
     it('should increment regardless of arg value', function () {
-      var parsed = parser([
+      const parsed = parser([
         '-v',
         '-v=true',
         '-v', 'true',
@@ -1636,7 +1636,7 @@ describe('yargs-parser', function () {
     })
 
     it('should add an error if counter is also set as array', function () {
-      var argv = parser.detailed(['--counter', '--counter', '--counter'], {
+      const argv = parser.detailed(['--counter', '--counter', '--counter'], {
         count: ['counter'],
         array: ['counter']
       })
@@ -1645,7 +1645,7 @@ describe('yargs-parser', function () {
     })
 
     it('should add an error if counter is also set as narg', function () {
-      var argv = parser.detailed(['--counter', 'foo', 'bar'], {
+      const argv = parser.detailed(['--counter', 'foo', 'bar'], {
         count: ['counter'],
         narg: { counter: 2 }
       })
@@ -1656,32 +1656,32 @@ describe('yargs-parser', function () {
 
   describe('array', function () {
     it('should group values into an array if the same option is specified multiple times (duplicate-arguments-array=true)', function () {
-      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], { configuration: { 'duplicate-arguments-array': true } })
+      const parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], { configuration: { 'duplicate-arguments-array': true } })
       parse.should.have.property('v').and.deep.equal(['a', 'b', 'c'])
       parse.should.have.property('_').with.length(0)
     })
     it('should keep only the last value if the same option is specified multiple times (duplicate-arguments-false)', function () {
-      var parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], { configuration: { 'duplicate-arguments-array': false } })
+      const parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], { configuration: { 'duplicate-arguments-array': false } })
       parse.should.have.property('v').and.equal('c')
       parse.should.have.property('_').with.length(0)
     })
 
     it('should default an array to an empty array if passed as first option followed by another', function () {
-      var result = parser(['-a', '-b'], {
+      const result = parser(['-a', '-b'], {
         array: 'a'
       })
       result.should.have.property('a').and.deep.equal([])
     })
 
     it('should not attempt to default array if an element has already been populated', function () {
-      var result = parser(['-a', 'foo', 'bar', '-b'], {
+      const result = parser(['-a', 'foo', 'bar', '-b'], {
         array: 'a'
       })
       result.should.have.property('a').and.deep.equal(['foo', 'bar'])
     })
 
     it('should default argument to empty array if no value given', function () {
-      var result = parser(['-b', '--tag'], {
+      const result = parser(['-b', '--tag'], {
         array: ['b', 'tag'],
         default: { tag: [] }
       })
@@ -1690,7 +1690,7 @@ describe('yargs-parser', function () {
     })
 
     it('should place default of argument in array, when default provided', function () {
-      var result = parser(['-b', '--tag'], {
+      const result = parser(['-b', '--tag'], {
         array: ['b', 'tag'],
         default: { b: 33, tag: ['foo'] }
       })
@@ -1699,7 +1699,7 @@ describe('yargs-parser', function () {
     })
 
     it('should place value of argument in array, when one argument provided', function () {
-      var result = parser(['-b', '33'], {
+      const result = parser(['-b', '33'], {
         array: ['b']
       })
       Array.isArray(result.b).should.equal(true)
@@ -1707,7 +1707,7 @@ describe('yargs-parser', function () {
     })
 
     it('should add multiple argument values to the array', function () {
-      var result = parser(['-b', '33', '-b', 'hello'], {
+      const result = parser(['-b', '33', '-b', 'hello'], {
         array: 'b'
       })
       Array.isArray(result.b).should.equal(true)
@@ -1716,7 +1716,7 @@ describe('yargs-parser', function () {
     })
 
     it('should allow array: true, to be set inside an option block', function () {
-      var result = parser(['-b', '33'], {
+      const result = parser(['-b', '33'], {
         array: 'b'
       })
       Array.isArray(result.b).should.equal(true)
@@ -1725,7 +1725,7 @@ describe('yargs-parser', function () {
 
     // issue #103
     it('should default camel-case alias to array type', function () {
-      var result = parser(['--ca-path', 'http://www.example.com'], {
+      const result = parser(['--ca-path', 'http://www.example.com'], {
         array: ['ca-path']
       })
 
@@ -1734,7 +1734,7 @@ describe('yargs-parser', function () {
     })
 
     it('should default alias to array type', function () {
-      var result = parser(['--ca-path', 'http://www.example.com'], {
+      const result = parser(['--ca-path', 'http://www.example.com'], {
         array: 'ca-path',
         alias: {
           'ca-path': 'c'
@@ -1748,7 +1748,7 @@ describe('yargs-parser', function () {
 
     // see: https://github.com/bcoe/yargs/issues/162
     it('should eat non-hyphenated arguments until hyphenated option is hit', function () {
-      var result = parser(['-a=hello', 'world', '-b',
+      const result = parser(['-a=hello', 'world', '-b',
         '33', '22', '--foo', 'red', 'green',
         '--bar=cat', 'dog'], {
         array: ['a', 'b', 'foo', 'bar']
@@ -1773,7 +1773,7 @@ describe('yargs-parser', function () {
 
     // see: https://github.com/yargs/yargs-parser/pull/13
     it('should support array for --foo= format when the key is a number', function () {
-      var result = parser(['--1=a', 'b'], {
+      const result = parser(['--1=a', 'b'], {
         array: ['1']
       })
 
@@ -1783,7 +1783,7 @@ describe('yargs-parser', function () {
     })
 
     it('should support array for -f= and --bar= format when the value is dashed', function () {
-      var result = parser(['-f=--dog', 'cat', '--bar=--red', 'green'], {
+      const result = parser(['-f=--dog', 'cat', '--bar=--red', 'green'], {
         array: ['f', 'bar']
       })
 
@@ -1797,33 +1797,33 @@ describe('yargs-parser', function () {
     })
 
     it('should create an array when passing an argument twice with same value', function () {
-      var result = parser(['-x', 'val1', '-x', 'val1'])
+      const result = parser(['-x', 'val1', '-x', 'val1'])
       result.should.have.property('x').that.is.an('array').and.to.deep.equal(['val1', 'val1'])
     })
 
     it('should eat camelCase switch with camelCase array option', function () {
-      var result = parser(['--someOption', '1', '2'], {
+      const result = parser(['--someOption', '1', '2'], {
         array: ['someOption']
       })
       Array.isArray(result.someOption).should.equal(true)
       result.someOption.should.deep.equal([1, 2])
     })
     it('should eat hyphenated switch with hyphenated array option', function () {
-      var result = parser(['--some-option', '1', '2'], {
+      const result = parser(['--some-option', '1', '2'], {
         array: ['some-option']
       })
       Array.isArray(result['some-option']).should.equal(true)
       result['some-option'].should.deep.equal([1, 2])
     })
     it('should eat camelCase switch with hyphenated array option', function () {
-      var result = parser(['--someOption', '1', '2'], {
+      const result = parser(['--someOption', '1', '2'], {
         array: ['some-option']
       })
       Array.isArray(result['some-option']).should.equal(true)
       result['some-option'].should.deep.equal([1, 2])
     })
     it('should eat hyphenated switch with camelCase array option', function () {
-      var result = parser(['--some-option', '1', '2'], {
+      const result = parser(['--some-option', '1', '2'], {
         array: ['someOption']
       })
       Array.isArray(result.someOption).should.equal(true)
@@ -1832,14 +1832,14 @@ describe('yargs-parser', function () {
 
     // see https://github.com/yargs/yargs-parser/issues/6
     it('should respect the type `boolean` option for arrays', function () {
-      var result = parser(['-x=true', 'false'], {
+      const result = parser(['-x=true', 'false'], {
         array: [{ key: 'x', boolean: true }]
       })
       result.should.have.property('x').that.is.an('array').and.to.deep.equal([true, false])
     })
 
     it('should respect type `boolean` without value for arrays', function () {
-      var result = parser(['-x', '-x'], {
+      const result = parser(['-x', '-x'], {
         array: [{ key: 'x', boolean: true }],
         configuration: { 'flatten-duplicate-arrays': false }
       })
@@ -1847,7 +1847,7 @@ describe('yargs-parser', function () {
     })
 
     it('should respect `boolean negation` for arrays', function () {
-      var result = parser(['--no-bool', '--no-bool'], {
+      const result = parser(['--no-bool', '--no-bool'], {
         array: [{ key: 'bool', boolean: true }],
         configuration: { 'flatten-duplicate-arrays': false }
       })
@@ -1855,14 +1855,14 @@ describe('yargs-parser', function () {
     })
 
     it('should respect the type `number` option for arrays', function () {
-      var result = parser(['-x=5', '2'], {
+      const result = parser(['-x=5', '2'], {
         array: [{ key: 'x', number: true }]
       })
       result.should.have.property('x').that.is.an('array').and.to.deep.equal([5, 2])
     })
 
     it('should respect the type `string` option for arrays', function () {
-      var result = parser(['-x=5', '2'], {
+      const result = parser(['-x=5', '2'], {
         configuration: {
           'parse-numbers': true
         },
@@ -1872,7 +1872,7 @@ describe('yargs-parser', function () {
     })
 
     it('should eat non-hyphenated arguments until hyphenated option is hit - combined with coercion', function () {
-      var result = parser([
+      const result = parser([
         '-a=hello', 'world',
         '-b', '33', '22',
         '--foo', 'true', 'false',
@@ -1906,7 +1906,7 @@ describe('yargs-parser', function () {
 
   describe('nargs', function () {
     it('should allow the number of arguments following a key to be specified', function () {
-      var result = parser(['--foo', 'apple', 'bar'], {
+      const result = parser(['--foo', 'apple', 'bar'], {
         narg: {
           foo: 2
         }
@@ -1918,7 +1918,7 @@ describe('yargs-parser', function () {
     })
 
     it('should raise an exception if -f== format is used for a key with no expected argument', function () {
-      var argv = parser.detailed('-f=apple', {
+      const argv = parser.detailed('-f=apple', {
         narg: {
           f: 0
         }
@@ -1927,7 +1927,7 @@ describe('yargs-parser', function () {
     })
 
     it('should raise an exception if --bar== format is used for a key with no expected argument', function () {
-      var argv = parser.detailed('--bar=apple', {
+      const argv = parser.detailed('--bar=apple', {
         narg: {
           bar: 0
         }
@@ -1936,7 +1936,7 @@ describe('yargs-parser', function () {
     })
 
     it('should raise an exception if there are not enough arguments following key', function () {
-      var argv = parser.detailed('--foo apple', {
+      const argv = parser.detailed('--foo apple', {
         narg: {
           foo: 2
         }
@@ -1945,7 +1945,7 @@ describe('yargs-parser', function () {
     })
 
     it('nargs is applied to aliases', function () {
-      var result = parser(['--bar', 'apple', 'bar'], {
+      const result = parser(['--bar', 'apple', 'bar'], {
         narg: {
           foo: 2
         },
@@ -1959,7 +1959,7 @@ describe('yargs-parser', function () {
     })
 
     it('should apply nargs to flag arguments', function () {
-      var result = parser(['-f', 'apple', 'bar', 'blerg'], {
+      const result = parser(['-f', 'apple', 'bar', 'blerg'], {
         narg: {
           f: 2
         }
@@ -1971,7 +1971,7 @@ describe('yargs-parser', function () {
     })
 
     it('should support nargs for -f= and --bar= format arguments', function () {
-      var result = parser(['-f=apple', 'bar', 'blerg', '--bar=monkey', 'washing', 'cat'], {
+      const result = parser(['-f=apple', 'bar', 'blerg', '--bar=monkey', 'washing', 'cat'], {
         narg: {
           f: 2,
           bar: 2
@@ -1988,7 +1988,7 @@ describe('yargs-parser', function () {
     })
 
     it('should support nargs for -f= and --bar= format arguments with dashed values', function () {
-      var result = parser(['-f=--apple', 'bar', 'blerg', '--bar=-monkey', 'washing', 'cat'], {
+      const result = parser(['-f=--apple', 'bar', 'blerg', '--bar=-monkey', 'washing', 'cat'], {
         narg: {
           f: 2,
           bar: 2
@@ -2005,8 +2005,8 @@ describe('yargs-parser', function () {
     })
 
     it('should not modify the input args if an = was used', function () {
-      var expected = ['-f=apple', 'bar', 'blerg', '--bar=monkey', 'washing', 'cat']
-      var args = expected.slice()
+      const expected = ['-f=apple', 'bar', 'blerg', '--bar=monkey', 'washing', 'cat']
+      const args = expected.slice()
       parser(args, {
         narg: {
           f: 2,
@@ -2025,7 +2025,7 @@ describe('yargs-parser', function () {
     })
 
     it('allows multiple nargs to be set at the same time', function () {
-      var result = parser(['--foo', 'apple', 'bar', '--bar', 'banana', '-f'], {
+      const result = parser(['--foo', 'apple', 'bar', '--bar', 'banana', '-f'], {
         narg: {
           foo: 2,
           bar: 1
@@ -2041,7 +2041,7 @@ describe('yargs-parser', function () {
 
     // see: https://github.com/yargs/yargs-parser/pull/13
     it('should support nargs for --foo= format when the key is a number', function () {
-      var result = parser(['--1=a', 'b'], {
+      const result = parser(['--1=a', 'b'], {
         narg: {
           1: 2
         }
@@ -2053,7 +2053,7 @@ describe('yargs-parser', function () {
     })
 
     it('should not treat flag arguments as satisfying narg requirements', function () {
-      var result = parser.detailed(['--foo', '--bar', '99'], {
+      const result = parser.detailed(['--foo', '--bar', '99'], {
         narg: {
           foo: 1
         }
@@ -2065,7 +2065,7 @@ describe('yargs-parser', function () {
 
     // See: https://github.com/yargs/yargs-parser/issues/232
     it('should treat flag arguments as satisfying narg requirements, if nargs-eats-options=true', function () {
-      var result = parser.detailed(['--foo', '--bar', '99', '--batman', 'robin'], {
+      const result = parser.detailed(['--foo', '--bar', '99', '--batman', 'robin'], {
         narg: {
           foo: 2
         },
@@ -2079,7 +2079,7 @@ describe('yargs-parser', function () {
     })
 
     it('should not consume more than configured nargs', function () {
-      var result = parser(['--foo', 'a', 'b'], {
+      const result = parser(['--foo', 'a', 'b'], {
         narg: {
           foo: 1
         }
@@ -2089,7 +2089,7 @@ describe('yargs-parser', function () {
     })
 
     it('should ignore undefined configured nargs', function () {
-      var result = parser(['--foo', 'a', 'b'], {
+      const result = parser(['--foo', 'a', 'b'], {
         narg: {
           foo: undefined
         }
@@ -2099,7 +2099,7 @@ describe('yargs-parser', function () {
     })
 
     it('should default to 1 if configured narg is NaN', function () {
-      var result = parser(['--foo', 'a', 'b'], {
+      const result = parser(['--foo', 'a', 'b'], {
         narg: {
           foo: NaN
         }
@@ -2113,7 +2113,7 @@ describe('yargs-parser', function () {
     it('should apply all env vars if prefix is empty', function () {
       process.env.ONE_FISH = 'twofish'
       process.env.RED_FISH = 'bluefish'
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: ''
       })
       result.oneFish.should.equal('twofish')
@@ -2124,7 +2124,7 @@ describe('yargs-parser', function () {
     it('should apply all env vars if prefix is not a string', function () {
       process.env.ONE_FISH = 'twofish'
       process.env.RED_FISH = 'bluefish'
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: null
       })
 
@@ -2135,7 +2135,7 @@ describe('yargs-parser', function () {
     it('should not apply all env vars if prefix is undefined', function () {
       process.env.ONE_FISH = 'twofish'
       process.env.RED_FISH = 'bluefish'
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: undefined
       })
 
@@ -2148,7 +2148,7 @@ describe('yargs-parser', function () {
       process.env.RED_FISH = 'bluefish'
       process.env.GREEN_EGGS = 'sam'
       process.env.GREEN_HAM = 'iam'
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: 'GREEN'
       })
 
@@ -2160,7 +2160,7 @@ describe('yargs-parser', function () {
 
     it('should set aliases for options defined by env var', function () {
       process.env.AIRFORCE_ONE = 'two'
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: 'AIRFORCE',
         alias: {
           1: ['one', 'uno']
@@ -2174,7 +2174,7 @@ describe('yargs-parser', function () {
 
     it('should prefer command line value over env var', function () {
       process.env.FOO_BAR = 'ignore'
-      var result = parser(['--foo-bar', 'baz'], {
+      const result = parser(['--foo-bar', 'baz'], {
         envPrefix: ''
       })
 
@@ -2184,7 +2184,7 @@ describe('yargs-parser', function () {
     it('should respect type for args defined by env var', function () {
       process.env.MY_TEST_STRING = '1'
       process.env.MY_TEST_NUMBER = '2'
-      var result = parser([], {
+      const result = parser([], {
         string: 'string',
         envPrefix: 'MY_TEST_'
       })
@@ -2195,7 +2195,7 @@ describe('yargs-parser', function () {
 
     it('should set option from aliased env var', function () {
       process.env.SPACE_X = 'awesome'
-      var result = parser([], {
+      const result = parser([], {
         alias: {
           xactly: 'x'
         },
@@ -2208,7 +2208,7 @@ describe('yargs-parser', function () {
     it('should prefer env var value over configured default', function () {
       process.env.FOO_BALL = 'wut'
       process.env.FOO_BOOL = 'true'
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: 'FOO',
         default: {
           ball: 'baz',
@@ -2222,10 +2222,10 @@ describe('yargs-parser', function () {
       result.bool.should.equal(true)
     })
 
-    var jsonPath = path.resolve(__dirname, './fixtures/config.json')
+    const jsonPath = path.resolve(__dirname, './fixtures/config.json')
     it('should prefer environment variables over config file', function () {
       process.env.CFG_HERP = 'zerp'
-      var result = parser(['--cfg', jsonPath], {
+      const result = parser(['--cfg', jsonPath], {
         envPrefix: 'CFG',
         config: 'cfg',
         string: 'herp',
@@ -2239,7 +2239,7 @@ describe('yargs-parser', function () {
 
     it('should support an env var value as config file option', function () {
       process.env.TUX_CFG = jsonPath
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: 'TUX',
         config: ['cfg'],
         default: {
@@ -2256,7 +2256,7 @@ describe('yargs-parser', function () {
 
     it('should prefer cli config file option over env var config file option', function () {
       process.env.MUX_CFG = path.resolve(__dirname, '../package.json')
-      var result = parser(['--cfg', jsonPath], {
+      const result = parser(['--cfg', jsonPath], {
         envPrefix: 'MUX',
         config: 'cfg'
       })
@@ -2272,7 +2272,7 @@ describe('yargs-parser', function () {
       process.env.TEST_A = 'a'
       process.env.TEST_NESTED_OPTION__FOO = 'baz'
       process.env.TEST_NESTED_OPTION__BAR = 'bar'
-      var result = parser(['--nestedOption.foo', 'bar'], {
+      const result = parser(['--nestedOption.foo', 'bar'], {
         envPrefix: 'TEST'
       })
 
@@ -2287,7 +2287,7 @@ describe('yargs-parser', function () {
       process.env.TEST_A = 'a'
       process.env.TEST_NESTED_OPTION__FOO = 'baz'
       process.env.TEST_NESTED_OPTION__BAR = 'bar'
-      var result = parser([], {
+      const result = parser([], {
         envPrefix: 'TEST',
         default: {
           'nestedOption.foo': 'banana'
@@ -2305,7 +2305,7 @@ describe('yargs-parser', function () {
   describe('configuration', function () {
     describe('short option groups', function () {
       it('allows short-option-groups to be disabled', function () {
-        var parse = parser(['-cats=meow'], {
+        let parse = parser(['-cats=meow'], {
           configuration: {
             'short-option-groups': false
           }
@@ -2322,7 +2322,7 @@ describe('yargs-parser', function () {
 
     describe('camel-case expansion', function () {
       it('does not expand camel-case aliases', function () {
-        var parsed = parser.detailed([], {
+        const parsed = parser.detailed([], {
           alias: {
             'foo-bar': ['x']
           },
@@ -2336,7 +2336,7 @@ describe('yargs-parser', function () {
       })
 
       it('does not expand camel-case keys', function () {
-        var parsed = parser.detailed(['--foo-bar=apple'], {
+        const parsed = parser.detailed(['--foo-bar=apple'], {
           configuration: {
             'camel-case-expansion': false
           }
@@ -2349,7 +2349,7 @@ describe('yargs-parser', function () {
 
     describe('dot notation', function () {
       it('does not expand dot notation defaults', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           default: {
             'foo.bar': 'x'
           },
@@ -2362,7 +2362,7 @@ describe('yargs-parser', function () {
       })
 
       it('does not expand dot notation arguments', function () {
-        var parsed = parser(['--foo.bar', 'banana'], {
+        let parsed = parser(['--foo.bar', 'banana'], {
           configuration: {
             'dot-notation': false
           }
@@ -2377,7 +2377,7 @@ describe('yargs-parser', function () {
       })
 
       it('should use value from cli, if cli overrides dot notation default', function () {
-        var parsed = parser(['--foo.bar', 'abc'], {
+        const parsed = parser(['--foo.bar', 'abc'], {
           default: {
             'foo.bar': 'default'
           },
@@ -2390,7 +2390,7 @@ describe('yargs-parser', function () {
       })
 
       it('should also override dot notation alias', function () {
-        var parsed = parser(['--foo.bar', 'abc'], {
+        const parsed = parser(['--foo.bar', 'abc'], {
           alias: {
             'foo.bar': ['alias.bar']
           },
@@ -2406,7 +2406,7 @@ describe('yargs-parser', function () {
       })
 
       it('does not expand alias of first element of dot notation arguments', function () {
-        var parsed = parser(['--foo.bar', 'banana'], {
+        const parsed = parser(['--foo.bar', 'banana'], {
           alias: {
             foo: ['f']
           },
@@ -2420,7 +2420,7 @@ describe('yargs-parser', function () {
 
       // addresses https://github.com/yargs/yargs/issues/716
       it('does not append nested-object keys from config to top-level key', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           alias: {
             foo: ['f']
           },
@@ -2446,7 +2446,7 @@ describe('yargs-parser', function () {
 
     describe('parse-positional-numbers', () => {
       it('does not parse positionals into numbers when false', function () {
-        var parsed = parser(['5.0', '3'], {
+        const parsed = parser(['5.0', '3'], {
           configuration: {
             'parse-positional-numbers': false
           }
@@ -2456,7 +2456,7 @@ describe('yargs-parser', function () {
       })
 
       it('parses positionals into numbers by default', function () {
-        var parsed = parser(['5.0', '3'])
+        const parsed = parser(['5.0', '3'])
         expect(parsed._[0]).to.equal(5)
         expect(parsed._[1]).to.equal(3)
       })
@@ -2464,7 +2464,7 @@ describe('yargs-parser', function () {
 
     describe('parse numbers', function () {
       it('does not coerce defaults into numbers', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           default: {
             foo: '5'
           },
@@ -2477,7 +2477,7 @@ describe('yargs-parser', function () {
       })
 
       it('does not coerce arguments into numbers', function () {
-        var parsed = parser(['--foo', '5'], {
+        const parsed = parser(['--foo', '5'], {
           configuration: {
             'parse-numbers': false
           }
@@ -2486,7 +2486,7 @@ describe('yargs-parser', function () {
       })
 
       it('does not coerce positional arguments into numbers', function () {
-        var parsed = parser(['5'], {
+        const parsed = parser(['5'], {
           configuration: {
             'parse-numbers': false
           }
@@ -2495,7 +2495,7 @@ describe('yargs-parser', function () {
       })
 
       it('parses number if option explicitly set to number type', function () {
-        var parsed = parser(['--foo', '5', '--bar', '6', '--baz', '7'], {
+        const parsed = parser(['--foo', '5', '--bar', '6', '--baz', '7'], {
           number: ['bar', 'baz'],
           coerce: {
             baz: val => val
@@ -2510,7 +2510,7 @@ describe('yargs-parser', function () {
       })
 
       it('should coerce elements of number typed arrays to numbers', function () {
-        var parsed = parser(['--foo', '4', '--foo', '5', '2'], {
+        const parsed = parser(['--foo', '4', '--foo', '5', '2'], {
           array: ['foo'],
           configObjects: [{ foo: ['1', '2', '3'] }],
           configuration: {
@@ -2525,7 +2525,7 @@ describe('yargs-parser', function () {
 
     describe('boolean negation', function () {
       it('does not negate arguments prefixed with --no-', function () {
-        var parsed = parser(['--no-dice'], {
+        const parsed = parser(['--no-dice'], {
           configuration: {
             'boolean-negation': false
           }
@@ -2536,7 +2536,7 @@ describe('yargs-parser', function () {
       })
 
       it('negates boolean arguments with correct prefix', function () {
-        var parsed = parser(['--foodice'], {
+        const parsed = parser(['--foodice'], {
           configuration: {
             'negation-prefix': 'foo'
           }
@@ -2548,7 +2548,7 @@ describe('yargs-parser', function () {
 
     describe('duplicate arguments array', function () {
       it('adds duplicate argument to array', function () {
-        var parsed = parser('-x a -x b', {
+        const parsed = parser('-x a -x b', {
           configuration: {
             'duplicate-arguments-array': true
           }
@@ -2557,7 +2557,7 @@ describe('yargs-parser', function () {
         parsed.x.should.deep.equal(['a', 'b'])
       })
       it('keeps only last argument', function () {
-        var parsed = parser('-x a -x b', {
+        const parsed = parser('-x a -x b', {
           configuration: {
             'duplicate-arguments-array': false
           }
@@ -2566,7 +2566,7 @@ describe('yargs-parser', function () {
         parsed.x.should.equal('b')
       })
       it('does not interfere with nargs', function () {
-        var parsed = parser('-x a b c -x o p q', {
+        const parsed = parser('-x a b c -x o p q', {
           narg: { x: 3 },
           configuration: {
             'duplicate-arguments-array': false
@@ -2579,7 +2579,7 @@ describe('yargs-parser', function () {
 
     describe('flatten duplicate arrays', function () {
       it('flattens duplicate array type', function () {
-        var parsed = parser('-x a b -x c d', {
+        const parsed = parser('-x a b -x c d', {
           array: ['x'],
           configuration: {
             'flatten-duplicate-arrays': true
@@ -2589,7 +2589,7 @@ describe('yargs-parser', function () {
         parsed.x.should.deep.equal(['a', 'b', 'c', 'd'])
       })
       it('nests duplicate array types', function () {
-        var parsed = parser('-x a b -x c d', {
+        const parsed = parser('-x a b -x c d', {
           array: ['x'],
           configuration: {
             'flatten-duplicate-arrays': false
@@ -2599,7 +2599,7 @@ describe('yargs-parser', function () {
         parsed.x.should.deep.equal([['a', 'b'], ['c', 'd']])
       })
       it('nests duplicate array types of more than 2', function () {
-        var parsed = parser('-x a b -x c d -x e f -x g h', {
+        const parsed = parser('-x a b -x c d -x e f -x g h', {
           array: ['x'],
           configuration: {
             'flatten-duplicate-arrays': false
@@ -2609,7 +2609,7 @@ describe('yargs-parser', function () {
         parsed.x.should.deep.equal([['a', 'b'], ['c', 'd'], ['e', 'f'], ['g', 'h']])
       })
       it('doesn\'t nests single arrays', function () {
-        var parsed = parser('-x a b', {
+        const parsed = parser('-x a b', {
           array: ['x'],
           configuration: {
             'flatten-duplicate-arrays': false
@@ -2619,7 +2619,7 @@ describe('yargs-parser', function () {
         parsed.x.should.deep.equal(['a', 'b'])
       })
       it('flattens duplicate array type, when argument uses dot notation', function () {
-        var parsed = parser('-x.foo a -x.foo b', {
+        const parsed = parser('-x.foo a -x.foo b', {
           array: ['x.foo'],
           configuration: {
             'flatten-duplicate-arrays': true
@@ -2663,7 +2663,7 @@ describe('yargs-parser', function () {
       describe('duplicate=false, flatten=false,', function () {
         describe('type=array', function () {
           it('[-x 1 2 3] => [1, 2, 3]', function () {
-            var parsed = parser('-x 1 2 3', {
+            const parsed = parser('-x 1 2 3', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2673,7 +2673,7 @@ describe('yargs-parser', function () {
             parsed.x.should.deep.equal([1, 2, 3])
           })
           it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
-            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+            const parsed = parser('-x 1 2 3 -x 2 3 4', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2685,7 +2685,7 @@ describe('yargs-parser', function () {
         })
         describe('type=number', function () {
           it('[-x 1 -x 2 -x 3] => 3', function () {
-            var parsed = parser('-x 1 -x 2 -x 3', {
+            const parsed = parser('-x 1 -x 2 -x 3', {
               number: 'x',
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2697,7 +2697,7 @@ describe('yargs-parser', function () {
         })
         describe('type=boolean', function () {
           it('[-x true -x true -x false] => false', function () {
-            var parsed = parser('-x true -x true -x false', {
+            const parsed = parser('-x true -x true -x false', {
               boolean: ['x'],
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2711,7 +2711,7 @@ describe('yargs-parser', function () {
       describe('duplicate=false, flatten=true,', function () {
         describe('type=array', function () {
           it('[-x 1 2 3] => [1, 2, 3]', function () {
-            var parsed = parser('-x 1 2 3', {
+            const parsed = parser('-x 1 2 3', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2721,7 +2721,7 @@ describe('yargs-parser', function () {
             parsed.x.should.deep.equal([1, 2, 3])
           })
           it('[-x 1 2 3 -x 2 3 4] => [2, 3, 4]', function () {
-            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+            const parsed = parser('-x 1 2 3 -x 2 3 4', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2733,7 +2733,7 @@ describe('yargs-parser', function () {
         })
         describe('type=number', function () {
           it('[-x 1 -x 2 -x 3] => 3', function () {
-            var parsed = parser('-x 1 -x 2 -x 3', {
+            const parsed = parser('-x 1 -x 2 -x 3', {
               number: 'x',
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2745,7 +2745,7 @@ describe('yargs-parser', function () {
         })
         describe('type=boolean', function () {
           it('[-x true -x true -x false] => false', function () {
-            var parsed = parser('-x true -x true -x false', {
+            const parsed = parser('-x true -x true -x false', {
               boolean: ['x'],
               configuration: {
                 'duplicate-arguments-array': false,
@@ -2759,7 +2759,7 @@ describe('yargs-parser', function () {
       describe('duplicate=true, flatten=true,', function () {
         describe('type=array', function () {
           it('[-x 1 2 3] => [1, 2, 3]', function () {
-            var parsed = parser('-x 1 2 3', {
+            const parsed = parser('-x 1 2 3', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2769,7 +2769,7 @@ describe('yargs-parser', function () {
             parsed.x.should.deep.equal([1, 2, 3])
           })
           it('[-x 1 2 3 -x 2 3 4] => [1, 2, 3, 2, 3, 4]', function () {
-            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+            const parsed = parser('-x 1 2 3 -x 2 3 4', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2781,7 +2781,7 @@ describe('yargs-parser', function () {
         })
         describe('type=number', function () {
           it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
-            var parsed = parser('-x 1 -x 2 -x 3', {
+            const parsed = parser('-x 1 -x 2 -x 3', {
               number: 'x',
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2794,7 +2794,7 @@ describe('yargs-parser', function () {
         describe('type=boolean', function () {
           // in the casse of boolean arguments, only the last argument is used:
           it('[-x true -x true -x false] => false', function () {
-            var parsed = parser('-x true -x true -x false', {
+            const parsed = parser('-x true -x true -x false', {
               boolean: ['x'],
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2808,7 +2808,7 @@ describe('yargs-parser', function () {
       describe('duplicate=true, flatten=false,', function () {
         describe('type=array', function () {
           it('[-x 1 -x 2 -x 3] => [[1], [2], [3]]', function () {
-            var parsed = parser('-x 1 -x 2 -x 3', {
+            const parsed = parser('-x 1 -x 2 -x 3', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2818,7 +2818,7 @@ describe('yargs-parser', function () {
             parsed.x.should.deep.equal([[1], [2], [3]])
           })
           it('[-x 1 2 3 -x 2 3 4] => [[1, 2, 3], [ 2, 3, 4]]', function () {
-            var parsed = parser('-x 1 2 3 -x 2 3 4', {
+            const parsed = parser('-x 1 2 3 -x 2 3 4', {
               array: ['x'],
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2830,7 +2830,7 @@ describe('yargs-parser', function () {
         })
         describe('type=number', function () {
           it('[-x 1 -x 2 -x 3] => [1, 2, 3]', function () {
-            var parsed = parser('-x 1 -x 2 -x 3', {
+            const parsed = parser('-x 1 -x 2 -x 3', {
               number: 'x',
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2842,7 +2842,7 @@ describe('yargs-parser', function () {
         })
         describe('type=boolean', function () {
           it('[-x true -x true -x false] => false', function () {
-            var parsed = parser('-x true -x true -x false', {
+            const parsed = parser('-x true -x true -x false', {
               boolean: ['x'],
               configuration: {
                 'duplicate-arguments-array': true,
@@ -2857,7 +2857,7 @@ describe('yargs-parser', function () {
 
     describe('populate--', function () {
       it('should populate "_" by default', function () {
-        var result = parser([
+        const result = parser([
           'bare',
           '--', '-h', 'eek', '--'
         ])
@@ -2866,7 +2866,7 @@ describe('yargs-parser', function () {
       })
 
       it('should populate "_" when given config with "short-option-groups" false', function () {
-        var result = parser.detailed([
+        const result = parser.detailed([
           '--', 'foo'
         ], {
           configuration: {
@@ -2879,7 +2879,7 @@ describe('yargs-parser', function () {
       })
 
       it('should populate the "--" if populate-- is "true"', function () {
-        var result = parser([
+        const result = parser([
           '--name=meowmers', 'bare', '-cats', 'woo', 'moxy',
           '-h', 'awesome', '--multi=quux',
           '--key', 'value',
@@ -2908,14 +2908,14 @@ describe('yargs-parser', function () {
 
     describe('set-placeholder-key', function () {
       it('should not set placeholder key by default', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           string: ['a']
         })
         parsed.should.not.have.property('a')
       })
 
       it('should set placeholder key to "undefined"', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           array: ['a'],
           boolean: ['b'],
           string: ['c'],
@@ -2947,7 +2947,7 @@ describe('yargs-parser', function () {
       })
 
       it('should not set placeholder for key with a default value', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           string: ['a'],
           default: { a: 'hello' },
           configuration: { 'set-placeholder-key': true }
@@ -2956,7 +2956,7 @@ describe('yargs-parser', function () {
       })
 
       it('should not set placeholder key with dot notation', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           string: ['a.b']
         })
         parsed.should.not.have.property('a')
@@ -2965,7 +2965,7 @@ describe('yargs-parser', function () {
       })
 
       it('should not set placeholder key with dot notation when `set-placeholder-key` is `true`', function () {
-        var parsed = parser([], {
+        const parsed = parser([], {
           string: ['a.b'],
           configuration: {
             'set-placeholder-key': true
@@ -2979,7 +2979,7 @@ describe('yargs-parser', function () {
 
     describe('halt-at-non-option', function () {
       it('gets the entire rest of line', function () {
-        var parse = parser(['--foo', './file.js', '--foo', '--bar'], {
+        const parse = parser(['--foo', './file.js', '--foo', '--bar'], {
           configuration: { 'halt-at-non-option': true },
           boolean: ['foo', 'bar']
         })
@@ -2987,7 +2987,7 @@ describe('yargs-parser', function () {
       })
 
       it('is not influenced by --', function () {
-        var parse = parser(
+        const parse = parser(
           ['--foo', './file.js', '--foo', '--', 'barbar', '--bar'],
           { configuration: { 'halt-at-non-option': true }, boolean: ['foo', 'bar'] }
         )
@@ -2998,7 +2998,7 @@ describe('yargs-parser', function () {
       })
 
       it('is not influenced by unknown options', function () {
-        var parse = parser(
+        const parse = parser(
           ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
           { configuration: { 'halt-at-non-option': true }, boolean: ['foo'] }
         )
@@ -3290,7 +3290,7 @@ describe('yargs-parser', function () {
 
   // addresses: https://github.com/yargs/yargs-parser/issues/41
   it('defaults to empty array if array option is provided no values', function () {
-    var parsed = parser(['-f'], {
+    let parsed = parser(['-f'], {
       alias: {
         f: 'files'
       },
@@ -3320,7 +3320,7 @@ describe('yargs-parser', function () {
 
   describe('coerce', function () {
     it('applies coercion function to simple arguments', function () {
-      var parsed = parser(['--foo', '99'], {
+      const parsed = parser(['--foo', '99'], {
         coerce: {
           foo: function (arg) {
             return arg * -1
@@ -3331,7 +3331,7 @@ describe('yargs-parser', function () {
     })
 
     it('applies coercion function to aliases', function () {
-      var parsed = parser(['--foo', '99'], {
+      const parsed = parser(['--foo', '99'], {
         coerce: {
           f: function (arg) {
             return arg * -1
@@ -3346,7 +3346,7 @@ describe('yargs-parser', function () {
     })
 
     it('applies coercion function to all dot options', function () {
-      var parsed = parser(['--foo.bar', 'nananana'], {
+      const parsed = parser(['--foo.bar', 'nananana'], {
         coerce: {
           foo: function (val) {
             val.bar += ', batman!'
@@ -3358,7 +3358,7 @@ describe('yargs-parser', function () {
     })
 
     it('applies coercion to defaults', function () {
-      var parsed = parser([], {
+      const parsed = parser([], {
         default: { foo: 'bar' },
         coerce: {
           foo: function (val) {
@@ -3370,7 +3370,7 @@ describe('yargs-parser', function () {
     })
 
     it('applies coercion function to an implicit array', function () {
-      var parsed = parser(['--foo', '99', '-f', '33'], {
+      const parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
           f: function (arg) {
             return arg.map(function (a) {
@@ -3387,7 +3387,7 @@ describe('yargs-parser', function () {
     })
 
     it('applies coercion function to an explicit array', function () {
-      var parsed = parser(['--foo', '99', '-f', '33'], {
+      const parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
           f: function (arg) {
             return arg.map(function (a) {
@@ -3405,7 +3405,7 @@ describe('yargs-parser', function () {
     })
 
     it('applies coercion function to _', function () {
-      var parsed = parser(['99', '33'], {
+      const parsed = parser(['99', '33'], {
         coerce: {
           _: function (arg) {
             return arg.map(function (a) {
@@ -3419,11 +3419,11 @@ describe('yargs-parser', function () {
 
     // see: https://github.com/yargs/yargs/issues/550
     it('coercion function can be used to parse large #s', function () {
-      var fancyNumberParser = function (arg) {
+      const fancyNumberParser = function (arg) {
         if (arg.length > 10) return arg
         else return parseInt(arg)
       }
-      var parsed = parser(['--foo', '88888889999990000998989898989898', '--bar', '998'], {
+      const parsed = parser(['--foo', '88888889999990000998989898989898', '--bar', '998'], {
         coerce: {
           foo: fancyNumberParser,
           bar: fancyNumberParser
@@ -3436,7 +3436,7 @@ describe('yargs-parser', function () {
     })
 
     it('populates argv.error, if an error is thrown', function () {
-      var parsed = parser.detailed(['--foo', '99'], {
+      const parsed = parser.detailed(['--foo', '99'], {
         coerce: {
           foo: function (arg) {
             throw Error('banana')
@@ -3447,7 +3447,7 @@ describe('yargs-parser', function () {
     })
 
     it('populates argv.error, if an error is thrown for an explicit array', function () {
-      var parsed = parser.detailed(['--foo', '99'], {
+      const parsed = parser.detailed(['--foo', '99'], {
         array: ['foo'],
         coerce: {
           foo: function (arg) {
@@ -3460,8 +3460,8 @@ describe('yargs-parser', function () {
 
     // see: https://github.com/yargs/yargs-parser/issues/76
     it('only runs coercion functions once, even with aliases', function () {
-      var runcount = 0
-      var func = (arg) => {
+      let runcount = 0
+      const func = (arg) => {
         runcount++
         return undefined
       }
@@ -3480,7 +3480,7 @@ describe('yargs-parser', function () {
 
   // see: https://github.com/yargs/yargs-parser/issues/37
   it('normalizes all paths in array when provided via config object', function () {
-    var argv = parser(['--foo', 'bar'], {
+    const argv = parser(['--foo', 'bar'], {
       array: ['a'],
       normalize: ['a'],
       configObjects: [{ a: ['bin/../a.txt', 'bin/../b.txt'] }]
@@ -3527,21 +3527,21 @@ describe('yargs-parser', function () {
   // see: https://github.com/yargs/yargs-parser/issues/101
   describe('dot-notation array arguments combined with string arguments', function () {
     it('parses correctly when dot-notation argument is first', function () {
-      var argv = parser(['--foo.bar', 'baz', '--foo', 'bux'])
+      const argv = parser(['--foo.bar', 'baz', '--foo', 'bux'])
       Array.isArray(argv.foo).should.equal(true)
       argv.foo[0].bar.should.equal('baz')
       argv.foo[1].should.equal('bux')
     })
 
     it('parses correctly when dot-notation argument is last', function () {
-      var argv = parser(['--foo', 'bux', '--foo.bar', 'baz'])
+      const argv = parser(['--foo', 'bux', '--foo.bar', 'baz'])
       Array.isArray(argv.foo).should.equal(true)
       argv.foo[0].should.equal('bux')
       argv.foo[1].bar.should.equal('baz')
     })
 
     it('parses correctly when there are multiple dot-notation arguments', function () {
-      var argv = parser(['--foo.first', 'firstvalue', '--foo', 'bux', '--foo.bar', 'baz', '--foo.bla', 'banana'])
+      const argv = parser(['--foo.first', 'firstvalue', '--foo', 'bux', '--foo.bar', 'baz', '--foo.bla', 'banana'])
       Array.isArray(argv.foo).should.equal(true)
       argv.foo.length.should.equal(4)
       argv.foo[0].first.should.equal('firstvalue')
@@ -3686,12 +3686,12 @@ describe('yargs-parser', function () {
 
   describe('prototype collisions', () => {
     it('parses unknown argument colliding with prototype', () => {
-      var parse = parser(['--toString'])
+      const parse = parser(['--toString'])
       parse.toString.should.equal(true)
     })
 
     it('parses unknown argument colliding with prototype, when unknown options as args', () => {
-      var parse = parser(['--toString'], {
+      const parse = parser(['--toString'], {
         configuration: {
           'unknown-options-as-args': true
         }
@@ -3700,7 +3700,7 @@ describe('yargs-parser', function () {
     })
 
     it('handles "alias" colliding with prototype', () => {
-      var parse = parser(['-t', '99'], {
+      const parse = parser(['-t', '99'], {
         alias: {
           toString: ['t']
         }
@@ -3711,38 +3711,38 @@ describe('yargs-parser', function () {
     })
 
     it('handles multiple args colliding with alias', () => {
-      var parse = parser(['--toString', '88', '--toString', '99'])
+      const parse = parser(['--toString', '88', '--toString', '99'])
       parse.toString.should.eql([88, 99])
     })
 
     it('handle dot notation colliding with alias', () => {
-      var parse = parser(['--toString.cool', 'apple'])
+      const parse = parser(['--toString.cool', 'apple'])
       parse.toString.cool.should.equal('apple')
     })
 
     it('handles "arrays" colliding with prototype', () => {
-      var parse = parser(['--toString', '99', '100'], {
+      const parse = parser(['--toString', '99', '100'], {
         array: ['toString']
       })
       parse.toString.should.eql([99, 100])
     })
 
     it('handles "arrays" colliding with prototype', () => {
-      var parse = parser(['--toString', '99', '100'], {
+      const parse = parser(['--toString', '99', '100'], {
         array: ['toString']
       })
       parse.toString.should.eql([99, 100])
     })
 
     it('handles "strings" colliding with prototype', () => {
-      var parse = parser(['--toString', '99'], {
+      const parse = parser(['--toString', '99'], {
         string: ['toString']
       })
       parse.toString.should.eql('99')
     })
 
     it('handles "numbers" colliding with prototype', () => {
-      var parse = parser(['--toString', '99'], {
+      const parse = parser(['--toString', '99'], {
         number: ['toString'],
         configuration: {
           'parse-numbers': false
@@ -3752,28 +3752,28 @@ describe('yargs-parser', function () {
     })
 
     it('handles "counts" colliding with prototype', () => {
-      var parse = parser(['--toString', '--toString', '--toString'], {
+      const parse = parser(['--toString', '--toString', '--toString'], {
         count: ['toString']
       })
       parse.toString.should.eql(3)
     })
 
     it('handles "normalize" colliding with prototype', () => {
-      var parse = parser(['--toString', './node_modules/chai'], {
+      const parse = parser(['--toString', './node_modules/chai'], {
         normalize: ['toString']
       })
       parse.toString.should.include('node_modules')
     })
 
     it('handles "normalize" colliding with prototype', () => {
-      var parse = parser(['--toString', './node_modules/chai'], {
+      const parse = parser(['--toString', './node_modules/chai'], {
         normalize: ['toString']
       })
       parse.toString.should.include('node_modules')
     })
 
     it('handles key in configuration file that collides with prototype', function () {
-      var argv = parser(['--foo', 'bar'], {
+      const argv = parser(['--foo', 'bar'], {
         alias: {
           z: 'zoom'
         },
@@ -3786,7 +3786,7 @@ describe('yargs-parser', function () {
     })
 
     it('handles "nargs" colliding with prototype', () => {
-      var parse = parser(['--toString', 'apple', 'banana', 'batman', 'robin'], {
+      const parse = parser(['--toString', 'apple', 'banana', 'batman', 'robin'], {
         narg: {
           toString: 3
         }
@@ -3796,7 +3796,7 @@ describe('yargs-parser', function () {
     })
 
     it('handles "coercions" colliding with prototype', () => {
-      var parse = parser(['--toString', '33'], {
+      const parse = parser(['--toString', '33'], {
         coerce: {
           toString: (val) => {
             return val * 2
@@ -3809,7 +3809,7 @@ describe('yargs-parser', function () {
 
   // See: https://github.com/facebook/jest/issues/9517
   it('does not collect arguments configured as booleans into implicit array', () => {
-    var parse = parser(['--infinite', 'true', '--infinite', 'true', '--no-infinite'], {
+    const parse = parser(['--infinite', 'true', '--infinite', 'true', '--no-infinite'], {
       boolean: 'infinite'
     })
     parse.infinite.should.equal(false)
@@ -3819,7 +3819,7 @@ describe('yargs-parser', function () {
   // https://github.com/yargs/yargs/issues/1570
   describe('array with nargs', () => {
     it('allows array and nargs to be configured in conjunction, enforcing the nargs value', () => {
-      var parse = parser.detailed(['-a', 'apple', 'banana'], {
+      const parse = parser.detailed(['-a', 'apple', 'banana'], {
         array: 'a',
         narg: {
           a: 1
@@ -3832,7 +3832,7 @@ describe('yargs-parser', function () {
 
     // see; https://github.com/yargs/yargs/issues/1098
     it('allows special NaN count to be provided to narg, to indicate one or more array values', () => {
-      var parse = parser.detailed(['-a', 'apple', 'banana'], {
+      const parse = parser.detailed(['-a', 'apple', 'banana'], {
         array: 'a',
         narg: {
           a: NaN
@@ -3843,7 +3843,7 @@ describe('yargs-parser', function () {
     })
 
     it('throws error if at least one value not provided for NaN', () => {
-      var parse = parser.detailed(['-a'], {
+      const parse = parser.detailed(['-a'], {
         array: 'a',
         narg: {
           a: NaN
@@ -3853,7 +3853,7 @@ describe('yargs-parser', function () {
     })
 
     it('returns an error if not enough positionals were provided for nargs', () => {
-      var parse = parser.detailed(['-a', '33'], {
+      const parse = parser.detailed(['-a', '33'], {
         array: 'a',
         narg: {
           a: 2
@@ -3864,7 +3864,7 @@ describe('yargs-parser', function () {
     })
 
     it('returns an error if not enough positionals were provided for nargs even with nargs-eats-options', () => {
-      var parse = parser.detailed(['-a', '33', '--cat'], {
+      const parse = parser.detailed(['-a', '33', '--cat'], {
         narg: {
           a: 3
         },
@@ -3876,7 +3876,7 @@ describe('yargs-parser', function () {
     })
 
     it('does not raise error if no arguments are provided for boolean option', () => {
-      var parse = parser.detailed(['-a'], {
+      const parse = parser.detailed(['-a'], {
         array: 'a',
         boolean: 'a',
         narg: {
