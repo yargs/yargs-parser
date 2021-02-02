@@ -1,8 +1,8 @@
 export function camelCase (str: string): string {
-  const isCamelCase = str !== str.toLowerCase() && str !== str.toUpperCase();
+  const isCamelCase = str !== str.toLowerCase() && str !== str.toUpperCase()
 
   if (!isCamelCase) {
-    str = str.toLocaleLowerCase();
+    str = str.toLocaleLowerCase()
   }
 
   if (str.indexOf('-') === -1 && str.indexOf('_') === -1) {
@@ -19,7 +19,6 @@ export function camelCase (str: string): string {
       }
       if (i !== 0 && (chr === '-' || chr === '_')) {
         nextChrUpper = true
-        continue
       } else if (chr !== '-' && chr !== '_') {
         camelcase += chr
       }
