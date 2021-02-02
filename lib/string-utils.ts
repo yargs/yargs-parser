@@ -1,5 +1,10 @@
 export function camelCase (str: string): string {
-  str = str.toLocaleLowerCase()
+  const isCamelCase = str !== str.toLowerCase() && str !== str.toUpperCase();
+
+  if (!isCamelCase) {
+    str = str.toLocaleLowerCase();
+  }
+
   if (str.indexOf('-') === -1 && str.indexOf('_') === -1) {
     return str
   } else {
