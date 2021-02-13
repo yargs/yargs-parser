@@ -1,4 +1,6 @@
 export function camelCase (str: string): string {
+  // Handle the case where an argument is provided as camel case, e.g., fooBar.
+  // by ensuring that the string isn't already mixed case:
   const isCamelCase = str !== str.toLowerCase() && str !== str.toUpperCase()
 
   if (!isCamelCase) {
