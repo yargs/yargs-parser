@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [20.2.5](https://www.github.com/yargs/yargs-parser/compare/v20.2.4...v20.2.5) (2021-02-13)
+
+
+### Bug Fixes
+
+* do not lowercase camel cased string ([#348](https://www.github.com/yargs/yargs-parser/issues/348)) ([5f4da1f](https://www.github.com/yargs/yargs-parser/commit/5f4da1f17d9d50542d2aaa206c9806ce3e320335))
+
 ### [20.2.4](https://www.github.com/yargs/yargs-parser/compare/v20.2.3...v20.2.4) (2020-11-09)
 
 
