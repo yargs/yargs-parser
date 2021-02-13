@@ -11,7 +11,7 @@ describe('string-utils', function () {
     it('removes leading hyphens', () => {
       strictEqual(camelCase('-goodnight-moon'), 'goodnightMoon')
     })
-    it('camelCase string stay as is', () => {
+    it('camelCase string stays as is', () => {
       strictEqual(camelCase('iAmCamelCase'), 'iAmCamelCase')
     })
     it('uppercase string with underscore to camel case', () => {
