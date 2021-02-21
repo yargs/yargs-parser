@@ -408,6 +408,8 @@ export class YargsParser {
 
     // '--' defaults to undefined.
     if (notFlagsOption && notFlags.length) argv[notFlagsArgv] = []
+    // See: https://github.com/yargs/yargs/issues/1869.
+    if (notFlagsOption && !Array.isArray(argv[notFlagsArgv])) argv[notFlagsArgv] = [argv[notFlagsArgv]]
     notFlags.forEach(function (key) {
       argv[notFlagsArgv].push(key)
     })
