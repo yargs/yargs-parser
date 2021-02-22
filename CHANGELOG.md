@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [20.2.6](https://www.github.com/yargs/yargs-parser/compare/v20.2.5...v20.2.6) (2021-02-22)
+
+
+### Bug Fixes
+
+* **populate--:** -- should always be array ([#354](https://www.github.com/yargs/yargs-parser/issues/354)) ([585ae8f](https://www.github.com/yargs/yargs-parser/commit/585ae8ffad74cc02974f92d788e750137fd65146))
+
 ### [20.2.5](https://www.github.com/yargs/yargs-parser/compare/v20.2.4...v20.2.5) (2021-02-13)
 
 
