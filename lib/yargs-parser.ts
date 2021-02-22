@@ -214,6 +214,11 @@ export class YargsParser {
       // any unknown option (except for end-of-options, "--")
       if (arg !== '--' && isUnknownOptionAsArg(arg)) {
         pushPositional(arg)
+      // ---, ---=, ----, etc,
+      } else if (arg.match(/---+(=|$)/)) {
+        // options without key name are invalid.
+        pushPositional(arg)
+        continue
       // -- separated by =
       } else if (arg.match(/^--.+=/) || (
         !configuration['short-option-groups'] && arg.match(/^-.+=/)

@@ -3244,6 +3244,17 @@ describe('yargs-parser', function () {
           k: true
         })
       })
+      // See: https://github.com/yargs/yargs/issues/1869
+      // ----=hello ---=hello ---- hello.
+      it('should not populate "--" for key values other than "--"', () => {
+        const argv = parser('----=test', {
+          configuration: {
+            'populate--': true
+          }
+        })
+        argv._.should.eql(['----=test'])
+        expect(argv['--']).to.equal(undefined)
+      })
       // see: https://github.com/yargs/yargs/issues/1489
       it('should identify "hasOwnProperty" as unknown option', () => {
         const argv = parser('--known-arg=1 --hasOwnProperty=33', {
