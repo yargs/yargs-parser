@@ -3245,16 +3245,15 @@ describe('yargs-parser', function () {
         })
       })
       // See: https://github.com/yargs/yargs/issues/1869
-      // TODO(@bcoe): add additional test cases for handling of edge cases like
       // ----=hello ---=hello ---- hello.
-      it('should default -- to arrray when populate-- set', () => {
+      it('should not populate "--" for key values other than "--"', () => {
         const argv = parser('----=test', {
           configuration: {
             'populate--': true
           }
         })
-        argv['--'].should.eql(['test'])
-        argv[''].should.eql(['test'])
+        argv['_'].should.eql(['----=test'])
+        expect(argv['--']).to.equal(undefined);
       })
       // see: https://github.com/yargs/yargs/issues/1489
       it('should identify "hasOwnProperty" as unknown option', () => {

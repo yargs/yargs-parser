@@ -214,6 +214,11 @@ export class YargsParser {
       // any unknown option (except for end-of-options, "--")
       if (arg !== '--' && isUnknownOptionAsArg(arg)) {
         pushPositional(arg)
+      // ---, ---=, ----, etc,
+      } else if (arg.match(/---+(=|$)/)) {
+        // options without key name are invalid.
+        pushPositional(arg)
+        continue;
       // -- separated by =
       } else if (arg.match(/^--.+=/) || (
         !configuration['short-option-groups'] && arg.match(/^-.+=/)
@@ -407,9 +412,7 @@ export class YargsParser {
     })
 
     // '--' defaults to undefined.
-    if (notFlagsOption && notFlags.length) argv[notFlagsArgv] = []
-    // See: https://github.com/yargs/yargs/issues/1869.
-    if (notFlagsOption && !Array.isArray(argv[notFlagsArgv])) argv[notFlagsArgv] = [argv[notFlagsArgv]]
+    if (notFlagsOption && notFlags.length) argv[notFlagsArgv] = [];
     notFlags.forEach(function (key) {
       argv[notFlagsArgv].push(key)
     })
