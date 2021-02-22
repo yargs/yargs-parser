@@ -3252,8 +3252,8 @@ describe('yargs-parser', function () {
             'populate--': true
           }
         })
-        argv['_'].should.eql(['----=test'])
-        expect(argv['--']).to.equal(undefined);
+        argv._.should.eql(['----=test'])
+        expect(argv['--']).to.equal(undefined)
       })
       // see: https://github.com/yargs/yargs/issues/1489
       it('should identify "hasOwnProperty" as unknown option', () => {

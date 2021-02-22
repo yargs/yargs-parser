@@ -218,7 +218,7 @@ export class YargsParser {
       } else if (arg.match(/---+(=|$)/)) {
         // options without key name are invalid.
         pushPositional(arg)
-        continue;
+        continue
       // -- separated by =
       } else if (arg.match(/^--.+=/) || (
         !configuration['short-option-groups'] && arg.match(/^-.+=/)
@@ -412,7 +412,7 @@ export class YargsParser {
     })
 
     // '--' defaults to undefined.
-    if (notFlagsOption && notFlags.length) argv[notFlagsArgv] = [];
+    if (notFlagsOption && notFlags.length) argv[notFlagsArgv] = []
     notFlags.forEach(function (key) {
       argv[notFlagsArgv].push(key)
     })
