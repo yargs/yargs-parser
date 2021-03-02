@@ -252,7 +252,7 @@ Should positional keys that look like numbers be treated as such.
 
 ```console
 $ node example.js 99.3
-{ _: [99] }
+{ _: [99.3] }
 ```
 
 _if disabled:_
