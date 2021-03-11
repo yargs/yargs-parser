@@ -3935,6 +3935,11 @@ describe('yargs-parser', function () {
     })
   })
 
+  it('parses ANSI-C quotes properly', () => {
+    const argv = parser(['--string', "$'text with \\n newline'"])
+    argv.should.have.property('string', 'text with \n newline')
+  })
+
   it('should replace the key __proto__ with the key ___proto___', function () {
     const argv = parser(['-f.__proto__.foo', '99', '-x.y.__proto__.bar', '100', '--__proto__', '200'])
     argv.should.eql({

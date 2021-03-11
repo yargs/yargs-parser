@@ -1,6 +1,6 @@
 /* global describe, it */
 import { strictEqual } from 'assert'
-import { tokenizeArgString } from '../../lib/tokenize-arg-string.js'
+import { tokenizeArgString, escapeAnsiString } from '../../lib/tokenize-arg-string.js'
 
 describe('TokenizeArgString', function () {
   it('handles unquoted string', function () {
@@ -82,6 +82,12 @@ describe('TokenizeArgString', function () {
     strictEqual(args[1], '99')
   })
 
+  it('handles array with non string value', function () {
+    const args = tokenizeArgString(['--foo', 99])
+    strictEqual(args[0], '--foo')
+    strictEqual(args[1], '99')
+  })
+
   it('handles array with quoted string with no spaces', function () {
     const args = tokenizeArgString(['--foo', "'hello'"])
     strictEqual(args[0], '--foo')
@@ -127,5 +133,34 @@ describe('TokenizeArgString', function () {
     const args = tokenizeArgString(['--foo', '-bar'])
     strictEqual(args[0], '--foo')
     strictEqual(args[1], '-bar')
+  })
+
+  it('handles ANSI-C quoted strings', function () {
+    const args = tokenizeArgString(['--string', "$'text with \\n newline'"])
+    strictEqual(args[0], '--string')
+    strictEqual(args[1], '\'text with \n newline\'')
+  })
+
+  it('handles ANSI-C quoted strings as equals declarations', function () {
+    const args = tokenizeArgString(["--string=$'text with \\n newline'"])
+    strictEqual(args[0], '--string=\'text with \n newline\'')
+  })
+
+  it('handles ANSI-C quoted strings with silently stripped characters', function () {
+    const args = tokenizeArgString(["$'\\b\\f'"])
+    strictEqual(args[0], '\'\b\f\'')
+  })
+
+  it('handles ANSI-C quoted strings in real curl example', function () {
+    const args = tokenizeArgString('curl \'http://localhost:3001\' -H \'Content-Type: multipart/form-data; boundary=---------------------------22070739573223388867407661007\' --data-binary $\'-----------------------------22070739573223388867407661007\\r\\nContent-Disposition: form-data; name="caseid"\\r\\n\\r\\n165646\\r\\n-----------------------------22070739573223388867407661007--\\r\\n\'')
+    const expected = '\'-----------------------------22070739573223388867407661007\r\nContent-Disposition: form-data; name="caseid"\r\n\r\n165646\r\n-----------------------------22070739573223388867407661007--\r\n\''
+    strictEqual(args[5], expected)
+  })
+})
+
+describe('EscapeAnsiString', function () {
+  it('handles ANSI-C quoted strings with silently stripped characters', function () {
+    const args = escapeAnsiString("'start-\\binbetween\\f-end'")
+    strictEqual(args, '\'start-\binbetween\f-end\'')
   })
 })
