@@ -1,11 +1,8 @@
-
 /*
  * This is *only* for bash ANSI-C quoted strings - that is, strings that match the pattern $'some text'
  *
- * It's a fairly rare case but leads to the occasional bug. Only implementing the escaped string replacement will most
- * likely fix the vast majority of these bugs.
- *
- * Javascript strings already process some of these correctly (newlines, unicode strings, carriage returns, etc)
+ * It's a fairly rare case but leads to the occasional bug (most notably when copying from Chrome or Firefox devtools).
+ * Implementing the escaped string replacement will most likely fix the vast majority of these bugs.
  *
  * Additional documentation
  * https://www.gnu.org/software/bash/manual/bash.html#ANSI_002dC-Quoting
