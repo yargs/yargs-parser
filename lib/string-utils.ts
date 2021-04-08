@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright (c) 2016, Contributors
+ * SPDX-License-Identifier: ISC
+ */
+
 export function camelCase (str: string): string {
   // Handle the case where an argument is provided as camel case, e.g., fooBar.
   // by ensuring that the string isn't already mixed case:

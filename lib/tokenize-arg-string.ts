@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright (c) 2016, Contributors
+ * SPDX-License-Identifier: ISC
+ */
+
 // take an un-split argv string and tokenize it.
 export function tokenizeArgString (argString: string | any[]): string[] {
   if (Array.isArray(argString)) {
