@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright (c) 2016, Contributors
+ * SPDX-License-Identifier: ISC
+ */
+
 import { tokenizeArgString } from './tokenize-arg-string.js'
 import type {
   ArgsInput,

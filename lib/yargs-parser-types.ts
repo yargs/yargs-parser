@@ -1,4 +1,10 @@
 /**
+ * @license
+ * Copyright (c) 2016, Contributors
+ * SPDX-License-Identifier: ISC
+ */
+
+/**
  * An object whose all properties have the same type, where each key is a string.
  */
 export interface Dictionary<T = any> {
