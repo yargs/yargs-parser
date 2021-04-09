@@ -13,7 +13,6 @@ import type {
   CoerceCallback,
   Configuration,
   DefaultValuesForType,
-  DefaultValuesForTypeKey,
   DetailedArguments,
   Dictionary,
   Flag,
@@ -29,6 +28,7 @@ import type {
   ValueOf,
   YargsParserMixin
 } from './yargs-parser-types.js'
+import { DefaultValuesForTypeKey } from './yargs-parser-types.js'
 import { camelCase, decamelize, looksLikeNumber } from './string-utils.js'
 
 let mixin: YargsParserMixin
@@ -1002,10 +1002,10 @@ export class YargsParser {
     // return a default value, given the type of a flag.,
     function defaultForType<K extends DefaultValuesForTypeKey> (type: K): DefaultValuesForType[K] {
       const def: DefaultValuesForType = {
-        boolean: true,
-        string: '',
-        number: undefined,
-        array: []
+        [DefaultValuesForTypeKey.BOOLEAN]: true,
+        [DefaultValuesForTypeKey.STRING]: '',
+        [DefaultValuesForTypeKey.NUMBER]: undefined,
+        [DefaultValuesForTypeKey.ARRAY]: []
       }
 
       return def[type]
@@ -1013,11 +1013,11 @@ export class YargsParser {
 
     // given a flag, enforce a default type.
     function guessType (key: string): DefaultValuesForTypeKey {
-      let type: DefaultValuesForTypeKey = 'boolean'
-      if (checkAllAliases(key, flags.strings)) type = 'string'
-      else if (checkAllAliases(key, flags.numbers)) type = 'number'
-      else if (checkAllAliases(key, flags.bools)) type = 'boolean'
-      else if (checkAllAliases(key, flags.arrays)) type = 'array'
+      let type: DefaultValuesForTypeKey = DefaultValuesForTypeKey.BOOLEAN
+      if (checkAllAliases(key, flags.strings)) type = DefaultValuesForTypeKey.STRING
+      else if (checkAllAliases(key, flags.numbers)) type = DefaultValuesForTypeKey.NUMBER
+      else if (checkAllAliases(key, flags.bools)) type = DefaultValuesForTypeKey.BOOLEAN
+      else if (checkAllAliases(key, flags.arrays)) type = DefaultValuesForTypeKey.ARRAY
       return type
     }
 
