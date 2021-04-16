@@ -10,7 +10,7 @@ export function camelCase (str: string): string {
   const isCamelCase = str !== str.toLowerCase() && str !== str.toUpperCase()
 
   if (!isCamelCase) {
-    str = str.toLocaleLowerCase()
+    str = str.toLowerCase()
   }
 
   if (str.indexOf('-') === -1 && str.indexOf('_') === -1) {
@@ -23,7 +23,7 @@ export function camelCase (str: string): string {
       let chr = str.charAt(i)
       if (nextChrUpper) {
         nextChrUpper = false
-        chr = chr.toLocaleUpperCase()
+        chr = chr.toUpperCase()
       }
       if (i !== 0 && (chr === '-' || chr === '_')) {
         nextChrUpper = true
@@ -36,7 +36,7 @@ export function camelCase (str: string): string {
 }
 
 export function decamelize (str: string, joinString?: string): string {
-  const lowercase = str.toLocaleLowerCase()
+  const lowercase = str.toLowerCase()
   joinString = joinString || '-'
   let notCamelcase = ''
   for (let i = 0; i < str.length; i++) {
