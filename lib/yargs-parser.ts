@@ -82,6 +82,10 @@ export class YargsParser {
       'strip-dashed': false,
       'unknown-options-as-args': false
     }, opts.configuration)
+    if (!configuration['boolean-negation'] && configuration['negation-prefix'] === 'no-') {
+      configuration['negation-prefix'] = ''
+    }
+
     const defaults: OptionsDefault = Object.assign(Object.create(null), opts.default)
     const configObjects = opts.configObjects || []
     const envPrefix = opts.envPrefix
