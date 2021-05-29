@@ -28,7 +28,9 @@ describe('string-utils', function () {
       strictEqual(looksLikeNumber('3293'), true)
       strictEqual(looksLikeNumber('0x10'), true)
       strictEqual(looksLikeNumber('0x10'), true)
+      strictEqual(looksLikeNumber('0.1'), true)
 
+      strictEqual(looksLikeNumber('00.1'), false)
       strictEqual(looksLikeNumber('0100'), false)
       strictEqual(looksLikeNumber('apple'), false)
     })
