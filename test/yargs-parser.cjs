@@ -3963,4 +3963,37 @@ describe('yargs-parser', function () {
     }).to.throw(/yargs parser supports a minimum Node.js version of 55/)
     delete process.env.YARGS_MIN_NODE_VERSION
   })
+
+  // Refs: https://github.com/yargs/yargs-parser/issues/386
+  describe('perf', () => {
+    const i = 100000
+    describe('unknown-options-as-args', () => {
+      it('parses long chain of "-" with reasonable performance', function () {
+        this.timeout(500)
+        const s = (new Array(i).fill('-').join('')) + 'a'
+        const parsed = parser([s], { configuration: { 'unknown-options-as-args': true } })
+        parsed._[0].should.equal(s)
+      })
+      it('parses long chain of "-a-a" with reasonable performance', function () {
+        this.timeout(500)
+        const s = '-' + (new Array(i).fill('-a').join('')) + '=35'
+        const parsed = parser([s], { configuration: { 'unknown-options-as-args': true } })
+        parsed._[0].should.equal(s)
+      })
+    })
+    it('parses long chain of "-" with reasonable performance', function () {
+      this.timeout(500)
+      const s = (new Array(i).fill('-').join('')) + 'a'
+      const arg = (new Array(i - 2).fill('-').join('')) + 'a'
+      const parsed = parser([s])
+      parsed[arg].should.equal(true)
+    })
+    it('parses long chain of "-a-a" with reasonable performance', function () {
+      this.timeout(500)
+      const s = '-' + (new Array(i).fill('-a').join('')) + '=35'
+      const arg = 'a' + (new Array(i - 1).fill('A').join(''))
+      const parsed = parser([s])
+      parsed[arg].should.equal(35)
+    })
+  })
 })
