@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [20.2.8](https://www.github.com/yargs/yargs-parser/compare/v20.2.7...v20.2.8) (2021-06-20)
+
+
+### Bug Fixes
+
+* **build:** revert to prior publish action ([c5e5440](https://www.github.com/yargs/yargs-parser/commit/c5e5440fd0e434f0b2e3abea857901f0f2737035))
+* **build:** switch to new tag_name syntax ([b473fd4](https://www.github.com/yargs/yargs-parser/commit/b473fd4a612e0a22d8e59e547f48a8f48457cf46))
+* **locale:** Turkish camelize and decamelize issues with toLocaleLowerCase/toLocaleUpperCase ([2617303](https://www.github.com/yargs/yargs-parser/commit/261730383e02448562f737b94bbd1f164aed5143))
+* **perf:** address slow parse when using unknown-options-as-args ([#394](https://www.github.com/yargs/yargs-parser/issues/394)) ([441f059](https://www.github.com/yargs/yargs-parser/commit/441f059d585d446551068ad213db79ac91daf83a))
+* **string-utils:** detect [0,1] ranged values as numbers ([#388](https://www.github.com/yargs/yargs-parser/issues/388)) ([efcc32c](https://www.github.com/yargs/yargs-parser/commit/efcc32c2d6b09aba31abfa2db9bd947befe5586b))
+
 ### [20.2.8](https://www.github.com/yargs/yargs-parser/compare/yargs-parser-v20.2.7...yargs-parser-v20.2.8) (2021-06-20)
 
 
