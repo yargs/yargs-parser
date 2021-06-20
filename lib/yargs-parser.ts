@@ -210,6 +210,7 @@ export class YargsParser {
 
     for (let i = 0; i < args.length; i++) {
       const arg = args[i]
+      const truncatedArg = arg.replace(/^-{3,}/, '---')
       let broken: boolean
       let key: string | undefined
       let letters: string[]
@@ -221,7 +222,7 @@ export class YargsParser {
       if (arg !== '--' && isUnknownOptionAsArg(arg)) {
         pushPositional(arg)
       // ---, ---=, ----, etc,
-      } else if (arg.match(/---+(=|$)/)) {
+      } else if (truncatedArg.match(/---+(=|$)/)) {
         // options without key name are invalid.
         pushPositional(arg)
         continue
@@ -969,6 +970,7 @@ export class YargsParser {
     }
 
     function isUnknownOption (arg: string): boolean {
+      arg = arg.replace(/^-{3,}/, '--')
       // ignore negative numbers
       if (arg.match(negative)) { return false }
       // if this is a short option group and all of them are configured, it isn't unknown
