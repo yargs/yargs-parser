@@ -970,7 +970,7 @@ export class YargsParser {
     }
 
     function isUnknownOption (arg: string): boolean {
-      arg = arg.replace(/^-{2,}/, '--')
+      arg = arg.replace(/^-{3,}/, '--')
       // ignore negative numbers
       if (arg.match(negative)) { return false }
       // if this is a short option group and all of them are configured, it isn't unknown
