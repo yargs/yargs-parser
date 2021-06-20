@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [20.2.9](https://www.github.com/yargs/yargs-parser/compare/yargs-parser-v20.2.8...yargs-parser-v20.2.9) (2021-06-20)
+
+
+### Bug Fixes
+
+* **build:** fixed automated release pipeline ([1fe9135](https://www.github.com/yargs/yargs-parser/commit/1fe9135884790a083615419b2861683e2597dac3))
+
 ### [20.2.8](https://www.github.com/yargs/yargs-parser/compare/yargs-parser-v20.2.7...yargs-parser-v20.2.8) (2021-06-20)
 
 

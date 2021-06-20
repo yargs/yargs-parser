@@ -1,6 +1,6 @@
 {
   "name": "yargs-parser",
-  "version": "20.2.8",
+  "version": "20.2.9",
   "description": "the mighty option parser used by yargs",
   "main": "build/index.cjs",
   "exports": {
