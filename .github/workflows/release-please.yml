@@ -11,8 +11,8 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          command: manifest
-          default-branch: main
+          release-type: node
+          package-name: yargs-parser
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
@@ -28,19 +28,19 @@ jobs:
           git remote add gh-token "https://${{ secrets.GITHUB_TOKEN}}@github.com/yargs/yargs-parser.git"
           git checkout -b deno
           git add -f build
-          git commit -a -m 'chore: ${{ steps.release.outputs[".--tag_name"] }} release'
+          git commit -a -m 'chore: ${{ steps.release.outputs.tag_name }} release'
           git push origin +deno
-          git tag -a ${{ steps.release.outputs[".--tag_name"] }}-deno -m 'chore: ${{ steps.release.outputs[".--tag_name"] }} release'
-          git push origin ${{ steps.release.outputs[".--tag_name"] }}-deno
-        if: ${{ steps.release.outputs.releases_created }}
+          git tag -a ${{ steps.release.outputs.tag_name }}-deno -m 'chore: ${{ steps.release.outputs.tag_name }} release'
+          git push origin ${{ steps.release.outputs.tag_name }}-deno
+        if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v1
         with:
           node-version: 14
           registry-url: 'https://external-dot-oss-automation.appspot.com/'
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created }}
       - run: npm install
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created }}
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: ${{ steps.release.outputs.releases_created }}
+        if: ${{ steps.release.outputs.release_created }}
