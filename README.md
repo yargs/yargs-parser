@@ -336,14 +336,14 @@ Should arrays consume more than one positional argument following their flag.
 
 ```console
 $ node example --arr 1 2
-{ _[], arr: [1, 2] }
+{ _: [], arr: [1, 2] }
 ```
 
 _if disabled:_
 
 ```console
 $ node example --arr 1 2
-{ _[2], arr: [1] }
+{ _: [2], arr: [1] }
 ```
 
 **Note: in `v18.0.0` we are considering defaulting greedy arrays to `false`.**
