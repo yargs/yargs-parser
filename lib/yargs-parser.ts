@@ -210,7 +210,7 @@ export class YargsParser {
 
     for (let i = 0; i < args.length; i++) {
       const arg = args[i]
-      const truncatedArg = arg.replace(/^-{3,}/, '---');
+      const truncatedArg = arg.replace(/^-{3,}/, '---')
       let broken: boolean
       let key: string | undefined
       let letters: string[]
