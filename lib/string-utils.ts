@@ -58,6 +58,6 @@ export function looksLikeNumber (x: null | undefined | number | string): boolean
   // hexadecimal.
   if (/^0x[0-9a-f]+$/i.test(x)) return true
   // don't treat 0123 as a number; as it drops the leading '0'.
-  if (x.length > 1 && x[0] === '0') return false
+  if (/^0[^.]/.test(x)) return false
   return /^[-]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
 }
