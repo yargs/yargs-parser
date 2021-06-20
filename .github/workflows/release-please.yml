@@ -20,7 +20,6 @@ jobs:
       - run: npm install
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-      - run: npm run compile
       - uses: actions/setup-node@v1
         with:
           node-version: 14
