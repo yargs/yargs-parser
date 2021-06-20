@@ -14,7 +14,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* **deno:** force relese for Deno ([6687c97](https://www.github.com/yargs/yargs-parser/commit/6687c972d0f3ca7865a97908dde3080b05f8b026))
 * **locale:** Turkish camelize and decamelize issues with toLocaleLowerCase/toLocaleUpperCase ([2617303](https://www.github.com/yargs/yargs-parser/commit/261730383e02448562f737b94bbd1f164aed5143))
 * **perf:** address slow parse when using unknown-options-as-args ([#394](https://www.github.com/yargs/yargs-parser/issues/394)) ([441f059](https://www.github.com/yargs/yargs-parser/commit/441f059d585d446551068ad213db79ac91daf83a))
 * **string-utils:** detect [0,1] ranged values as numbers ([#388](https://www.github.com/yargs/yargs-parser/issues/388)) ([efcc32c](https://www.github.com/yargs/yargs-parser/commit/efcc32c2d6b09aba31abfa2db9bd947befe5586b))
