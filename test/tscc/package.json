@@ -1,0 +1,8 @@
+{
+  "name": "optimized-test",
+  "version": "0.0.0",
+  "dependencies": {
+    "@tscc/tscc": "^0.6.4",
+    "@types/node": "^10.0.3"
+  }
+}

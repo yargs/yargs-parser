@@ -1,0 +1,5 @@
+{
+  "modules": {
+    "out": "optimized.ts"
+  }
+}
