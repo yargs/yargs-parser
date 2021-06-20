@@ -186,11 +186,16 @@ export type FlagsKey = KeyOf<Omit<Flags, 'keys'>>;
 
 export type ArrayFlagsKey = Extract<FlagsKey, 'bools' | 'strings' | 'numbers'>;
 
-export interface DefaultValuesForType {
-  boolean: boolean;
-  string: string;
-  number: undefined;
-  array: any[];
+export enum DefaultValuesForTypeKey {
+  BOOLEAN = 'boolean',
+  STRING = 'string',
+  NUMBER = 'number',
+  ARRAY = 'array',
 }
 
-export type DefaultValuesForTypeKey = KeyOf<DefaultValuesForType>;
+export interface DefaultValuesForType {
+  [DefaultValuesForTypeKey.BOOLEAN]: boolean;
+  [DefaultValuesForTypeKey.STRING]: string;
+  [DefaultValuesForTypeKey.NUMBER]: undefined;
+  [DefaultValuesForTypeKey.ARRAY]: any[];
+}
