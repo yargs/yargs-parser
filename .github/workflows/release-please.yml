@@ -1,7 +1,7 @@
 on:
    push:
      branches:
-       - master
+       - main
 name: release-please
 jobs:
   release-please:
@@ -12,7 +12,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           command: manifest
-          default-branch: master
+          default-branch: main
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
