@@ -1,0 +1,35 @@
+on:
+  push:
+    branches:
+      - 15.x.x
+  pull_request:
+    types: [ assigned, opened, synchronize, reopened, labeled ]
+name: ci
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [6]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node --version
+      - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      - run: npm test
+      - run: npm run check
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 6
+      - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      - run: npm test

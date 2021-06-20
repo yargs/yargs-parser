@@ -1,0 +1,34 @@
+on:
+   push:
+     branches:
+       - 15.x.x
+name: release-please
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v2
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          command: manifest
+          default-branch: 15.x.x
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm install
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      - run: npm run compile
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: 'https://external-dot-oss-automation.appspot.com/'
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm install
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm publish --tag=latest-15
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        if: ${{ steps.release.outputs.release_created }}
