@@ -9,7 +9,7 @@ The mighty option parser used by [yargs](https://github.com/yargs/yargs).
 
 visit the [yargs website](http://yargs.js.org/) for more examples, and thorough usage instructions.
 
-<img width="250" src="https://raw.githubusercontent.com/yargs/yargs-parser/master/yargs-logo.png">
+<img width="250" src="https://raw.githubusercontent.com/yargs/yargs-parser/main/yargs-logo.png">
 
 ## Example
 
