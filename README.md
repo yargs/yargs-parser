@@ -248,7 +248,7 @@ $ node example.js --foo=99.3
 * default: `true`
 * key: `parse-positional-numbers`
 
-Should positional keys that look like numbers be treated as such.
+Should positional keys that look like numbers be treated as such?
 
 ```console
 $ node example.js 99.3
@@ -500,6 +500,28 @@ _If enabled_
 ```console
 $ node example.js --unknown-option --known-option 2 --string-option --unknown-option2
 { _: ['--unknown-option'], knownOption: 2, stringOption: '--unknown-option2' }
+```
+
+### parse bash ANSI-C strings
+
+* default: `false`
+* key: `parse-bash-ansi-c-strings`
+
+Should arguments that look like [ANSI-C quoted strings](https://www.gnu.org/software/bash/manual/html_node/ANSI_002dC-Quoting.html) (a bash-only feature) be treated as such?
+
+_if disabled:_
+
+```console
+> const parser = require('yargs-parser')
+> parser("--foo $'hello world'")
+{ _: [], foo: "$'hello world'" }
+```
+
+_if enabled:_
+
+```console
+> parser("--foo $'hello world'", {configuration: {'parse-bash-ansi-c-strings': true}})
+{ _: [], foo: 'hello world' }
 ```
 
 ## Supported Node.js Versions

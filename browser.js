@@ -2,7 +2,7 @@
 // specific libraries, such as "path".
 //
 // TODO: figure out reasonable web equivalents for "resolve", "normalize", etc.
-import { camelCase, decamelize, looksLikeNumber } from './build/lib/string-utils.js'
+import { camelCase, decamelize, looksLikeNumber, parseAnsiCQuotedString } from './build/lib/string-utils.js'
 import { YargsParser } from './build/lib/yargs-parser.js'
 const parser = new YargsParser({
   cwd: () => { return '' },
@@ -25,5 +25,6 @@ yargsParser.detailed = function (args, opts) {
 yargsParser.camelCase = camelCase
 yargsParser.decamelize = decamelize
 yargsParser.looksLikeNumber = looksLikeNumber
+yargsParser.parseAnsiCQuotedString = parseAnsiCQuotedString
 
 export default yargsParser

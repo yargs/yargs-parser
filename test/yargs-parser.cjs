@@ -3589,6 +3589,116 @@ describe('yargs-parser', function () {
     })
   })
 
+  // see: https://github.com/yargs/yargs-parser/issues/346
+  describe('ANSI-C quoted strings', () => {
+    it('does not parse ANSI-C quoted strings by default', function () {
+      const args = parser(["$'\\n'"])
+      args._[0].should.equal("$'\\n'")
+      const args2 = parser("--foo $'\\t'")
+      args2.foo.should.equal("$'\\t'")
+    })
+
+    it('handles bash ANSI-C quoted strings', () => {
+      const args = parser("--foo $'text with \\n newline'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args.foo.should.equal('text with \n newline')
+
+      // Double quotes shouldn't work
+      const args2 = parser('--foo $"text without \\n newline"', {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args2.foo.should.equal('$"text without \\n newline"')
+
+      const characters = '\\\\' + '\\a' + '\\b' + '\\e' + '\\E' + '\\f' + '\\n' + '\\r' + '\\t' + '\\v' + "\\'" + '\\"' + '\\?'
+      const args3 = parser("--foo $'" + characters + "'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args3.foo.should.equal('\\\a\b\u001b\u001b\f\n\r\t\v\'"?') // eslint-disable-line
+
+      const args4 = parser("--foo $'text \\xFFFF with \\xFF hex'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args4.foo.should.equal('text \u00FFFF with \u00FF hex')
+      const args5 = parser("--foo $'text \\uFFFFFF\\uFFFF with \\uFF hex'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args5.foo.should.equal('text \uFFFFFF\uFFFF with \u00FF hex')
+      const args6 = parser("--foo $'text \\U10FFFF\\UFFFF with \\U00FF hex'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      const longCodePoint = String.fromCodePoint(0x10FFFF)
+      args6.foo.should.equal(`text ${longCodePoint}\uFFFF with \u00FF hex`)
+
+      const args7 = parser("--foo $'text \\cAB \\cz with \\c12 control \\c011 chars'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args7.foo.should.equal('text \u0001B \u001A with \u00112 control \u001011 chars')
+
+      const args8 = parser("--foo $'text \\0 \\001 with \\12 \\123 \\129 octal'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args8.foo.should.equal('text \u0000 \u0001 with \u000A \u0053 \u000A9 octal')
+    })
+
+    it('handles edge case characters in control code escapes', () => {
+      const args = parser("--foo $'\\c\\t'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args.foo.should.equal('\x1Ct')
+
+      // Check that the regex matches whitespace characters
+      const args2 = parser("--foo $'\\c\nt'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args2.foo.should.equal('\nt')
+
+      const args3 = parser("--foo $'\\c '", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args3.foo.should.equal('\x00')
+
+      // This is a special case
+      const args4 = parser("--foo $'\\c?'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args4.foo.should.equal('\x7F')
+    })
+
+    it('throws error for non-ASCII characters in control code escapes', () => {
+      const args = parser.detailed("--foo $'\\c\u0080'", {
+        configuration: {
+          'parse-bash-ansi-c-strings': true
+        }
+      })
+      args.error.message.should.match(/non-ASCII control character in ANSI-C quoted/)
+    })
+  })
+
   // see: https://github.com/yargs/yargs-parser/issues/144
   it('number/string types should use default when no right-hand value', () => {
     let argv = parser(['--foo'], {

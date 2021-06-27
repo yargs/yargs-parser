@@ -29,7 +29,12 @@ import type {
   YargsParserMixin
 } from './yargs-parser-types.js'
 import { DefaultValuesForTypeKey } from './yargs-parser-types.js'
-import { camelCase, decamelize, looksLikeNumber } from './string-utils.js'
+import {
+  camelCase,
+  decamelize,
+  looksLikeNumber,
+  parseAnsiCQuotedString
+} from './string-utils.js'
 
 let mixin: YargsParserMixin
 export class YargsParser {
@@ -75,6 +80,7 @@ export class YargsParser {
       'negation-prefix': 'no-',
       'parse-numbers': true,
       'parse-positional-numbers': true,
+      'parse-bash-ansi-c-strings': false,
       'populate--': false,
       'set-placeholder-key': false,
       'short-option-groups': true,
@@ -607,11 +613,18 @@ export class YargsParser {
 
     function processValue (key: string, val: any) {
       // strings may be quoted, clean this up as we assign values.
-      if (typeof val === 'string' &&
-        (val[0] === "'" || val[0] === '"') &&
-        val[val.length - 1] === val[0]
-      ) {
-        val = val.substring(1, val.length - 1)
+      if (typeof val === 'string') {
+        if ((val[0] === "'" || val[0] === '"') &&
+          val[val.length - 1] === val[0]
+        ) {
+          val = val.substring(1, val.length - 1)
+        } else if (configuration['parse-bash-ansi-c-strings'] && val.slice(0, 2) === "$'" && val[val.length - 1] === "'") {
+          try {
+            val = parseAnsiCQuotedString(val)
+          } catch (err) {
+            error = err
+          }
+        }
       }
 
       // handle parsing boolean arguments --foo=true --bar false.

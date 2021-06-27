@@ -72,10 +72,12 @@ export interface Configuration {
   'nargs-eats-options': boolean;
   /** The prefix to use for negated boolean variables. Default is `'no-'` */
   'negation-prefix': string;
-  /** Should positional values that look like numbers be parsed? Default is `true` */
-  'parse-positional-numbers': boolean;
+  /** Should positional values that look ANSI-C strings (a bash-only feature) be parsed? Default is `false` */
+  'parse-bash-ansi-c-strings': boolean;
   /** Should keys that look like numbers be treated as such? Default is `true` */
   'parse-numbers': boolean;
+  /** Should positional values that look like numbers be parsed? Default is `true` */
+  'parse-positional-numbers': boolean;
   /** Should unparsed flags be stored in -- or _? Default is `false` */
   'populate--': boolean;
   /** Should a placeholder be added for keys not set via the corresponding CLI argument? Default is `false` */
@@ -155,6 +157,7 @@ export interface Parser {
   camelCase(str: string): string;
   decamelize(str: string, joinString?: string): string;
   looksLikeNumber(x: null | undefined | number | string): boolean;
+  parseAnsiCQuotedString(str: string): string;
 }
 
 export type StringFlag = Dictionary<string[]>;
