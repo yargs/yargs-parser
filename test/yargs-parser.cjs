@@ -3587,6 +3587,22 @@ describe('yargs-parser', function () {
       args.foo.should.equal('-hello world')
       args.bar.should.equal('--goodnight moon')
     })
+
+    it.only('respects inner quotes (string)', function () {
+      const args = parser('cmd --foo ""Hello"" --bar ""World"" --baz "":)""')
+      console.log('string', {args})
+      args.foo.should.equal('"Hello"')
+      args.bar.should.equal('"World"')
+      args.baz.should.equal('":)"')
+    })
+
+    it.only('respects inner quotes (array)', function () {
+      const args = parser(['cmd', '--foo', '"Hello"', '--bar', '"World"', '--baz', '":)"'])
+      console.log('array', {args})
+      args.foo.should.equal('"Hello"')
+      args.bar.should.equal('"World"')
+      args.baz.should.equal('":)"')
+    })
   })
 
   // see: https://github.com/yargs/yargs-parser/issues/144
