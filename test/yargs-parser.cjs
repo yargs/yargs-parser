@@ -3569,7 +3569,7 @@ describe('yargs-parser', function () {
       args.foo.should.equal('hello world')
       args.bar.should.equal('goodnight\'moon')
       const args2 = parser(['--foo', '"hello world"', '--bar="goodnight\'moon"'])
-      args2.foo.should.equal('hello world')
+      args2.foo.should.equal('"hello world"')
       args2.bar.should.equal('goodnight\'moon')
     })
 
@@ -3578,7 +3578,7 @@ describe('yargs-parser', function () {
       args.foo.should.equal('hello world')
       args.bar.should.equal('goodnight"moon')
       const args2 = parser(['--foo', "'hello world'", "--bar='goodnight\"moon'"])
-      args2.foo.should.equal('hello world')
+      args2.foo.should.equal("'hello world'")
       args2.bar.should.equal('goodnight"moon')
     })
 
@@ -3589,7 +3589,7 @@ describe('yargs-parser', function () {
     })
 
     it('respects inner quotes (string)', function () {
-      const args = parser('cmd --foo ""Hello"" --bar ""World"" --baz "":)""')
+      const args = parser('cmd --foo ""Hello"" --bar ""World"" --baz="":)""')
       console.log('string', {args})
       args.foo.should.equal('"Hello"')
       args.bar.should.equal('"World"')
@@ -3597,7 +3597,7 @@ describe('yargs-parser', function () {
     })
 
     it('respects inner quotes (array)', function () {
-      const args = parser(['cmd', '--foo', '"Hello"', '--bar', '"World"', '--baz', '":)"'])
+      const args = parser(['cmd', '--foo', '"Hello"', '--bar', '"World"', '--baz="":)""'])
       console.log('array', {args})
       args.foo.should.equal('"Hello"')
       args.bar.should.equal('"World"')
