@@ -557,7 +557,6 @@ export class YargsParser {
         addNewAlias(key, alias)
       }
 
-      console.log({val})
       const value = processValue(key, val, shouldStripQuotes)
       const splitKey = key.split('.')
       setKey(argv, splitKey, value)
