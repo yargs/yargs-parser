@@ -77,7 +77,7 @@
     "!*.d.ts"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "standardx": {
     "ignore": [
