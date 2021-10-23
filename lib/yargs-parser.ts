@@ -681,7 +681,7 @@ export class YargsParser {
             }
 
             setConfigObject(config)
-          } catch (ex) {
+          } catch (ex: any) {
             // Deno will receive a PermissionDenied error if an attempt is
             // made to load config without the --allow-read flag:
             if (ex.name === 'PermissionDenied') error = ex
@@ -759,7 +759,7 @@ export class YargsParser {
                 argv[ali] = value
               })
             } catch (err) {
-              error = err
+              error = err as Error
             }
           }
         }
