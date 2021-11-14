@@ -2,7 +2,7 @@
   "name": "optimized-test",
   "version": "0.0.0",
   "dependencies": {
-    "@tscc/tscc": "^0.6.4",
-    "@types/node": "^10.0.3"
+    "@tscc/tscc": "^0.7.4",
+    "@types/node": "^16.11.4"
   }
 }
