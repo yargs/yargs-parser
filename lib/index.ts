@@ -43,7 +43,7 @@ const parser = new YargsParser({
       return require(path)
     } else if (path.match(/\.json$/)) {
       // Addresses: https://github.com/yargs/yargs/issues/2040
-      return JSON.parse(readFileSync(path, 'utf8'));
+      return JSON.parse(readFileSync(path, 'utf8'))
     } else {
       throw Error('only .json config files are supported in ESM')
     }
