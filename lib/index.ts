@@ -8,11 +8,11 @@
  */
 
 import { format } from 'util'
-import { readFileSync } from 'fs'
 import { normalize, resolve } from 'path'
 import { ArgsInput, Arguments, Parser, Options, DetailedArguments } from './yargs-parser-types.js'
 import { camelCase, decamelize, looksLikeNumber } from './string-utils.js'
 import { YargsParser } from './yargs-parser.js'
+import { readFileSync } from 'fs'
 
 // See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our
 // version support policy. The YARGS_MIN_NODE_VERSION is used for testing only.
@@ -42,7 +42,8 @@ const parser = new YargsParser({
     if (typeof require !== 'undefined') {
       return require(path)
     } else if (path.match(/\.json$/)) {
-      return readFileSync(path, 'utf8')
+      // Addresses: https://github.com/yargs/yargs/issues/2040
+      return JSON.parse(readFileSync(path, 'utf8'))
     } else {
       throw Error('only .json config files are supported in ESM')
     }

@@ -19,6 +19,7 @@
     "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
     "pretest": "rimraf build && tsc -p tsconfig.test.json && cross-env NODE_ENV=test npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.cjs",
+    "test:esm": "c8 --reporter=text --reporter=html mocha test/*.mjs",
     "test:browser": "start-server-and-test 'serve ./ -p 8080' http://127.0.0.1:8080/package.json 'node ./test/browser/yargs-test.cjs'",
     "pretest:typescript": "npm run pretest",
     "test:typescript": "c8 mocha ./build/test/typescript/*.js",
@@ -49,7 +50,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.0.0",
+    "@types/node": "^16.11.4",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
     "@wessberg/rollup-plugin-ts": "^1.2.28",
