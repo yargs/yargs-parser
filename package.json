@@ -59,7 +59,7 @@
     "cross-env": "^7.0.2",
     "eslint": "^8.0.0",
     "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-node": "^11.1.0",
     "gts": "^3.0.0",
     "mocha": "^9.0.0",
     "puppeteer": "^11.0.0",
