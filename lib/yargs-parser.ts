@@ -61,7 +61,7 @@ export class YargsParser {
     const args = tokenizeArgString(argsInput)
     // tokenizeArgString adds extra quotes to args if argsInput is a string
     // only strip those extra quotes in processValue if argsInput is a string
-    const shouldStripQuotes = typeof argsInput === 'string'
+    const inputIsString = typeof argsInput === 'string'
 
     // aliases might have transitive relationships, normalize this.
     const aliases = combineAliases(Object.assign(Object.create(null), opts.alias))
@@ -246,13 +246,7 @@ export class YargsParser {
             // nargs format = '--f=monkey washing cat'
             i = eatNargs(i, m[1], args, m[2])
           } else {
-            // only strip quotes if they wouldn't already be removed
-            if (shouldStripQuotes) {
-              setArg(m[1], m[2])
-            } else {
-              setArg(m[1], stripQuotes(m[2]))
-            }
-            
+            setArg(m[1], m[2], true)
           }
         }
       } else if (arg.match(negatedBoolean) && configuration['boolean-negation']) {
@@ -533,7 +527,7 @@ export class YargsParser {
           next = args[ii]
           if (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next)) break
           i = ii
-          argsToSet.push(processValue(key, next, shouldStripQuotes))
+          argsToSet.push(processValue(key, next, inputIsString))
         }
       }
 
@@ -549,7 +543,7 @@ export class YargsParser {
       return i
     }
 
-    function setArg (key: string, val: any): void {
+    function setArg (key: string, val: any, shouldStripQuotes: boolean = inputIsString): void {
       if (/-/.test(key) && configuration['camel-case-expansion']) {
         const alias = key.split('.').map(function (prop) {
           return camelCase(prop)
@@ -1123,12 +1117,12 @@ function sanitizeKey (key: string): string {
   return key
 }
 
-function stripQuotes(val: string): string {
+function stripQuotes (val: string): string {
   return (
     typeof val === 'string' &&
     (val[0] === "'" || val[0] === '"') &&
     val[val.length - 1] === val[0]
   )
-    ? val = val.substring(1, val.length - 1)
+    ? val.substring(1, val.length - 1)
     : val
 }

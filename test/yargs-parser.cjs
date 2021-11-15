@@ -3590,7 +3590,6 @@ describe('yargs-parser', function () {
 
     it('respects inner quotes (string)', function () {
       const args = parser('cmd --foo ""Hello"" --bar ""World"" --baz="":)""')
-      console.log('string', {args})
       args.foo.should.equal('"Hello"')
       args.bar.should.equal('"World"')
       args.baz.should.equal('":)"')
@@ -3598,7 +3597,6 @@ describe('yargs-parser', function () {
 
     it('respects inner quotes (array)', function () {
       const args = parser(['cmd', '--foo', '"Hello"', '--bar', '"World"', '--baz="":)""'])
-      console.log('array', {args})
       args.foo.should.equal('"Hello"')
       args.bar.should.equal('"World"')
       args.baz.should.equal('":)"')
