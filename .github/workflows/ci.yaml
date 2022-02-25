@@ -55,13 +55,14 @@ jobs:
       - run: npm install
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          MY_PREFIX_MY_KEY: "my value"
       - run: npm run compile
       - uses: denolib/setup-deno@v2
         with:
           deno-version: v1.x
       - run: |
           deno --version
-          deno test --allow-read test/deno/yargs-test.ts
+          deno test --allow-read --allow-env test/deno/yargs-test.ts
   browser:
     runs-on: ubuntu-latest
     steps:
