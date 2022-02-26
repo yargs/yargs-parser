@@ -65,6 +65,6 @@ Deno.test('it detects strings that could be parsed as numbers', () => {
 })
 
 Deno.test('should load values from environment variables', () => {
-  const argv = parser([], { envPrefix: 'MY_PREFIX' })
+  const argv = parser([], { envPrefix: 'MY_PREFIX_' })
   assertEquals(argv.myKey, 'my value')
 })
