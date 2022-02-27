@@ -61,7 +61,9 @@ jobs:
           deno-version: v1.x
       - run: |
           deno --version
-          deno test --allow-read test/deno/yargs-test.ts
+          deno test --allow-read --allow-env test/deno/yargs-test.ts
+        env:
+          MY_PREFIX_MY_KEY: "my value"
   browser:
     runs-on: ubuntu-latest
     steps:

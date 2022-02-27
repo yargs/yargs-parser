@@ -10,7 +10,7 @@ import type { Arguments, ArgsInput, Parser, Options, DetailedArguments } from '.
 const parser = new YargsParser({
   cwd: Deno.cwd,
   env: () => {
-    Deno.env.toObject()
+    return Deno.env.toObject()
   },
   format: (str: string, arg: string) => { return str.replace('%s', arg) },
   normalize: path.posix.normalize,
