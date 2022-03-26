@@ -222,7 +222,7 @@ export class YargsParser {
       let value: string
 
       // any unknown option (except for end-of-options, "--")
-      if (arg !== '--' && isUnknownOptionAsArg(arg)) {
+      if (arg !== '--' && /^-/.test(arg) && isUnknownOptionAsArg(arg)) {
         pushPositional(arg)
       // ---, ---=, ----, etc,
       } else if (truncatedArg.match(/^---+(=|$)/)) {
