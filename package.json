@@ -10,6 +10,9 @@
         "require": "./build/index.cjs"
       },
       "./build/index.cjs"
+    ],
+    "./browser": [
+      "./browser.js"
     ]
   },
   "type": "module",
