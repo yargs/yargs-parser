@@ -225,7 +225,7 @@ export class YargsParser {
       if (arg !== '--' && isUnknownOptionAsArg(arg)) {
         pushPositional(arg)
       // ---, ---=, ----, etc,
-      } else if (truncatedArg.match(/---+(=|$)/)) {
+      } else if (truncatedArg.match(/^---+(=|$)/)) {
         // options without key name are invalid.
         pushPositional(arg)
         continue
