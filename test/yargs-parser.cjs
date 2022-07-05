@@ -3588,6 +3588,13 @@ describe('yargs-parser', function () {
       args.bar.should.equal('--goodnight moon')
     })
 
+    // see: https://github.com/yargs/yargs-parser/issues/433
+    it('handles strings with three or more trailing dashes', function () {
+      const args = parser('--foo "hello---" --bar="world---"')
+      args.foo.should.equal('hello---')
+      args.bar.should.equal('world---')
+    })
+
     it('respects inner quotes (string)', function () {
       const args = parser('cmd --foo ""Hello"" --bar ""World"" --baz="":)""')
       args.foo.should.equal('"Hello"')
