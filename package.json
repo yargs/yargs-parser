@@ -66,7 +66,7 @@
     "rollup": "^2.22.1",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-ts": "^3.0.0",
-    "serve": "^13.0.0",
+    "serve": "^14.0.0",
     "standardx": "^7.0.0",
     "start-server-and-test": "^1.11.2",
     "ts-transform-default-export": "^1.0.2",
