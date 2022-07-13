@@ -19,8 +19,9 @@ import { readFileSync } from 'fs'
 const minNodeVersion = (process && process.env && process.env.YARGS_MIN_NODE_VERSION)
   ? Number(process.env.YARGS_MIN_NODE_VERSION)
   : 12
-if (process && process.version) {
-  const major = Number(process.version.match(/v([^.]+)/)![1])
+const nodeVersion = process && (process.versions ? process.versions.node : process.version.slice(1))
+if (nodeVersion) {
+  const major = Number(nodeVersion.match(/^([^.]+)/)![1])
   if (major < minNodeVersion) {
     throw Error(`yargs parser supports a minimum Node.js version of ${minNodeVersion}. Read our version support policy: https://github.com/yargs/yargs-parser#supported-nodejs-versions`)
   }
