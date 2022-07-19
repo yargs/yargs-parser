@@ -19,7 +19,7 @@ import { readFileSync } from 'fs'
 const minNodeVersion = (process && process.env && process.env.YARGS_MIN_NODE_VERSION)
   ? Number(process.env.YARGS_MIN_NODE_VERSION)
   : 12
-const nodeVersion = process && (process.versions ? process.versions.node : process.version.slice(1))
+const nodeVersion = process?.versions?.node || process?.version?.slice(1)
 if (nodeVersion) {
   const major = Number(nodeVersion.match(/^([^.]+)/)![1])
   if (major < minNodeVersion) {
