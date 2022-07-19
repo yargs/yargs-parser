@@ -3008,6 +3008,16 @@ describe('yargs-parser', function () {
           _: ['./file.js', '--foo', '--', 'barbar']
         })
       })
+
+      it('is not influenced by unknown options when "unknown-options-as-args" is true', function () {
+        const parse = parser(
+          ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
+          { configuration: { 'halt-at-non-option': true, 'unknown-options-as-args': true }, boolean: ['foo'] }
+        )
+        parse.should.deep.equal({
+          _: ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar']
+        })
+      })
     })
 
     describe('unknown-options-as-args = true', function () {
@@ -3586,6 +3596,13 @@ describe('yargs-parser', function () {
       const args = parser('--foo "-hello world" --bar="--goodnight moon"')
       args.foo.should.equal('-hello world')
       args.bar.should.equal('--goodnight moon')
+    })
+
+    // see: https://github.com/yargs/yargs-parser/issues/433
+    it('handles strings with three or more trailing dashes', function () {
+      const args = parser('--foo "hello---" --bar="world---"')
+      args.foo.should.equal('hello---')
+      args.bar.should.equal('world---')
     })
 
     it('respects inner quotes (string)', function () {
