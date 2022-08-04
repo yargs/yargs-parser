@@ -68,7 +68,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.22.1",
     "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-ts": "^3.0.0",
+    "rollup-plugin-ts": "^3.0.2",
     "serve": "^14.0.0",
     "standardx": "^7.0.0",
     "start-server-and-test": "^1.11.2",
@@ -78,7 +78,8 @@
   "files": [
     "browser.js",
     "build",
-    "!*.d.ts"
+    "!*.d.ts",
+    "!*.d.cts"
   ],
   "engines": {
     "node": ">=12"
