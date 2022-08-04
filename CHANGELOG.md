@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [21.1.1](https://github.com/yargs/yargs-parser/compare/yargs-parser-v21.1.0...yargs-parser-v21.1.1) (2022-08-04)
+
+
+### Bug Fixes
+
+* **typescript:** ignore .cts files during publish ([#454](https://github.com/yargs/yargs-parser/issues/454)) ([d69f9c3](https://github.com/yargs/yargs-parser/commit/d69f9c3a91c3ad2f9494d0a94e29a8b76c41b81b)), closes [#452](https://github.com/yargs/yargs-parser/issues/452)
+
 ## [21.1.0](https://github.com/yargs/yargs-parser/compare/yargs-parser-v21.0.1...yargs-parser-v21.1.0) (2022-08-03)
 
 
