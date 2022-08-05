@@ -2997,6 +2997,17 @@ describe('yargs-parser', function () {
         })
       })
 
+      it('should push to _ when populate-- is true', function () {
+        const parse = parser(
+          ['--foo', './file.js', '--foo', '--', 'barbar', '--bar'],
+          { configuration: { 'halt-at-non-option': true, 'populate--': true }, boolean: ['foo', 'bar'] }
+        )
+        parse.should.deep.equal({
+          foo: true,
+          _: ['./file.js', '--foo', '--', 'barbar', '--bar']
+        })
+      })
+
       it('is not influenced by unknown options', function () {
         const parse = parser(
           ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
