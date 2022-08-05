@@ -395,7 +395,7 @@ export class YargsParser {
         notFlags = args.slice(i + 1)
         break
       } else if (configuration['halt-at-non-option']) {
-        notFlags = args.slice(i)
+        args.slice(i).forEach(pushPositional)
         break
       } else {
         pushPositional(arg)
