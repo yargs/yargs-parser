@@ -88,6 +88,8 @@ export interface Configuration {
   'strip-dashed': boolean;
   /** Should unknown options be treated like regular arguments? An unknown option is one that is not configured in opts. Default is `false` */
   'unknown-options-as-args': boolean;
+  /** Should we delay treating non-flag tokens as invalid until we've seen a flag. Default is 'false' **/
+  'wait-for-first-flag-before-filtering-options': boolean;
 }
 
 export type ArrayOption = string | { key: string; boolean?: boolean, string?: boolean, number?: boolean, integer?: boolean };

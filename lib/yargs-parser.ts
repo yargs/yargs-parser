@@ -83,7 +83,8 @@ export class YargsParser {
       'short-option-groups': true,
       'strip-aliased': false,
       'strip-dashed': false,
-      'unknown-options-as-args': false
+      'unknown-options-as-args': false,
+      'wait-for-first-flag-before-filtering-options': false
     }, opts.configuration)
     const defaults: OptionsDefault = Object.assign(Object.create(null), opts.default)
     const configObjects = opts.configObjects || []
@@ -210,6 +211,7 @@ export class YargsParser {
     // remove all prototypes from objects returned by this API, we might want
     // to gradually move towards doing so.
     const argvReturn: { [argName: string]: any } = {}
+    let requireDash = !configuration['wait-for-first-flag-before-filtering-options'];
 
     for (let i = 0; i < args.length; i++) {
       const arg = args[i]
@@ -221,8 +223,12 @@ export class YargsParser {
       let next: string
       let value: string
 
+      if (!requireDash && arg.length > 0 && arg.charAt(0) === '-') {
+        requireDash = true;
+      }
+
       // any unknown option (except for end-of-options, "--")
-      if (arg !== '--' && /^-/.test(arg) && isUnknownOptionAsArg(arg)) {
+      if (arg !== '--' && (!requireDash || /^-/.test(arg)) && isUnknownOptionAsArg(arg)) {
         pushPositional(arg)
       // ---, ---=, ----, etc,
       } else if (truncatedArg.match(/^---+(=|$)/)) {

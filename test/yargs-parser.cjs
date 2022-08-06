@@ -3011,11 +3011,41 @@ describe('yargs-parser', function () {
 
       it('is not influenced by unknown options when "unknown-options-as-args" is true', function () {
         const parse = parser(
-          ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
+          ['abc', 'def', '-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
           { configuration: { 'halt-at-non-option': true, 'unknown-options-as-args': true }, boolean: ['foo'] }
         )
         parse.should.deep.equal({
-          _: ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar']
+          _: ['abc', 'def', '-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar']
+        })
+      })
+      it('is initially influenced by unknown options when "unknown-options-as-args" and "wait-for-first-flag-before-filtering-options" are true', function () {
+        const parse = parser(
+            ['abc', 'def', '-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
+            { configuration: { 'halt-at-non-option': true, 'unknown-options-as-args': true, 'wait-for-first-flag-before-filtering-options': true }, boolean: ['foo'] }
+        )
+        parse.should.deep.equal({
+          _: ['abc', 'def', '-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar']
+        })
+      })
+
+      it('puts all unknown options in "--" when "populate--" and "unknown-options-as-args" are true', function () {
+        const parse = parser(
+            ['abc', 'def', '-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
+            { configuration: { 'populate--': true, 'halt-at-non-option': true, 'unknown-options-as-args': true }, boolean: ['foo'] }
+        )
+        parse.should.deep.equal({
+          _: [],
+          "--": ['abc', 'def', '-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar']
+        })
+      })
+      it('puts later unknown options in "--" when "populate--", "unknown-options-as-args", and "wait-for-first-flag-before-filtering-options" are true', function () {
+        const parse = parser(
+            ['abc', 'def', '-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
+            { configuration: { 'populate--': true, 'halt-at-non-option': true, 'unknown-options-as-args': true, 'wait-for-first-flag-before-filtering-options': true }, boolean: ['foo'] }
+        )
+        parse.should.deep.equal({
+          _: ['abc', 'def', '-v', '--long'],
+          "--": ['arg', './file.js', '--foo', '--', 'barbar']
         })
       })
     })
