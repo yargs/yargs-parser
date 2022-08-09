@@ -3008,16 +3008,6 @@ describe('yargs-parser', function () {
           _: ['./file.js', '--foo', '--', 'barbar']
         })
       })
-
-      it('is not influenced by unknown options when "unknown-options-as-args" is true', function () {
-        const parse = parser(
-          ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar'],
-          { configuration: { 'halt-at-non-option': true, 'unknown-options-as-args': true }, boolean: ['foo'] }
-        )
-        parse.should.deep.equal({
-          _: ['-v', '--long', 'arg', './file.js', '--foo', '--', 'barbar']
-        })
-      })
     })
 
     describe('unknown-options-as-args = true', function () {
