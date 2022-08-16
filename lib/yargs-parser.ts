@@ -70,6 +70,7 @@ export class YargsParser {
       'camel-case-expansion': true,
       'combine-arrays': false,
       'dot-notation': true,
+      'config-dot-notation': false,
       'duplicate-arguments-array': true,
       'flatten-duplicate-arrays': true,
       'greedy-arrays': true,
@@ -697,6 +698,13 @@ export class YargsParser {
       Object.keys(config).forEach(function (key) {
         const value = config[key]
         const fullKey = prev ? prev + '.' + key : key
+
+        // shortcut the process below if the key includes `.` because `setArg()` would do
+        // additional processing with aliases and splitting the key, when we don't need to.
+        if (key.includes('.') && !configuration['config-dot-notation'] && !hasKey(argv, fullKey.split('.'))) {
+          setKey(argv, prev ? [prev, key] : [key], value)
+          return
+        }
 
         // if the value is an inner object and we have dot-notation
         // enabled, treat inner objects in config the same as

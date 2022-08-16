@@ -224,6 +224,36 @@ $ node example.js --foo.bar
 { _: [], "foo.bar": true }
 ```
 
+_Note: as of yargs-parser@18.0.0, `dot-notation` has been split into `dot-notation` (**for CLI args**) and `config-dot-notation`_
+
+### config-dot-notation
+
+* default: `false`
+* key: `config-dot-notation`
+
+Should keys in the config file that contain `.` split into objects?
+
+example config.json:
+```json
+{
+  "foo.bar": true,
+  "parent": {
+    "foo.bar": true
+  }
+}
+```
+
+```console
+$ node example.js --config config.json
+{ _: [], "foo.bar": true, parent: { "foo.bar": true } }
+```
+
+_if enabled:_
+```console
+$ node example.js --config config.json
+{ _: [], foo: { bar: true }, parent: { foo: { bar: true } } }
+```
+
 ### parse numbers
 
 * default: `true`

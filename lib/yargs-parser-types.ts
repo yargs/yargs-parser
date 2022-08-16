@@ -60,6 +60,8 @@ export interface Configuration {
   'combine-arrays': boolean;
   /** Should keys that contain `.` be treated as objects? Default is `true` */
   'dot-notation': boolean;
+  /** Should keys in the config file that contain `.` split into objects? Default is `false` */
+  'config-dot-notation': boolean;
   /** Should arguments be coerced into an array when duplicated? Default is `true` */
   'duplicate-arguments-array': boolean;
   /** Should array arguments be coerced into a single array when duplicated? Default is `true` */
