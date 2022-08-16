@@ -597,7 +597,7 @@ describe('yargs-parser', function () {
       argv.should.have.property('foo').and.deep.equal('bar')
     })
 
-    it('should load options and values from a JS file when config has .js extention', function () {
+    it('should load options and values from a JS file when config has .js extension', function () {
       const jsPath = path.resolve(__dirname, './fixtures/settings.cjs')
       const argv = parser(['--settings', jsPath, '--foo', 'bar'], {
         config: ['settings']
@@ -659,6 +659,106 @@ describe('yargs-parser', function () {
       argv.should.have.property('nested').and.deep.equal({
         foo: 'baz',
         bar: 'bar'
+      })
+    })
+
+    it('should respect cli precedence when config-dot-notation option is disabled', function () {
+      const jsonPath = path.resolve(__dirname, './fixtures/config_with_dot_notation.json')
+      const argv = parser(["--settings", jsonPath, "--nested.b", "cli"], {
+        config: ["settings"],
+        default: {
+          "hello.world": false,
+          parent: {
+            "foo.bar": false,
+          },
+        },
+      });
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('nested').and.deep.equal({
+        b: 'cli'
+      })
+      argv.should.have.property('hello.world').and.equal(true)
+      argv.should.have.property('parent').and.deep.equal({
+        "foo.bar": true
+      })
+    })
+
+    it('should respect cli precedence when dot-notation and config-dot-notation option are disabled', function () {
+      const jsonPath = path.resolve(__dirname, './fixtures/config_with_dot_notation.json')
+      const argv = parser(["--settings", jsonPath, "--hello.world", "cli", "--parent.foo.bar", "cli"], {
+        config: ["settings"],
+        default: {
+          "hello.world": false,
+          parent: {
+            "foo.bar": false,
+          },
+        },
+        configuration: {
+          'dot-notation': false,
+        }
+      });
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('nested').and.deep.equal({
+        b: 'b'
+      })
+      argv.should.have.property('hello.world').and.equal('cli')
+      argv.should.have.property('parent').and.deep.equal({
+        "foo.bar": true
+      })
+    })
+
+    it('should split into objects when config-dot-notation is enabled', function () {
+      const jsonPath = path.resolve(__dirname, './fixtures/config_with_dot_notation.json')
+      const argv = parser(["--settings", jsonPath], {
+        config: ["settings"],
+        default: {
+          "hello.world": false,
+          parent: {
+            "foo.bar": false,
+          },
+        },
+        configuration: {
+          "config-dot-notation": true,
+        }
+      });
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('nested').and.deep.equal({
+        b: 'b'
+      })
+      argv.should.have.property('hello').and.deep.equal({
+        "world": true,
+      })
+      argv.should.have.property('parent').and.deep.equal({
+        "foo": { "bar": true }
+      })
+    })
+
+    it('should disable config-dot-notation when dot-notation is disabled', function () {
+      const jsonPath = path.resolve(__dirname, './fixtures/config_with_dot_notation.json')
+      const argv = parser(["--settings", jsonPath], {
+        config: ["settings"],
+        default: {
+          "hello.world": false,
+          parent: {
+            "foo.bar": false,
+          },
+        },
+        configuration: {
+          "config-dot-notation": true,
+          "dot-notation": false,
+        }
+      });
+
+      argv.should.have.property('a', 'a')
+      argv.should.have.property('nested').and.deep.equal({
+        b: 'b'
+      })
+      argv.should.have.property('hello.world').and.equal(true)
+      argv.should.have.property('parent').and.deep.equal({
+        "foo.bar": true
       })
     })
 

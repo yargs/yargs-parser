@@ -1,0 +1,10 @@
+{
+  "a": "a",
+  "nested": {
+    "b": "b"
+  },
+  "hello.world": true,
+  "parent": {
+    "foo.bar": true
+  }
+}
