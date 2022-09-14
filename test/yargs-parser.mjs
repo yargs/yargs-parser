@@ -112,6 +112,19 @@ describe('yargs-parser (esm)', function () {
       argv.should.have.property('foo').and.deep.equal('bar')
     })
 
+    // see https://github.com/yargs/yargs-parser/issues/430
+    it("should allow repeated config options", function () {
+      const argv = parser(['--settings', jsonPath, '--settings', jsonPath], {
+        alias: {
+          z: 'zoom'
+        },
+        config: ['settings']
+      })
+
+      argv.should.have.property('herp', 'derp')
+      argv.should.have.property('zoom', 55)
+    })
+
     // for esm, only support importing json files
     it('should fail to load options and values from a JS file when config has .js extention', function () {
       const jsPath = path.resolve(__dirname, './fixtures/settings.cjs')

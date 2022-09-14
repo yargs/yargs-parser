@@ -659,8 +659,13 @@ export class YargsParser {
       applyDefaultsAndAliases(configLookup, flags.aliases, defaults)
 
       Object.keys(flags.configs).forEach(function (configKey) {
-        const configPath = argv[configKey] || configLookup[configKey]
-        if (configPath) {
+        var configPaths = argv[configKey] || configLookup[configKey]
+
+        if (typeof configPaths === "string") {
+          configPaths = [configPaths]
+        }
+
+        configPaths.forEach(function (configPath : string) {
           try {
             let config = null
             const resolvedConfigPath = mixin.resolve(mixin.cwd(), configPath)
@@ -687,7 +692,7 @@ export class YargsParser {
             if (ex.name === 'PermissionDenied') error = ex
             else if (argv[configKey]) error = Error(__('Invalid JSON config file: %s', configPath))
           }
-        }
+        })
       })
     }
 
