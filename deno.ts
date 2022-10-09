@@ -2,7 +2,7 @@
 // Main entrypoint for Deno.
 //
 // TODO: find reasonable replacement for require logic.
-import * as path from 'https://deno.land/std/path/mod.ts'
+import * as path from 'https://deno.land/std@0.159.0/path/mod.ts'
 import { camelCase, decamelize, looksLikeNumber } from './build/lib/string-utils.js'
 import { YargsParser } from './build/lib/yargs-parser.js'
 import type { Arguments, ArgsInput, Parser, Options, DetailedArguments } from './build/lib/yargs-parser-types.d.ts'
