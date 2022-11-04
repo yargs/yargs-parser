@@ -1,5 +1,5 @@
 import cleanup from 'rollup-plugin-cleanup'
-import ts from 'rollup-plugin-ts'
+import ts from '@rollup/plugin-typescript'
 import transformDefaultExport from 'ts-transform-default-export'
 
 const output = {
