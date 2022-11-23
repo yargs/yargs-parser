@@ -39,6 +39,7 @@ const parser = new YargsParser({
   resolve,
   // TODO: figure  out a  way to combine ESM and CJS coverage, such  that
   // we can exercise all the lines below:
+  /* c8 ignore start */
   require: (path: string) => {
     if (typeof require !== 'undefined') {
       return require(path)
@@ -49,6 +50,7 @@ const parser = new YargsParser({
       throw Error('only .json config files are supported in ESM')
     }
   }
+  /* c8 ignore stop */
 })
 const yargsParser: Parser = function Parser (args: ArgsInput, opts?: Partial<Options>): Arguments {
   const result = parser.parse(args.slice(), opts)
