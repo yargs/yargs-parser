@@ -18,8 +18,8 @@
   "type": "module",
   "module": "./build/lib/index.js",
   "scripts": {
-    "check": "standardx '**/*.ts' && standardx '**/*.js' && standardx '**/*.cjs'",
-    "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
+    "check": "standardx '**/*.ts' && standardx '**/*.js' && standardx '**/*.cjs'&& standardx '**/*.mjs'",
+    "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs' && standardx --fix '**/*.mjs'",
     "pretest": "rimraf build && tsc -p tsconfig.test.json && cross-env NODE_ENV=test npm run build:cjs",
     "test": "c8 --reporter=text --reporter=html mocha test/*.cjs",
     "test:esm": "c8 --reporter=text --reporter=html mocha test/*.mjs",
