@@ -41,7 +41,7 @@ const parser = new YargsParser({
   // we can exercise all the lines below:
   require: (path: string) => {
     if (typeof require !== 'undefined') {
-      return require(path)
+      return require(`${path}`);
     } else if (path.match(/\.json$/)) {
       // Addresses: https://github.com/yargs/yargs/issues/2040
       return JSON.parse(readFileSync(path, 'utf8'))
