@@ -1,5 +1,5 @@
 import cleanup from 'rollup-plugin-cleanup'
-import ts from 'rollup-plugin-ts'
+import typescript from '@rollup/plugin-typescript';
 
 const output = {
   format: 'cjs',
@@ -13,7 +13,7 @@ export default {
   input: './lib/index.ts',
   output,
   plugins: [
-    ts(),
+    typescript(),
     cleanup({
       comments: 'none',
       extensions: ['*']
