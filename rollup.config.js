@@ -1,5 +1,5 @@
 import cleanup from 'rollup-plugin-cleanup'
-import typescript from '@rollup/plugin-typescript';
+import typescript from '@rollup/plugin-typescript'
 
 const output = {
   format: 'cjs',
