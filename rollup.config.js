@@ -1,6 +1,5 @@
 import cleanup from 'rollup-plugin-cleanup'
 import ts from 'rollup-plugin-ts'
-import transformDefaultExport from 'ts-transform-default-export'
 
 const output = {
   format: 'cjs',
@@ -14,11 +13,7 @@ export default {
   input: './lib/index.ts',
   output,
   plugins: [
-    ts({
-      transformers: ({ program }) => ({
-        afterDeclarations: transformDefaultExport(program)
-      })
-    }),
+    ts(),
     cleanup({
       comments: 'none',
       extensions: ['*']
