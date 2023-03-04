@@ -18,7 +18,7 @@ import { readFileSync } from 'fs'
 // version support policy. The YARGS_MIN_NODE_VERSION is used for testing only.
 const minNodeVersion = (process && process.env && process.env.YARGS_MIN_NODE_VERSION)
   ? Number(process.env.YARGS_MIN_NODE_VERSION)
-  : 12
+  : 14
 const nodeVersion = process?.versions?.node ?? process?.version?.slice(1)
 if (nodeVersion) {
   const major = Number(nodeVersion.match(/^([^.]+)/)![1])
