@@ -13,7 +13,7 @@ export default {
   input: './lib/index.ts',
   output,
   plugins: [
-    typescript({ compilerOptions: { sourceMap: output.sourcemap } }),
+    typescript(),
     cleanup({
       comments: 'none',
       extensions: ['*']
