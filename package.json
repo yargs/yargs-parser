@@ -73,7 +73,7 @@
     "standardx": "^7.0.0",
     "start-server-and-test": "^1.11.2",
     "ts-transform-default-export": "^1.0.2",
-    "typescript": "^4.0.0"
+    "typescript": "^5.0.0"
   },
   "files": [
     "browser.js",
