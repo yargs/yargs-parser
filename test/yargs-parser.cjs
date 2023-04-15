@@ -1487,19 +1487,27 @@ describe('yargs-parser', function () {
   })
 
   describe('-', function () {
-    it('should set - as value of n', function () {
+    it('should set - as space separated value of n', function () {
       const argv = parser(['-n', '-'])
       argv.should.have.property('n', '-')
       argv.should.have.property('_').with.length(0)
     })
 
-    it('should set - as a non-hyphenated value', function () {
+    it('should set - as a non-hyphenated value (positional)', function () {
       const argv = parser(['-'])
       argv.should.have.property('_').and.deep.equal(['-'])
     })
 
-    it('should set - as a value of f', function () {
+    it('should set - as an embedded value of f', function () {
+      // special case dash trailing short option
       const argv = parser(['-f-'])
+      argv.should.have.property('f', '-')
+      argv.should.have.property('_').with.length(0)
+    })
+
+    it('should set - as an embedded value of f with =', function () {
+      // usual style for embedded short option value
+      const argv = parser(['-f=-'])
       argv.should.have.property('f', '-')
       argv.should.have.property('_').with.length(0)
     })
@@ -1519,6 +1527,18 @@ describe('yargs-parser', function () {
       })
 
       argv.should.have.property('s', '-')
+      argv.should.have.property('_').with.length(0)
+    })
+
+    it('should set - as space separated value of foo', function () {
+      const argv = parser(['--foo', '-'])
+      argv.should.have.property('foo', '-')
+      argv.should.have.property('_').with.length(0)
+    })
+
+    it('should set - as embedded value of foo', function () {
+      const argv = parser(['--foo=-'])
+      argv.should.have.property('foo', '-')
       argv.should.have.property('_').with.length(0)
     })
   })
