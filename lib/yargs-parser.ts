@@ -985,7 +985,7 @@ export class YargsParser {
       // e.g. '-abc123'
       const flagEndingInDigits = /^-+([^=]+?\d+)$/
       // e.g. '-a/usr/local'
-      const flagEndingInNonWordCharacters = /^-+([^=]+?)\W+.*$/
+      const flagEndingInNonWordCharacters = /^-+([^=]+?)[^\w-]+.*$/
       // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method
       return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag, flagEndingInHyphen, flagEndingInDigits, flagEndingInNonWordCharacters)
     }
