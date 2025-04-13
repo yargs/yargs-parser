@@ -2,14 +2,13 @@
   "name": "yargs-parser",
   "version": "21.1.1",
   "description": "the mighty option parser used by yargs",
-  "main": "build/index.cjs",
+  "main": "build/lib/index.js",
   "exports": {
     ".": [
       {
-        "import": "./build/lib/index.js",
-        "require": "./build/index.cjs"
+        "import": "./build/lib/index.js"
       },
-      "./build/index.cjs"
+      "./build/lib/index.js"
     ],
     "./browser": [
       "./browser.js"
@@ -20,17 +19,15 @@
   "scripts": {
     "check": "standardx '**/*.ts' && standardx '**/*.js' && standardx '**/*.cjs'",
     "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
-    "pretest": "rimraf build && tsc -p tsconfig.test.json && cross-env NODE_ENV=test npm run build:cjs",
-    "test": "c8 --reporter=text --reporter=html mocha test/*.cjs",
-    "test:esm": "c8 --reporter=text --reporter=html mocha test/*.mjs",
+    "pretest": "rimraf build && tsc -p tsconfig.test.json",
+    "test:cjs": "c8 --reporter=text --reporter=html mocha test/*.cjs",
+    "test": "c8 --reporter=text --reporter=html mocha test/*.mjs",
     "test:browser": "start-server-and-test 'serve ./ -p 8080' http://127.0.0.1:8080/package.json 'node ./test/browser/yargs-test.cjs'",
     "pretest:typescript": "npm run pretest",
     "test:typescript": "c8 mocha ./build/test/typescript/*.js",
     "coverage": "c8 report --check-coverage",
     "precompile": "rimraf build",
     "compile": "tsc",
-    "postcompile": "npm run build:cjs",
-    "build:cjs": "rollup -c",
     "prepare": "npm run compile"
   },
   "repository": {
@@ -59,21 +56,18 @@
     "c8": "^7.3.0",
     "chai": "^4.2.0",
     "cross-env": "^7.0.2",
-    "eslint": "^7.0.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
-    "gts": "^3.0.0",
-    "mocha": "^10.0.0",
-    "puppeteer": "^16.0.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.22.1",
-    "rollup-plugin-cleanup": "^3.1.1",
-    "rollup-plugin-ts": "^3.0.2",
+    "gts": "^6.0.2",
+    "mocha": "^11.1.0",
+    "puppeteer": "^24.6.1",
+    "rimraf": "^6.0.1",
     "serve": "^14.0.0",
     "standardx": "^7.0.0",
     "start-server-and-test": "^1.11.2",
     "ts-transform-default-export": "^1.0.2",
-    "typescript": "^4.0.0"
+    "typescript": "^5.8.3"
   },
   "files": [
     "browser.js",
@@ -82,7 +76,7 @@
     "!*.d.cts"
   ],
   "engines": {
-    "node": ">=12"
+    "node": "^20.19.0 || ^22.12.0 || >=23"
   },
   "standardx": {
     "ignore": [

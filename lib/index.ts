@@ -1,6 +1,5 @@
 /**
  * @fileoverview Main entrypoint for libraries using yargs-parser in Node.js
- * CJS and ESM environments.
  *
  * @license
  * Copyright (c) 2016, Contributors
@@ -13,12 +12,13 @@ import { ArgsInput, Arguments, Parser, Options, DetailedArguments } from './yarg
 import { camelCase, decamelize, looksLikeNumber } from './string-utils.js'
 import { YargsParser } from './yargs-parser.js'
 import { readFileSync } from 'fs'
+import { createRequire } from 'node:module';
 
 // See https://github.com/yargs/yargs-parser#supported-nodejs-versions for our
 // version support policy. The YARGS_MIN_NODE_VERSION is used for testing only.
 const minNodeVersion = (process && process.env && process.env.YARGS_MIN_NODE_VERSION)
   ? Number(process.env.YARGS_MIN_NODE_VERSION)
-  : 12
+  : 20
 const nodeVersion = process?.versions?.node ?? process?.version?.slice(1)
 if (nodeVersion) {
   const major = Number(nodeVersion.match(/^([^.]+)/)![1])
@@ -29,6 +29,8 @@ if (nodeVersion) {
 
 // Creates a yargs-parser instance using Node.js standard libraries:
 const env = process ? process.env as { [key: string]: string } : {}
+const require = createRequire ? createRequire(import.meta.url) : undefined;
+
 const parser = new YargsParser({
   cwd: process.cwd,
   env: () => {
@@ -37,8 +39,6 @@ const parser = new YargsParser({
   format,
   normalize,
   resolve,
-  // TODO: figure  out a  way to combine ESM and CJS coverage, such  that
-  // we can exercise all the lines below:
   require: (path: string) => {
     if (typeof require !== 'undefined') {
       return require(path)
