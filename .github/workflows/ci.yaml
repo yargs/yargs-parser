@@ -31,7 +31,7 @@ jobs:
           node-version: 22
       - run: npm install
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PUPPETEER_SKIP_DOWNLOAD: true
       - run: npm test
   coverage:
     runs-on: ubuntu-latest
