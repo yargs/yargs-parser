@@ -3,7 +3,7 @@
 import yargsParser from '../../lib/index.js'
 import * as assert from 'assert'
 
-describe('types', function () {
+describe('types', () => {
   it('allows a partial options object to be provided', () => {
     const argv = yargsParser('--foo 99', {
       string: 'foo'

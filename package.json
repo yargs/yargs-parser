@@ -63,7 +63,6 @@
     "rimraf": "^6.0.1",
     "serve": "^14.0.0",
     "start-server-and-test": "^2.0.11",
-    "ts-transform-default-export": "^1.0.2",
     "typescript": "^5.8.3"
   },
   "files": [
@@ -74,10 +73,5 @@
   ],
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=23"
-  },
-  "standardx": {
-    "ignore": [
-      "build"
-    ]
   }
 }

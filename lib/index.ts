@@ -6,6 +6,8 @@
  * SPDX-License-Identifier: ISC
  */
 
+/* eslint-disable n/no-unpublished-import */
+
 import { format } from 'util'
 import { normalize, resolve } from 'path'
 import { ArgsInput, Arguments, Parser, Options, DetailedArguments } from './yargs-parser-types.js'

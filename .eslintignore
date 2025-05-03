@@ -1,2 +1,3 @@
 build/
+test/tscc/
 yargs-parser-types.ts

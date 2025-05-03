@@ -1,4 +1,5 @@
 /* global describe, it */
+/* eslint-disable prefer-arrow-callback */
 import { strictEqual } from 'assert'
 import { tokenizeArgString } from '../../lib/tokenize-arg-string.js'
 

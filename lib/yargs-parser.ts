@@ -3,6 +3,7 @@
  * Copyright (c) 2016, Contributors
  * SPDX-License-Identifier: ISC
  */
+/* eslint-disable prefer-arrow-callback */
 
 import { tokenizeArgString } from './tokenize-arg-string.js'
 import type {
