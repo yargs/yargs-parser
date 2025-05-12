@@ -5,7 +5,11 @@ const puppeteer = require('puppeteer')
 let browser
 async function parse (argv, opts) {
   if (!browser) {
-    browser = await puppeteer.launch()
+    // The developer install of Chromium is blocked by apparmor changes in Ubuntu 22.04.
+    // We are only running local tests and so easiest setup is to skip the sandbox.
+    browser = await puppeteer.launch({ 
+      args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+  })
   }
   const page = await browser.newPage()
   opts = encodeURIComponent(JSON.stringify(opts))
