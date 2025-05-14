@@ -18,7 +18,7 @@
   "module": "./build/lib/index.js",
   "scripts": {
     "check": "gts lint",
-    "fix": "standardx --fix '**/*.ts' && standardx --fix '**/*.js' && standardx --fix '**/*.cjs'",
+    "fix": "gts fix",
     "pretest": "rimraf build && tsc -p tsconfig.test.json",
     "test": "c8 --reporter=text --reporter=html mocha test/*.mjs",
     "test:browser": "start-server-and-test 'serve ./ -p 8080' http://127.0.0.1:8080/package.json 'node ./test/browser/yargs-test.cjs'",
