@@ -63,3 +63,6 @@ yargsParser.camelCase = camelCase
 yargsParser.decamelize = decamelize
 yargsParser.looksLikeNumber = looksLikeNumber
 export default yargsParser
+
+// special syntax to allow unqualified default export from CommonJS
+export {yargsParser as 'module.exports'};
