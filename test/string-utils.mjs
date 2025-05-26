@@ -1,7 +1,7 @@
 /* global describe, it */
 
-const { strictEqual } = require('assert')
-const { camelCase, decamelize, looksLikeNumber } = require('../build/index.cjs')
+import { strictEqual } from 'assert'
+import { camelCase, decamelize, looksLikeNumber } from '../build/lib/string-utils.js'
 
 describe('string-utils', function () {
   describe('camelCase', () => {

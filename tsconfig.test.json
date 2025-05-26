@@ -4,6 +4,7 @@
     "sourceMap": true
   },
   "include": [
-    "test/typescript/*.ts"
+    "lib/**/*.ts",
+    "test/typescript/**/*.ts"
   ]
 }

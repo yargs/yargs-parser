@@ -4,9 +4,9 @@
     "outDir": "build",
     "rootDir": ".",
     "sourceMap": false,
-    "target": "es2017",
+    "target": "es2019",
     "moduleResolution": "node",
-    "module": "es2020"
+    "module": "es2022"
   },  
   "include": [
     "lib/**/*.ts"
