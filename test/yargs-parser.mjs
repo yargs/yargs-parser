@@ -3194,6 +3194,103 @@ describe('yargs-parser', function () {
           k: '/1/'
         })
       })
+      // Fixes: https://github.com/yargs/yargs-parser/issues/501
+      it('should allow an unknown arg that resembles a known arg and contains hyphens to be used as the value of another flag in short form', function () {
+        {
+          const argv = parser('--known-arg /1/ -k --known-arg-unknown', {
+            string: ['k', 'known-arg'],
+            narg: { k: 1, 'known-arg': 1 },
+            configuration: {
+              'unknown-options-as-args': true
+            }
+          })
+          argv.should.deep.equal({
+            _: [],
+            k: '--known-arg-unknown',
+            'knownArg': '/1/',
+            'known-arg': '/1/',
+          })
+        }
+
+        {
+          const argv = parser('-k --u-u', {
+            string: ['k', 'u'],
+            narg: { k: 1, u: 1 },
+            configuration: {
+              'unknown-options-as-args': true
+            }
+          })
+          argv.should.deep.equal({
+            _: [],
+            k: '--u-u'
+          })
+        }
+      })
+      // Fixes: https://github.com/yargs/yargs-parser/issues/501
+      it('should allow an unknown arg that resembles a known arg and contains hyphens to be used as the value of another flag in long form', function () {
+        {
+          const argv = parser('-k /1/ --known-arg --k-u', {
+            string: ['k', 'known-arg'],
+            narg: { k: 1, 'known-arg': 1 },
+            configuration: {
+              'unknown-options-as-args': true
+            }
+          })
+          argv.should.deep.equal({
+            _: [],
+            k: '/1/',
+            'knownArg': '--k-u',
+            'known-arg': '--k-u',
+          })
+        }
+
+        {
+          const argv = parser('--known-arg --known-unknown', {
+            string: ['known-arg', 'known'],
+            narg: { 'known-arg': 1, 'known': 1 },
+            configuration: {
+              'unknown-options-as-args': true
+            }
+          })
+          argv.should.deep.equal({
+            _: [],
+            'knownArg': '--known-unknown',
+            'known-arg': '--known-unknown',
+          })
+        }
+      })
+      // Fixes: https://github.com/yargs/yargs-parser/issues/501
+      it('should allow an unknown arg that resembles a known arg and contains hyphens to be used as the value of another flag in array form', function () {
+        {
+          const argv = parser('--known-arg --known-unknown --known-not-known', {
+            array: ['known-arg', 'known'],
+            configuration: {
+              'unknown-options-as-args': true
+            }
+          })
+          argv.should.deep.equal({
+            _: [],
+            knownArg: ['--known-unknown', '--known-not-known'],
+            'known-arg': ['--known-unknown', '--known-not-known']
+          })
+        }
+
+        {
+          const argv = parser('--known-arg --k-unknown --k-not-known', {
+            array: ['known-arg'],
+            alias: { 'known-arg': ['k'] },
+            configuration: {
+              'unknown-options-as-args': true
+            }
+          })
+          argv.should.deep.equal({
+            _: [],
+            knownArg: ['--k-unknown', '--k-not-known'],
+            'known-arg': ['--k-unknown', '--k-not-known'],
+            k: ['--k-unknown', '--k-not-known']
+          })
+        }
+      })
       it('should ignore unknown options in short format with multiple flags in one argument where an unknown flag is before the end', function () {
         const argv = parser('-kuv', {
           boolean: ['k', 'v'],
