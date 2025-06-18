@@ -69,6 +69,7 @@
   "files": [
     "browser.js",
     "build",
+    "vendor",
     "!*.d.ts",
     "!*.d.cts"
   ],
