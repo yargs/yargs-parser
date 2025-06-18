@@ -1,14 +1,16 @@
 // Main entrypoint for ESM web browser environments. Avoids using Node.js
 // specific libraries, such as "path".
 //
-// TODO: figure out reasonable web equivalents for "resolve", "normalize", etc.
 import { camelCase, decamelize, looksLikeNumber } from './build/lib/string-utils.js'
 import { YargsParser } from './build/lib/yargs-parser.js'
+// Using `path-browserify` package from local dependency
+import path from './vendor/path-browserify/index.js';
+
 const parser = new YargsParser({
   cwd: () => { return '' },
   format: (str, arg) => { return str.replace('%s', arg) },
-  normalize: (str) => { return str },
-  resolve: (str) => { return str },
+  normalize: path.normalize,  // Use `path-browserify`
+  resolve: path.resolve,    // Use `path-browserify`
   require: () => {
     throw Error('loading config from files not currently supported in browser')
   },
