@@ -977,7 +977,7 @@ export class YargsParser {
         return m !== null && !hasAnyFlag(m[1]);
       } else if (/^-[^-]+/.test(arg) && !negative.test(arg)) {
         // group of short flags to unpick
-        
+
         const letters = arg.slice(1, -1).split('')
         let broken = false;
         let next: string;
@@ -986,14 +986,14 @@ export class YargsParser {
           next = arg.slice(j + 2)
 
           if (letters[j + 1] && letters[j + 1] === '=') {
-            if (!hasAnyFlag(letters[j])) 
+            if (!hasAnyFlag(letters[j]))
               return true;
             broken = true
             break
           }
 
           if (next === '-') {
-            if (!hasAnyFlag(letters[j])) 
+            if (!hasAnyFlag(letters[j]))
               return true;
             continue
           }
@@ -1002,29 +1002,29 @@ export class YargsParser {
           if (/[A-Za-z]/.test(letters[j]) &&
             /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) &&
             checkAllAliases(next, flags.bools) === false) {
-            if (!hasAnyFlag(letters[j])) 
+            if (!hasAnyFlag(letters[j]))
               return true;
             broken = true
             break
           }
 
           if (letters[j + 1] && /\W/.test(letters[j + 1])) {
-            if (!hasAnyFlag(letters[j])) 
+            if (!hasAnyFlag(letters[j]))
               return true;
             broken = true
             break
           } else {
-            if (!hasAnyFlag(letters[j])) 
+            if (!hasAnyFlag(letters[j]))
               return true;
           }
         }
 
         const key = arg.slice(-1)[0]
         if (!broken && key !== '-') {
-          if (!hasAnyFlag(key)) 
+          if (!hasAnyFlag(key))
             return true;
         }
-      } 
+      }
 
       return false;
     }
