@@ -926,44 +926,10 @@ export class YargsParser {
     }
 
     function hasAnyFlag (key: string): boolean {
-      const flagsKeys = Object.keys(flags) as FlagsKey[]
-      const toCheck = ([] as Array<{ [key: string]: any } | string[]>).concat(flagsKeys.map(k => flags[k]))
-      return toCheck.some(function (flag) {
-        return Array.isArray(flag) ? flag.includes(key) : flag[key]
-      })
-    }
-
-    function hasFlagsMatching (arg: string, ...patterns: RegExp[]): boolean {
-      const toCheck = ([] as RegExp[]).concat(...patterns)
-      return toCheck.some(function (pattern) {
-        const match = arg.match(pattern)
-        return match && hasAnyFlag(match[1])
-      })
-    }
-
-    // based on a simplified version of the short flag group parsing logic
-    function hasAllShortFlags (arg: string): boolean {
-      // if this is a negative number, or doesn't start with a single hyphen, it's not a short flag group
-      if (arg.match(negative) || !arg.match(/^-[^-]+/)) { return false }
-      let hasAllFlags = true
-      let next: string
-      const letters = arg.slice(1).split('')
-      for (let j = 0; j < letters.length; j++) {
-        next = arg.slice(j + 2)
-
-        if (!hasAnyFlag(letters[j])) {
-          hasAllFlags = false
-          break
-        }
-
-        if ((letters[j + 1] && letters[j + 1] === '=') ||
-          next === '-' ||
-          (/[A-Za-z]/.test(letters[j]) && /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) ||
-          (letters[j + 1] && letters[j + 1].match(/\W/))) {
-          break
-        }
-      }
-      return hasAllFlags
+      // Keys with aliases are in flags.aliases. The aliases are properties too, thanks to extendAliases().
+      // Keys without aliases are in flags.keys (along with others).
+      // flags.configs not included in flags.keys.
+      return flags.keys.includes(key) || flags.aliases[key] !== undefined || flags.configs[key] !== undefined;
     }
 
     function isUnknownOptionAsArg (arg: string): boolean {
@@ -971,23 +937,96 @@ export class YargsParser {
     }
 
     function isUnknownOption (arg: string): boolean {
-      arg = arg.replace(/^-{3,}/, '--')
-      // ignore negative numbers
-      if (arg.match(negative)) { return false }
-      // if this is a short option group and all of them are configured, it isn't unknown
-      if (hasAllShortFlags(arg)) { return false }
-      // e.g. '--count=2'
-      const flagWithEquals = /^-+([^=]+?)=[\s\S]*$/
-      // e.g. '-a' or '--arg'
-      const normalFlag = /^-+([^=]+?)$/
-      // e.g. '-a-'
-      const flagEndingInHyphen = /^-+([^=]+?)-$/
-      // e.g. '-abc123'
-      const flagEndingInDigits = /^-+([^=]+?\d+)$/
-      // e.g. '-a/usr/local'
-      const flagEndingInNonWordCharacters = /^-+([^=]+?)\W+.*$/
-      // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method
-      return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag, flagEndingInHyphen, flagEndingInDigits, flagEndingInNonWordCharacters)
+      // options have a leading dash
+      if (arg[0] !== '-')
+        return false
+      // options have a key (name), so ---- and ---=foo are not options
+      if (/^-+(=|$)/.test(arg))
+        return false
+
+      // Reproduce enough main logic to exclude known options and negative numbers.
+      // Consistently using /regex/.test if not capturing a match, but otherwise
+      // closely following the original flow including match groups not used here.
+
+      let m: RegExpMatchArray | null
+
+      // -- separated by =
+      if (/^--.+=/.test(arg) || (
+        !configuration['short-option-groups'] && /^-.+=/.test(arg)
+      )) {
+        m = arg.match(/^--?([^=]+)=([\s\S]*)$/)
+        return m !== null && !hasAnyFlag(m[1]);
+      } else if (negatedBoolean.test(arg) && configuration['boolean-negation']) {
+        m = arg.match(negatedBoolean)
+        return m !== null && !hasAnyFlag(m[1]);
+      // -- separated by space.
+      } else if (/^--.+/.test(arg) || (
+        !configuration['short-option-groups'] && /^-[^-]+/.test(arg)
+      )) {
+        m = arg.match(/^--?(.+)/)
+        return m !== null && !hasAnyFlag(m[1]);
+      // dot-notation flag separated by '='.
+      // (catch case to treat like short option flag)
+      } else if (/^-.\..+=/.test(arg)) {
+        m = arg.match(/^-([^=]+)=([\s\S]*)$/)
+        return m !== null && !hasAnyFlag(m[1]);
+      // dot-notation flag separated by space.
+      // (catch case to treat like short option flag)
+      } else if (/^-.\..+/.test(arg) && !negative.test(arg)) {
+        m = arg.match(/^-(.\..+)/)
+        return m !== null && !hasAnyFlag(m[1]);
+      } else if (/^-[^-]+/.test(arg) && !negative.test(arg)) {
+        // group of short flags to unpick
+        
+        const letters = arg.slice(1, -1).split('')
+        let broken = false;
+        let next: string;
+
+        for (let j = 0; j < letters.length; j++) {
+          next = arg.slice(j + 2)
+
+          if (letters[j + 1] && letters[j + 1] === '=') {
+            if (!hasAnyFlag(letters[j])) 
+              return true;
+            broken = true
+            break
+          }
+
+          if (next === '-') {
+            if (!hasAnyFlag(letters[j])) 
+              return true;
+            continue
+          }
+
+          // current letter is an alphabetic character and next value is a number
+          if (/[A-Za-z]/.test(letters[j]) &&
+            /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) &&
+            checkAllAliases(next, flags.bools) === false) {
+            if (!hasAnyFlag(letters[j])) 
+              return true;
+            broken = true
+            break
+          }
+
+          if (letters[j + 1] && /\W/.test(letters[j + 1])) {
+            if (!hasAnyFlag(letters[j])) 
+              return true;
+            broken = true
+            break
+          } else {
+            if (!hasAnyFlag(letters[j])) 
+              return true;
+          }
+        }
+
+        const key = arg.slice(-1)[0]
+        if (!broken && key !== '-') {
+          if (!hasAnyFlag(key)) 
+            return true;
+        }
+      } 
+
+      return false;
     }
 
     // make a best effort to pick a default value
