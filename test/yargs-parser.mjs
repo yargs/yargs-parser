@@ -2884,6 +2884,24 @@ describe('yargs-parser', function () {
         result.newAliases.should.deep.equal({})
       })
 
+      it('should treat negative numbers as numbers when "short-option-groups" false', function () {
+        // First confirm the normal behaviour, as that is what we expect, and has changed over time.
+        const normalResult = parser.detailed([
+          '-1'
+        ])
+        normalResult.argv.should.deep.equal({ _: [-1] })
+
+        const result = parser.detailed([
+          '-1'
+        ], {
+          configuration: {
+            'short-option-groups': false
+          }
+        })
+        result.argv.should.deep.equal({ _: [-1] })
+      })
+
+
       it('should populate the "--" if populate-- is "true"', function () {
         const result = parser([
           '--name=meowmers', 'bare', '-cats', 'woo', 'moxy',
