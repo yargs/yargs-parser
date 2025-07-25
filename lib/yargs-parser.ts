@@ -981,7 +981,10 @@ export class YargsParser {
       // e.g. '-a' or '--arg'
       const normalFlag = /^-+([^=]+?)$/
       // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method
-      return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag)
+      const patterns = [flagWithEquals, normalFlag];
+      if (configuration['boolean-negation'])
+        patterns.push(negatedBoolean);
+      return !hasFlagsMatching(arg, ...patterns)
     }
 
     // make a best effort to pick a default value
