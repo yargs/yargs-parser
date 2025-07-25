@@ -980,7 +980,7 @@ export class YargsParser {
       const flagWithEquals = /^-+([^=]+?)=[\s\S]*$/
       // e.g. '-a' or '--arg'
       const normalFlag = /^-+([^=]+?)$/
-      // e.g. '-a-'
+      // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method
       return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag)
     }
 
