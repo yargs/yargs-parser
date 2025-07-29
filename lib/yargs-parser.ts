@@ -980,14 +980,8 @@ export class YargsParser {
       const flagWithEquals = /^-+([^=]+?)=[\s\S]*$/
       // e.g. '-a' or '--arg'
       const normalFlag = /^-+([^=]+?)$/
-      // e.g. '-a-'
-      const flagEndingInHyphen = /^-+([^=]+?)-$/
-      // e.g. '-abc123'
-      const flagEndingInDigits = /^-+([^=]+?\d+)$/
-      // e.g. '-a/usr/local'
-      const flagEndingInNonWordCharacters = /^-+([^=]+?)\W+.*$/
       // check the different types of flag styles, including negatedBoolean, a pattern defined near the start of the parse method
-      return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag, flagEndingInHyphen, flagEndingInDigits, flagEndingInNonWordCharacters)
+      return !hasFlagsMatching(arg, flagWithEquals, negatedBoolean, normalFlag)
     }
 
     // make a best effort to pick a default value
