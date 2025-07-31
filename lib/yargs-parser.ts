@@ -259,7 +259,7 @@ export class YargsParser {
 
       // -- separated by space.
       } else if (arg.match(/^--.+/) || (
-        !configuration['short-option-groups'] && arg.match(/^-[^-]+/)
+        !configuration['short-option-groups'] && arg.match(/^-[^-]+/) && !arg.match(negative)
       )) {
         m = arg.match(/^--?(.+)/)
         if (m !== null && Array.isArray(m) && m.length >= 2) {
