@@ -3071,6 +3071,18 @@ describe('yargs-parser', function () {
           knownArg: false
         })
       })
+      it('should ignore negated known options when boolean-negation:false', function () {
+        const argv = parser('--no-known-arg --no-unknown-arg', {
+          boolean: ['known-arg'],
+          configuration: {
+            'unknown-options-as-args': true,
+            'boolean-negation': false
+          }
+        })
+        argv.should.deep.equal({
+          _: ['--no-known-arg', '--no-unknown-arg']
+        })
+      })
       it('should ignore unknown options in long format separated by space', function () {
         const argv = parser('--known-arg a --unknown-arg b', {
           string: ['known-arg'],
