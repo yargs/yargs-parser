@@ -3261,7 +3261,7 @@ describe('yargs-parser', function () {
           v: true
         })
       })
-          // Fixes: https://github.com/yargs/yargs-parser/issues/501
+      // Fixes: https://github.com/yargs/yargs-parser/issues/501
       it('should allow an unknown arg that resembles a known arg and contains hyphens to be used as the value of another flag in short form', function () {
          {
            const argv = parser('--known-arg /1/ -k --known-arg-unknown', {
@@ -3357,6 +3357,18 @@ describe('yargs-parser', function () {
              k: ['--k-unknown', '--k-not-known']
            })
          }
+      })
+      it('should not parse known short option groups when short-option-groups:false', function () {
+        const argv = parser('-known', {
+          boolean: ['k', 'n', 'o', 'w', 'n'],
+          configuration: {
+            'unknown-options-as-args': true,
+            'short-option-groups': false
+          }
+        })
+        argv.should.deep.equal({
+          _: ['-known']
+        })
       })
       it('should parse negative numbers', function () {
         const argv = parser('-k -33', {

@@ -975,7 +975,7 @@ export class YargsParser {
       // ignore negative numbers
       if (arg.match(negative)) { return false }
       // if this is a short option group and all of them are configured, it isn't unknown
-      if (hasAllShortFlags(arg)) { return false }
+      if (configuration['short-option-groups'] && hasAllShortFlags(arg)) { return false }
       // e.g. '--count=2'
       const flagWithEquals = /^-+([^=]+?)=[\s\S]*$/
       // e.g. '-a' or '--arg'
