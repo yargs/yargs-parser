@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [22.0.1](https://github.com/yargs/yargs-parser/compare/yargs-parser-v22.0.0...yargs-parser-v22.0.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* preserve negative number handling when short-option-groups:false ([#511](https://github.com/yargs/yargs-parser/issues/511)) ([ccc3634](https://github.com/yargs/yargs-parser/commit/ccc3634e324458d15789d8e9bd81851b178f21b5))
+* remove inaccurate and unnecessary regexp used by unknown-options-as-args ([#508](https://github.com/yargs/yargs-parser/issues/508)) ([cea8972](https://github.com/yargs/yargs-parser/commit/cea8972ad169121c32a9a67693e5eb11dd3dc001))
+* unknown-options-as-args now respects short-option-groups ([#510](https://github.com/yargs/yargs-parser/issues/510)) ([60f2db5](https://github.com/yargs/yargs-parser/commit/60f2db5dacde1e94f960ce0941a717f3f422f865))
+
 ## [22.0.0](https://github.com/yargs/yargs-parser/compare/yargs-parser-v21.1.1...yargs-parser-v22.0.0) (2025-05-26)
 
 
