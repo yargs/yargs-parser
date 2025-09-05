@@ -346,7 +346,7 @@ $ node example --arr 1 2
 { _: [2], arr: [1] }
 ```
 
-**Note: in `v18.0.0` we are considering defaulting greedy arrays to `false`.**
+**Note: in `v19.0.0` we are considering defaulting greedy arrays to `false`.**
 
 ### nargs eats options
 
