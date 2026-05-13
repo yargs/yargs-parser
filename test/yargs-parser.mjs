@@ -2581,6 +2581,10 @@ describe('yargs-parser', function () {
 
         parsed.x.should.deep.equal(['o', 'p', 'q'])
       })
+      it('does not sum repeated numeric arguments when one equals 1', function () {
+        const parsed = parser('-x 3 -x 1')
+        parsed.x.should.deep.equal([3, 1])
+      })
     })
 
     describe('flatten duplicate arrays', function () {
