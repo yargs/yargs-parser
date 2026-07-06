@@ -1529,6 +1529,13 @@ describe('yargs-parser', function () {
     })
   })
 
+
+  it('should not increment non-count options when value equals 1', function () {
+    const result = parser('-x 3 -x 1')
+    result.should.have.property('x')
+    result.x.should.eql([3, 1])
+  })
+
   describe('count', function () {
     it('should count the number of times a boolean is present', function () {
       let parsed
