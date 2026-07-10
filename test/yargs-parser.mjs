@@ -1867,6 +1867,13 @@ describe('yargs-parser', function () {
       result.should.have.property('x').that.is.an('array').and.to.deep.equal([5, 2])
     })
 
+    it('should not coerce array values as numbers when `number` is false (#415)', function () {
+      const result = parser(['--foo', 'dog', 'cat'], {
+        array: [{ key: 'foo', number: false }]
+      })
+      result.should.have.property('foo').that.deep.equals(['dog', 'cat'])
+    })
+
     it('should respect the type `string` option for arrays', function () {
       const result = parser(['-x=5', '2'], {
         configuration: {

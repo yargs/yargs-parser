@@ -121,7 +121,11 @@ export class YargsParser {
           string: 'strings',
           number: 'numbers'
         }
-        return arrayFlagKeys[key]
+        // Only enable the sub-type coercion when its value is truthy, so an
+        // explicit falsy value such as `{ number: false }` is ignored (#415).
+        return typeof opt === 'object' && (opt as Record<string, unknown>)[key]
+          ? arrayFlagKeys[key]
+          : undefined
       }).filter(Boolean).pop()
 
       // assign key to be coerced
