@@ -64,7 +64,7 @@
     "rimraf": "^6.0.1",
     "serve": "^14.0.0",
     "start-server-and-test": "^2.0.11",
-    "typescript": "^5.8.3"
+    "typescript": "^7.0.0"
   },
   "files": [
     "browser.js",
