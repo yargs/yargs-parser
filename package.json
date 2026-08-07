@@ -47,8 +47,8 @@
   "author": "Ben Coe <ben@npmjs.com>",
   "license": "ISC",
   "devDependencies": {
-    "@babel/eslint-parser": "^7.27.1",
-    "@babel/preset-typescript": "^7.27.1",
+    "@babel/eslint-parser": "^8.0.0",
+    "@babel/preset-typescript": "^8.0.0",
     "@types/chai": "^5.2.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.3",
