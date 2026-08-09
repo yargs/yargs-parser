@@ -19,7 +19,7 @@ jobs:
           node-version: 14
       - run: npm install
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PUPPETEER_SKIP_DOWNLOAD: true
       - run: npm run compile
       - name: push Deno release
         run: |
