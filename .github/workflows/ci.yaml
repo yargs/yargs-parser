@@ -19,7 +19,7 @@ jobs:
       - run: node --version
       - run: npm install
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PUPPETEER_SKIP_DOWNLOAD: true
       - run: npm test
       - run: npm run check
   windows:
@@ -42,7 +42,7 @@ jobs:
           node-version: 22
       - run: npm install
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PUPPETEER_SKIP_DOWNLOAD: true
       - run: npm test
       - run: npm run coverage
   deno:
@@ -54,7 +54,7 @@ jobs:
           node-version: 22
       - run: npm install
         env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PUPPETEER_SKIP_DOWNLOAD: true
       - run: npm run compile
       - uses: denolib/setup-deno@v2
         with:
