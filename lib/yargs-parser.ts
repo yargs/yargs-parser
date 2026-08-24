@@ -620,13 +620,13 @@ export class YargsParser {
         if (typeof val === 'string') val = val === 'true'
       }
 
-      let value = Array.isArray(val)
+      let value: any = Array.isArray(val)
         ? val.map(function (v) { return maybeCoerceNumber(key, v) })
         : maybeCoerceNumber(key, val)
 
       // increment a count given as arg (either no value or value parsed as boolean)
       if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
-        value = increment()
+        value = INCREMENT_SENTINEL
       }
 
       // Set normalized value when key is in 'normalize' and in 'arrays'
@@ -850,7 +850,7 @@ export class YargsParser {
         }
       }
 
-      if (value === increment()) {
+      if (value === INCREMENT_SENTINEL) {
         o[key] = increment(o[key])
       } else if (Array.isArray(o[key])) {
         if (duplicate && isTypeArray && isValueArray) {
@@ -1097,6 +1097,8 @@ function combineAliases (aliases: Dictionary<string | string[]>): Dictionary<str
 
   return combined
 }
+
+const INCREMENT_SENTINEL = Symbol('count-increment')
 
 // this function should only be called when a count is given as an arg
 // it is NOT called to set a default value
