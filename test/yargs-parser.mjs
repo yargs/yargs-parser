@@ -4051,6 +4051,21 @@ describe('yargs-parser', function () {
       parse.error.message.should.equal('Not enough arguments following: a')
     })
 
+    it('returns an error if only an array default is available for nargs', () => {
+      const parse = parser.detailed(['-a'], {
+        array: 'a',
+        default: {
+          a: ['default']
+        },
+        narg: {
+          a: NaN
+        }
+      })
+
+      parse.argv.a.should.eql(['default'])
+      parse.error.message.should.equal('Not enough arguments following: a')
+    })
+
     it('returns an error if not enough positionals were provided for nargs even with nargs-eats-options', () => {
       const parse = parser.detailed(['-a', '33', '--cat'], {
         narg: {

@@ -503,12 +503,14 @@ export class YargsParser {
     // e.g., --foo apple banana cat becomes ["apple", "banana", "cat"]
     function eatArray (i: number, key: string, args: string[], argAfterEqualSign?: string): number {
       let argsToSet = []
+      let argsProvided = 0
       let next = argAfterEqualSign || args[i + 1]
       // If both array and nargs are configured, enforce the nargs count:
       const nargsCount = checkAllAliases(key, flags.nargs)
 
       if (checkAllAliases(key, flags.bools) && !(/^(true|false)$/.test(next))) {
         argsToSet.push(true)
+        argsProvided++
       } else if (isUndefined(next) ||
           (isUndefined(argAfterEqualSign) && /^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next))) {
         // for keys without value ==> argsToSet remains an empty []
@@ -521,6 +523,7 @@ export class YargsParser {
         // value in --option=value is eaten as is
         if (!isUndefined(argAfterEqualSign)) {
           argsToSet.push(processValue(key, argAfterEqualSign, true))
+          argsProvided++
         }
         for (let ii = i + 1; ii < args.length; ii++) {
           if ((!configuration['greedy-arrays'] && argsToSet.length > 0) ||
@@ -529,14 +532,15 @@ export class YargsParser {
           if (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next)) break
           i = ii
           argsToSet.push(processValue(key, next, inputIsString))
+          argsProvided++
         }
       }
 
       // If both array and nargs are configured, create an error if less than
       // nargs positionals were found. NaN has special meaning, indicating
       // that at least one value is required (more are okay).
-      if (typeof nargsCount === 'number' && ((nargsCount && argsToSet.length < nargsCount) ||
-          (isNaN(nargsCount) && argsToSet.length === 0))) {
+      if (typeof nargsCount === 'number' && ((nargsCount && argsProvided < nargsCount) ||
+          (isNaN(nargsCount) && argsProvided === 0))) {
         error = Error(__('Not enough arguments following: %s', key))
       }
 
