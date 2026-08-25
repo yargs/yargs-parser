@@ -503,7 +503,7 @@ export class YargsParser {
     // e.g., --foo apple banana cat becomes ["apple", "banana", "cat"]
     function eatArray (i: number, key: string, args: string[], argAfterEqualSign?: string): number {
       let argsToSet = []
-      let next = argAfterEqualSign || args[i + 1]
+      let next = isUndefined(argAfterEqualSign) ? args[i + 1] : argAfterEqualSign
       // If both array and nargs are configured, enforce the nargs count:
       const nargsCount = checkAllAliases(key, flags.nargs)
 

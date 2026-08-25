@@ -1712,6 +1712,13 @@ describe('yargs-parser', function () {
       result.b[0].should.equal(33)
     })
 
+    it('should place an empty equals value in an array', function () {
+      const result = parser(['--tag='], {
+        array: ['tag']
+      })
+      result.tag.should.deep.equal([''])
+    })
+
     it('should add multiple argument values to the array', function () {
       const result = parser(['-b', '33', '-b', 'hello'], {
         array: 'b'
