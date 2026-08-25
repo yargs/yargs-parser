@@ -3806,6 +3806,21 @@ describe('yargs-parser', function () {
       })
     })
 
+    it('strip-dashed removes dashed fields from dot-notation values', function () {
+      const argv = parser(['--dashed-will-be-stripped', '--here.it-will-not'], {
+        configuration: {
+          'strip-dashed': true
+        }
+      })
+      argv.should.deep.equal({
+        _: [],
+        dashedWillBeStripped: true,
+        here: {
+          itWillNot: true
+        }
+      })
+    })
+
     it('strip-aliased removes expected fields from argv', function () {
       const argv = parser(['--test-value', '1'], {
         number: ['test-value'],

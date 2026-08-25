@@ -429,9 +429,7 @@ export class YargsParser {
     })
 
     if (configuration['camel-case-expansion'] && configuration['strip-dashed']) {
-      Object.keys(argv).filter(key => key !== '--' && key.includes('-')).forEach(key => {
-        delete argv[key]
-      })
+      stripDashedKeys(argv)
     }
 
     if (configuration['strip-aliased']) {
@@ -450,6 +448,16 @@ export class YargsParser {
       if (typeof maybeCoercedNumber === 'string' || typeof maybeCoercedNumber === 'number') {
         argv._.push(maybeCoercedNumber)
       }
+    }
+
+    function stripDashedKeys (obj: { [key: string]: any }): void {
+      Object.keys(obj).forEach(key => {
+        if (key !== '--' && key.includes('-')) {
+          delete obj[key]
+        } else if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+          stripDashedKeys(obj[key])
+        }
+      })
     }
 
     // how many arguments should we consume, based
