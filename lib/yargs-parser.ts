@@ -709,7 +709,7 @@ export class YargsParser {
           // setting arguments via CLI takes precedence over
           // values within the config file.
           if (!hasKey(argv, fullKey.split('.')) || (checkAllAliases(fullKey, flags.arrays) && configuration['combine-arrays'])) {
-            setArg(fullKey, value)
+            setArg(fullKey, value, false)
           }
         }
       })

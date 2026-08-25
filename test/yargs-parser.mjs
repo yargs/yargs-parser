@@ -517,6 +517,17 @@ describe('yargs-parser', function () {
       argv.should.have.property('foo').and.deep.equal('bar')
     })
 
+    it('should preserve quoted string values from config files', function () {
+      const argv = parser([], {
+        config: ['settings'],
+        default: {
+          settings: jsonPath
+        }
+      })
+
+      argv.should.have.property('quoted').and.equal('"hello"')
+    })
+
     it('should use value from config file, if argv value is using default value', function () {
       const argv = parser([], {
         alias: {
