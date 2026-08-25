@@ -465,7 +465,11 @@ export class YargsParser {
         if (!isUndefined(argAfterEqualSign)) {
           error = Error(__('Argument unexpected for: %s', key))
         }
-        setArg(key, defaultValue(key))
+        if (!checkAllAliases(key, flags.strings) && !checkAllAliases(key, flags.numbers)) {
+          setArg(key, true)
+        } else {
+          setArg(key, defaultValue(key))
+        }
         return i
       }
 

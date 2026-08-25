@@ -1941,6 +1941,29 @@ describe('yargs-parser', function () {
       argv.error.message.should.equal('Argument unexpected for: bar')
     })
 
+    it('should allow narg 0 to override a false default', function () {
+      const argv = parser('-a hello -b world', {
+        narg: {
+          a: 1,
+          b: 0
+        },
+        default: {
+          b: false
+        },
+        alias: {
+          blah: ['b', 'bl']
+        }
+      })
+
+      argv.should.deep.equal({
+        _: ['world'],
+        a: 'hello',
+        b: true,
+        bl: true,
+        blah: true
+      })
+    })
+
     it('should raise an exception if there are not enough arguments following key', function () {
       const argv = parser.detailed('--foo apple', {
         narg: {
