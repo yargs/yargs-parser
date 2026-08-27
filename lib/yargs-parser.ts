@@ -318,7 +318,7 @@ export class YargsParser {
         for (let j = 0; j < letters.length; j++) {
           next = arg.slice(j + 2)
 
-          if (letters[j + 1] && letters[j + 1] === '=') {
+          if ((letters[j + 1] && letters[j + 1] === '=') || next === '=') {
             value = arg.slice(j + 3)
             key = letters[j]
 
