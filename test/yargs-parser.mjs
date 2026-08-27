@@ -1877,6 +1877,37 @@ describe('yargs-parser', function () {
       result.should.have.property('x').that.is.an('array').and.to.deep.equal(['5', '2'])
     })
 
+    // see https://github.com/yargs/yargs-parser/issues/415
+    // a falsy type flag should be treated as if it were absent, rather than
+    // enabling the corresponding coercion.
+    it('should not coerce array values to number when `number` is false', function () {
+      const result = parser(['--foo', 'dog', 'cat'], {
+        array: [{ key: 'foo', number: false }]
+      })
+      result.should.have.property('foo').that.is.an('array').and.to.deep.equal(['dog', 'cat'])
+    })
+
+    it('should not coerce array values to number when `number` is undefined', function () {
+      const result = parser(['--foo', 'dog', 'cat'], {
+        array: [{ key: 'foo', number: undefined }]
+      })
+      result.should.have.property('foo').that.is.an('array').and.to.deep.equal(['dog', 'cat'])
+    })
+
+    it('should not coerce array values to boolean when `boolean` is false', function () {
+      const result = parser(['--foo', 'dog', 'cat'], {
+        array: [{ key: 'foo', boolean: false }]
+      })
+      result.should.have.property('foo').that.is.an('array').and.to.deep.equal(['dog', 'cat'])
+    })
+
+    it('should not coerce array values to string when `string` is false', function () {
+      const result = parser(['--foo', '1', '2'], {
+        array: [{ key: 'foo', string: false }]
+      })
+      result.should.have.property('foo').that.is.an('array').and.to.deep.equal([1, 2])
+    })
+
     it('should eat non-hyphenated arguments until hyphenated option is hit - combined with coercion', function () {
       const result = parser([
         '-a=hello', 'world',

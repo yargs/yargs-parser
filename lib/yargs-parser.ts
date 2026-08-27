@@ -115,14 +115,17 @@ export class YargsParser {
       const key = typeof opt === 'object' ? opt.key : opt
 
       // assign to flags[bools|strings|numbers]
-      const assignment: ArrayFlagsKey | undefined = Object.keys(opt).map(function (key) {
-        const arrayFlagKeys: Record<string, ArrayFlagsKey> = {
-          boolean: 'bools',
-          string: 'strings',
-          number: 'numbers'
-        }
-        return arrayFlagKeys[key]
-      }).filter(Boolean).pop()
+      const arrayFlagKeys: Record<string, ArrayFlagsKey> = {
+        boolean: 'bools',
+        string: 'strings',
+        number: 'numbers'
+      }
+      const assignment: ArrayFlagsKey | undefined = typeof opt === 'object'
+        ? Object.keys(arrayFlagKeys)
+          .filter((flagKey) => (opt as Record<string, unknown>)[flagKey] === true)
+          .map((flagKey) => arrayFlagKeys[flagKey])
+          .pop()
+        : undefined
 
       // assign key to be coerced
       if (assignment) {
