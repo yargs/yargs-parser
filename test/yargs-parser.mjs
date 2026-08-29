@@ -3536,6 +3536,21 @@ describe('yargs-parser', function () {
       parsed.foo.should.equal('BAR')
     })
 
+    it('preserves objects returned by coercion functions', function () {
+      const value = Object.create(null)
+      value.database = 'postgres'
+
+      const parsed = parser(['--connection', 'postgresql://db/example'], {
+        coerce: {
+          connection: function () {
+            return value
+          }
+        }
+      })
+
+      parsed.connection.should.equal(value)
+    })
+
     it('applies coercion function to an implicit array', function () {
       const parsed = parser(['--foo', '99', '-f', '33'], {
         coerce: {
