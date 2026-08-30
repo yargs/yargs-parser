@@ -626,7 +626,8 @@ export class YargsParser {
 
       // increment a count given as arg (either no value or value parsed as boolean)
       if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
-        value = increment()
+        // COUNT_INCREMENT is a unique sentinel, not the number 1.
+        value = COUNT_INCREMENT as unknown as typeof value
       }
 
       // Set normalized value when key is in 'normalize' and in 'arrays'
@@ -850,7 +851,7 @@ export class YargsParser {
         }
       }
 
-      if (value === increment()) {
+      if (value === COUNT_INCREMENT) {
         o[key] = increment(o[key])
       } else if (Array.isArray(o[key])) {
         if (duplicate && isTypeArray && isValueArray) {
@@ -1097,6 +1098,11 @@ function combineAliases (aliases: Dictionary<string | string[]>): Dictionary<str
 
   return combined
 }
+
+// Sentinel so a real option value of 1 is not treated as a count step.
+// processValue used to assign increment(), which returns 1, and setKey
+// compared value === increment(), so `-x 3 -x 1` became 4 instead of [3, 1].
+const COUNT_INCREMENT = Symbol('yargs-parser-count-increment')
 
 // this function should only be called when a count is given as an arg
 // it is NOT called to set a default value
