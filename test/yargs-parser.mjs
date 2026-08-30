@@ -1666,6 +1666,16 @@ describe('yargs-parser', function () {
       parse.should.have.property('v').and.deep.equal(['a', 'b', 'c'])
       parse.should.have.property('_').with.length(0)
     })
+    it('should not treat a later value of 1 as a count increment (#506)', function () {
+      const parse = parser(['-x', '3', '-x', '1'])
+      parse.should.have.property('x').and.deep.equal([3, 1])
+      parse.should.have.property('_').with.length(0)
+    })
+    it('should keep a later value of 1 when duplicate-arguments-array is false (#506)', function () {
+      const parse = parser(['-x', '3', '-x', '1'], { configuration: { 'duplicate-arguments-array': false } })
+      parse.should.have.property('x').and.equal(1)
+      parse.should.have.property('_').with.length(0)
+    })
     it('should keep only the last value if the same option is specified multiple times (duplicate-arguments-false)', function () {
       const parse = parser(['-v', 'a', '-v', 'b', '-v', 'c'], { configuration: { 'duplicate-arguments-array': false } })
       parse.should.have.property('v').and.equal('c')
