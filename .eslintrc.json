@@ -8,6 +8,9 @@
   "overrides": [
     {
       "files": ["**/*.ts", "**/*.tsx"],
+      "parserOptions": {
+        "project": "./tsconfig.test.json"
+      },
       "rules": {
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-unused-vars": "off",
