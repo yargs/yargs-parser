@@ -617,7 +617,18 @@ export class YargsParser {
 
       // handle parsing boolean arguments --foo=true --bar false.
       if (checkAllAliases(key, flags.bools) || checkAllAliases(key, flags.counts)) {
-        if (typeof val === 'string') val = val === 'true'
+        if (typeof val === 'string') {
+          const lower = val.toLowerCase()
+          // Support common truthy/falsy string representations
+          if (lower === 'true' || lower === '1' || lower === 'yes' || lower === 'on') {
+            val = true
+          } else if (lower === 'false' || lower === '0' || lower === 'no' || lower === 'off') {
+            val = false
+          } else {
+            // For other strings, treat non-empty as truthy (backwards compat edge case)
+            val = val === 'true'
+          }
+        }
       }
 
       let value = Array.isArray(val)
@@ -728,19 +739,48 @@ export class YargsParser {
       if (typeof envPrefix === 'undefined') return
 
       const prefix = typeof envPrefix === 'string' ? envPrefix : ''
+      // Convert negation-prefix to env var format (e.g., 'no-' -> 'NO_')
+      const negationPrefix = (configuration['negation-prefix'] || 'no-').toUpperCase().replace(/-/g, '_')
       const env = mixin.env()
       Object.keys(env).forEach(function (envVar) {
         if (prefix === '' || envVar.lastIndexOf(prefix, 0) === 0) {
           // get array of nested keys and convert them to camel case
+          let isNegated = false
           const keys = envVar.split('__').map(function (key, i) {
             if (i === 0) {
               key = key.substring(prefix.length)
+              // Check for negation prefix (e.g., NO_DO_THING -> doThing with negation)
+              if (configuration['boolean-negation'] && key.lastIndexOf(negationPrefix, 0) === 0) {
+                key = key.substring(negationPrefix.length)
+                isNegated = true
+              }
             }
             return camelCase(key)
           })
 
           if (((configOnly && flags.configs[keys.join('.')]) || !configOnly) && !hasKey(argv, keys)) {
-            setArg(keys.join('.'), env[envVar])
+            let value: any = env[envVar]
+            // Handle negated boolean env vars
+            if (isNegated && checkAllAliases(keys.join('.'), flags.bools)) {
+              // For negated booleans: NO_FOO=true means foo=false, NO_FOO=false means foo=true
+              const lower = String(value).toLowerCase()
+              if (lower === 'true' || lower === '1' || lower === 'yes' || lower === 'on') {
+                value = false
+              } else if (lower === 'false' || lower === '0' || lower === 'no' || lower === 'off') {
+                value = true
+              } else {
+                value = false // Default negated to false for non-standard values
+              }
+              setKey(argv, keys, value)
+              // Also set aliases
+              if (flags.aliases[keys.join('.')]) {
+                flags.aliases[keys.join('.')].forEach(function (x) {
+                  setKey(argv, x.split('.'), value)
+                })
+              }
+            } else {
+              setArg(keys.join('.'), value)
+            }
           }
         }
       })
