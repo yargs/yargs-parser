@@ -620,13 +620,13 @@ export class YargsParser {
         if (typeof val === 'string') val = val === 'true'
       }
 
-      let value = Array.isArray(val)
+      let value: string | number | boolean | typeof incrementMarker | Array<string | number | null | undefined> | null | undefined = Array.isArray(val)
         ? val.map(function (v) { return maybeCoerceNumber(key, v) })
         : maybeCoerceNumber(key, val)
 
       // increment a count given as arg (either no value or value parsed as boolean)
       if (checkAllAliases(key, flags.counts) && (isUndefined(value) || typeof value === 'boolean')) {
-        value = increment()
+        value = incrementMarker
       }
 
       // Set normalized value when key is in 'normalize' and in 'arrays'
@@ -850,7 +850,7 @@ export class YargsParser {
         }
       }
 
-      if (value === increment()) {
+      if (value === incrementMarker) {
         o[key] = increment(o[key])
       } else if (Array.isArray(o[key])) {
         if (duplicate && isTypeArray && isValueArray) {
@@ -1097,6 +1097,11 @@ function combineAliases (aliases: Dictionary<string | string[]>): Dictionary<str
 
   return combined
 }
+
+// A count argument carries no value of its own: it is replaced by this marker
+// so that `setKey` can tell "increment the count" apart from a real value, and
+// a literal `1` passed to a non-count option is not mistaken for a count.
+const incrementMarker = Symbol('increment')
 
 // this function should only be called when a count is given as an arg
 // it is NOT called to set a default value
