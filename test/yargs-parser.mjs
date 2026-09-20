@@ -1658,6 +1658,21 @@ describe('yargs-parser', function () {
 
       argv.error.message.should.equal('Invalid configuration: counter, opts.count excludes opts.narg.')
     })
+
+    // See: https://github.com/yargs/yargs-parser/issues/506
+    // Regression: value === increment() treated a literal 1 as a count step.
+    it('should not treat a later value of 1 as a count increment (#506)', function () {
+      parser('-x 3 -x 1').x.should.deep.equal([3, 1])
+      parser('-x 1 -x 3').x.should.deep.equal([1, 3])
+      parser('--foo 2 --foo 1').foo.should.deep.equal([2, 1])
+    })
+
+    it('should keep a later value of 1 when duplicate-arguments-array is false (#506)', function () {
+      const parsed = parser('-x 3 -x 1', {
+        configuration: { 'duplicate-arguments-array': false }
+      })
+      parsed.x.should.equal(1)
+    })
   })
 
   describe('array', function () {
