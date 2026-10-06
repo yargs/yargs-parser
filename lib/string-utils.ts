@@ -51,10 +51,11 @@ export function decamelize (str: string, joinString?: string): string {
   return notCamelcase
 }
 
-export function looksLikeNumber (x: null | undefined | number | string): boolean {
+export function looksLikeNumber (x: unknown): boolean {
   if (x === null || x === undefined) return false
   // if loaded from config, may already be a number.
   if (typeof x === 'number') return true
+  if (typeof x !== 'string') return false
   // hexadecimal.
   if (/^0x[0-9a-f]+$/i.test(x)) return true
   // don't treat 0123 as a number; as it drops the leading '0'.

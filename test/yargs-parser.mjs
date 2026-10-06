@@ -14,6 +14,14 @@ const require = createRequire(import.meta.url);
 should()
 
 describe('yargs-parser', function () {
+  it('preserves null-prototype objects returned by coerce', function () {
+    const value = Object.assign(Object.create(null), { host: 'localhost' })
+    const result = parser.detailed('--db=connection', { coerce: { db: () => value } })
+    expect(result.error).to.equal(null)
+    expect(result.argv.db).to.equal(value)
+    expect(Object.getPrototypeOf(result.argv.db)).to.equal(null)
+  })
+
   it('should parse a "short boolean"', function () {
     const parse = parser(['-b'])
     parse.should.not.have.property('--')
