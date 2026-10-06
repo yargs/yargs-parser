@@ -429,8 +429,17 @@ export class YargsParser {
     })
 
     if (configuration['camel-case-expansion'] && configuration['strip-dashed']) {
-      Object.keys(argv).filter(key => key !== '--' && key.includes('-')).forEach(key => {
-        delete argv[key]
+      const keys = new Set([...Object.keys(argv), ...Object.keys(flags.aliases)])
+      keys.forEach(key => {
+        if (key === '--' || !key.includes('-')) return
+        const parts = configuration['dot-notation'] ? key.split('.') : [key]
+        let target = argv
+        for (const part of parts.slice(0, -1)) {
+          const property = sanitizeKey(part)
+          if (!target || typeof target !== 'object' || !Object.prototype.hasOwnProperty.call(target, property)) return
+          target = target[property]
+        }
+        if (target && typeof target === 'object') delete target[sanitizeKey(parts[parts.length - 1])]
       })
     }
 

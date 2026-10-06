@@ -14,6 +14,39 @@ const require = createRequire(import.meta.url);
 should()
 
 describe('yargs-parser', function () {
+  it('strips dashed option keys at nested paths', function () {
+    const result = parser('--outer.inner-dash true --outer.deep.third-dash 5', {
+      configuration: { 'strip-dashed': true }
+    })
+    expect(result.outer).to.deep.equal({ innerDash: 'true', deep: { thirdDash: 5 } })
+  })
+
+  it('strips nested dashed configuration keys while retaining camel aliases', function () {
+    const result = parser([], {
+      configObjects: [{ outer: { 'inner-dash': 'value' } }],
+      configuration: { 'strip-dashed': true }
+    })
+    expect(result.outer).to.deep.equal({ innerDash: 'value' })
+  })
+
+  it('keeps literal dotted camel aliases when dot notation is disabled', function () {
+    const result = parser('--outer.inner-dash value', {
+      configuration: { 'strip-dashed': true, 'dot-notation': false }
+    })
+    expect(result['outer.innerDash']).to.equal('value')
+    expect(result).not.to.have.property('outer.inner-dash')
+  })
+
+  it('does not strip arbitrary keys from a coerced option object', function () {
+    const value = { 'literal-key': 'value' }
+    const result = parser('--option value', {
+      coerce: { option: () => value },
+      configuration: { 'strip-dashed': true }
+    })
+    expect(result.option).to.equal(value)
+    expect(result.option['literal-key']).to.equal('value')
+  })
+
   it('should parse a "short boolean"', function () {
     const parse = parser(['-b'])
     parse.should.not.have.property('--')
