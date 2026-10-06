@@ -755,6 +755,29 @@ describe('yargs-parser', function () {
   })
 
   describe('config objects', function () {
+    it('preserves literal quotes in configuration with string argv', function () {
+      const options = { configObjects: [{ value: '"hello"', nested: { value: "'world'" } }] }
+      const fromString = parser('', options)
+      const fromArray = parser([], options)
+      expect(fromString.value).to.equal('"hello"')
+      expect(fromString.nested.value).to.equal("'world'")
+      expect(fromString).to.deep.equal(fromArray)
+    })
+
+    it('preserves literal quotes from a configuration loader', function () {
+      const result = parser('--config fixture.json', {
+        config: { config: () => ({ value: '"hello"' }) }
+      })
+      expect(result.value).to.equal('"hello"')
+    })
+
+    it('still removes shell quotes from string argv values', function () {
+      const result = parser('--value "hello world"', {
+        configObjects: [{ value: '"config"' }]
+      })
+      expect(result.value).to.equal('hello world')
+    })
+
     it('should load options from config object', function () {
       const argv = parser(['--foo', 'bar'], {
         configObjects: [{
