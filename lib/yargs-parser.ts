@@ -465,7 +465,8 @@ export class YargsParser {
         if (!isUndefined(argAfterEqualSign)) {
           error = Error(__('Argument unexpected for: %s', key))
         }
-        setArg(key, defaultValue(key))
+        const value = defaultValue(key)
+        setArg(key, typeof value === 'boolean' && guessType(key) === DefaultValuesForTypeKey.BOOLEAN ? true : value)
         return i
       }
 

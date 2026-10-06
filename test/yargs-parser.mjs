@@ -14,6 +14,32 @@ const require = createRequire(import.meta.url);
 should()
 
 describe('yargs-parser', function () {
+  it('activates zero-argument boolean defaults through every alias', function () {
+    for (const flag of ['-b', '--blah', '--bl']) {
+      const result = parser([flag, 'world'], {
+        narg: { b: 0 }, default: { b: false }, alias: { blah: ['b', 'bl'] }
+      })
+      expect(result.b).to.equal(true)
+      expect(result.blah).to.equal(true)
+      expect(result.bl).to.equal(true)
+      expect(result._).to.deep.equal(['world'])
+    }
+  })
+
+  it('retains false zero-argument defaults when the flag is absent', function () {
+    const result = parser([], { narg: { b: 0 }, default: { b: false } })
+    expect(result.b).to.equal(false)
+  })
+
+  it('retains explicitly typed zero-argument fallback values', function () {
+    const result = parser('--text --number', {
+      narg: { text: 0, number: 0 }, string: ['text'], number: ['number'],
+      default: { text: 'fallback', number: 42 }
+    })
+    expect(result.text).to.equal('fallback')
+    expect(result.number).to.equal(42)
+  })
+
   it('should parse a "short boolean"', function () {
     const parse = parser(['-b'])
     parse.should.not.have.property('--')
