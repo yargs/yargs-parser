@@ -14,6 +14,19 @@ const require = createRequire(import.meta.url);
 should()
 
 describe('yargs-parser', function () {
+  it('preserves parsed-looking keys in plain and frozen coerce results', function () {
+    for (const freeze of [value => value, Object.freeze]) {
+      const value = freeze({ 'literal-key': 'own', 'inner-dash': 'replacement' })
+      const result = parser.detailed('--outer.inner-dash value', {
+        coerce: { outer: () => value },
+        configuration: { 'strip-dashed': true }
+      })
+      expect(result.error).to.equal(null)
+      expect(result.argv.outer).to.equal(value)
+      expect(result.argv.outer['inner-dash']).to.equal('replacement')
+    }
+  })
+
   it('strips dashed option keys at nested paths', function () {
     const result = parser('--outer.inner-dash true --outer.deep.third-dash 5', {
       configuration: { 'strip-dashed': true }

@@ -433,6 +433,7 @@ export class YargsParser {
       keys.forEach(key => {
         if (key === '--' || !key.includes('-')) return
         const parts = configuration['dot-notation'] ? key.split('.') : [key]
+        if (parts.length > 1 && typeof checkAllAliases(parts[0], flags.coercions) === 'function') return
         let target = argv
         for (const part of parts.slice(0, -1)) {
           const property = sanitizeKey(part)
