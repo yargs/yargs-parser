@@ -2530,6 +2530,62 @@ describe('yargs-parser', function () {
     })
 
     describe('boolean negation', function () {
+      it('negates single-dash long options when short option groups are disabled', function () {
+        const parsed = parser(['-no-window'], {
+          configuration: { 'short-option-groups': false }
+        })
+
+        expect(parsed.window).to.equal(false)
+        expect(parsed['no-window']).to.equal(undefined)
+      })
+
+      it('uses the custom negation prefix for single-dash long options', function () {
+        const parsed = parser(['-without-window'], {
+          configuration: {
+            'short-option-groups': false,
+            'negation-prefix': 'without-'
+          }
+        })
+
+        expect(parsed.window).to.equal(false)
+      })
+
+      it('recognizes known single-dash negated options with aliases and arrays', function () {
+        const parsed = parser(['-no-window', '-no-unknown'], {
+          boolean: ['window'],
+          array: ['window'],
+          alias: { window: 'w' },
+          configuration: {
+            'short-option-groups': false,
+            'unknown-options-as-args': true
+          }
+        })
+
+        expect(parsed.window).to.deep.equal([false])
+        expect(parsed.w).to.deep.equal([false])
+        expect(parsed._).to.deep.equal(['-no-unknown'])
+      })
+
+      it('respects disabled boolean negation for single-dash long options', function () {
+        const parsed = parser(['-no-window'], {
+          configuration: {
+            'short-option-groups': false,
+            'boolean-negation': false
+          }
+        })
+
+        expect(parsed['no-window']).to.equal(true)
+        expect(parsed.window).to.equal(undefined)
+      })
+
+      it('preserves short option groups for arguments resembling negated options', function () {
+        const parsed = parser(['-no-x'])
+
+        expect(parsed.n).to.equal(true)
+        expect(parsed.o).to.equal('-x')
+        expect(parsed.x).to.equal(undefined)
+      })
+
       it('does not negate arguments prefixed with --no-', function () {
         const parsed = parser(['--no-dice'], {
           configuration: {

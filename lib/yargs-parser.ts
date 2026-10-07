@@ -109,7 +109,9 @@ export class YargsParser {
       keys: []
     }
     const negative = /^-([0-9]+(\.[0-9]+)?|\.[0-9]+)$/
-    const negatedBoolean = new RegExp('^--' + configuration['negation-prefix'] + '(.+)')
+    const negatedBoolean = new RegExp(
+      (configuration['short-option-groups'] ? '^--' : '^--?') + configuration['negation-prefix'] + '(.+)'
+    )
 
     ;([] as ArrayOption[]).concat(opts.array || []).filter(Boolean).forEach(function (opt) {
       const key = typeof opt === 'object' ? opt.key : opt
