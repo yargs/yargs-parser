@@ -2306,6 +2306,82 @@ describe('yargs-parser', function () {
         bar: 'bar'
       })
     })
+
+    it('should coerce boolean env var "1" to true', function () {
+      process.env.TEST_BOOL_DO_THING = '1'
+      const result = parser([], {
+        envPrefix: 'TEST_BOOL',
+        boolean: ['doThing']
+      })
+      result.doThing.should.equal(true)
+      delete process.env.TEST_BOOL_DO_THING
+    })
+
+    it('should coerce boolean env var "0" to false', function () {
+      process.env.TEST_BOOL_ZERO = '0'
+      const result = parser([], {
+        envPrefix: 'TEST_BOOL',
+        boolean: ['zero']
+      })
+      result.zero.should.equal(false)
+      delete process.env.TEST_BOOL_ZERO
+    })
+
+    it('should coerce boolean env var "yes" to true', function () {
+      process.env.TEST_BOOL_YES = 'yes'
+      const result = parser([], {
+        envPrefix: 'TEST_BOOL',
+        boolean: ['yes']
+      })
+      result.yes.should.equal(true)
+      delete process.env.TEST_BOOL_YES
+    })
+
+    it('should coerce boolean env var "no" to false', function () {
+      process.env.TEST_BOOL_NO = 'no'
+      const result = parser([], {
+        envPrefix: 'TEST_BOOL',
+        boolean: ['no']
+      })
+      result.no.should.equal(false)
+      delete process.env.TEST_BOOL_NO
+    })
+
+    it('should handle NO_ prefix in env vars for boolean negation', function () {
+      process.env.MY_APP_NO_DO_THING = 'true'
+      const result = parser([], {
+        envPrefix: 'MY_APP_',
+        boolean: ['doThing'],
+        default: { doThing: true }
+      })
+      // NO_DO_THING=true should negate doThing, making it false
+      result.doThing.should.equal(false)
+      delete process.env.MY_APP_NO_DO_THING
+    })
+
+    it('should handle NO_ prefix with "1" value for boolean negation', function () {
+      process.env.MY_APP_NO_FEATURE = '1'
+      const result = parser([], {
+        envPrefix: 'MY_APP_',
+        boolean: ['feature'],
+        default: { feature: true }
+      })
+      // NO_FEATURE=1 should negate feature, making it false
+      result.feature.should.equal(false)
+      delete process.env.MY_APP_NO_FEATURE
+    })
+
+    it('should handle NO_ prefix with "false" value (double negation)', function () {
+      process.env.MY_APP_NO_OPT = 'false'
+      const result = parser([], {
+        envPrefix: 'MY_APP_',
+        boolean: ['opt'],
+        default: { opt: false }
+      })
+      // NO_OPT=false means do NOT negate, so opt should be true
+      result.opt.should.equal(true)
+      delete process.env.MY_APP_NO_OPT
+    })
   })
 
   describe('configuration', function () {
