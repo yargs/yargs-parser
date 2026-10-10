@@ -274,7 +274,7 @@ export class YargsParser {
           } else {
             next = args[i + 1]
 
-            if (next !== undefined && (!next.match(/^-/) ||
+            if (next !== undefined && (!next.match(/^-./) ||
               next.match(negative)) &&
               !checkAllAliases(key, flags.bools) &&
               !checkAllAliases(key, flags.counts)) {
