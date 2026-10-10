@@ -1,2 +1,4 @@
 build/
 test/tscc/
+deno.ts
+test/deno/
