@@ -2588,6 +2588,10 @@ describe('yargs-parser', function () {
 
         parsed.x.should.deep.equal(['o', 'p', 'q'])
       })
+      it('does not sum repeated numeric arguments when one equals 1', function () {
+        const parsed = parser('-x 3 -x 1')
+        parsed.x.should.deep.equal([3, 1])
+      })
     })
 
     describe('flatten duplicate arrays', function () {
@@ -3076,6 +3080,18 @@ describe('yargs-parser', function () {
           _: ['--no-unknown-arg'],
           'known-arg': false,
           knownArg: false
+        })
+      })
+      it('should ignore negated known options when boolean-negation:false', function () {
+        const argv = parser('--no-known-arg --no-unknown-arg', {
+          boolean: ['known-arg'],
+          configuration: {
+            'unknown-options-as-args': true,
+            'boolean-negation': false
+          }
+        })
+        argv.should.deep.equal({
+          _: ['--no-known-arg', '--no-unknown-arg']
         })
       })
       it('should ignore unknown options in long format separated by space', function () {
