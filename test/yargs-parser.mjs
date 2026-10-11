@@ -186,6 +186,12 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').with.length(0)
   })
 
+  it('should set a short option to an empty string when a trailing equals sign supplies no value', function () {
+    parser(['-o='], { alias: { o: 'opt' } }).should.deep.equal({ _: [], o: '', opt: '' })
+    // control: a non-empty value after the equals sign is unaffected
+    parser(['-o=x'], { alias: { o: 'opt' } }).should.deep.equal({ _: [], o: 'x', opt: 'x' })
+  })
+
   it('should not set the next value as the value of a short option if that option is explicitly defined as a boolean', function () {
     const parse = parser(['-t', 'moo'], {
       boolean: 't'
