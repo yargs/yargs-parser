@@ -4062,6 +4062,44 @@ describe('yargs-parser', function () {
       parse.error.message.should.match(/Not enough arguments/)
     })
 
+    // see: https://github.com/yargs/yargs-parser/issues/445
+    it('returns an error when array+default+narg is given a flag without a value', () => {
+      const parse = parser.detailed(['-s'], {
+        array: ['s'],
+        narg: { s: 1 },
+        default: { s: ['turtles'] }
+      })
+      parse.error.message.should.equal('Not enough arguments following: s')
+    })
+
+    it('returns an error when array+default+narg NaN is given a flag without a value', () => {
+      const parse = parser.detailed(['-s'], {
+        array: ['s'],
+        narg: { s: NaN },
+        default: { s: ['turtles'] }
+      })
+      parse.error.message.should.equal('Not enough arguments following: s')
+    })
+
+    it('still applies array default when the flag is omitted entirely', () => {
+      const parse = parser.detailed([], {
+        array: ['s'],
+        narg: { s: 1 },
+        default: { s: ['turtles'] }
+      })
+      expect(parse.error).to.be.null // eslint-disable-line
+      parse.argv.s.should.eql(['turtles'])
+    })
+
+    it('still applies array default for a bare flag when narg is not set', () => {
+      const parse = parser.detailed(['-s'], {
+        array: ['s'],
+        default: { s: ['turtles'] }
+      })
+      expect(parse.error).to.be.null // eslint-disable-line
+      parse.argv.s.should.eql(['turtles'])
+    })
+
     it('returns an error if not enough positionals were provided for nargs', () => {
       const parse = parser.detailed(['-a', '33'], {
         array: 'a',

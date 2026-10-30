@@ -512,10 +512,16 @@ export class YargsParser {
       } else if (isUndefined(next) ||
           (isUndefined(argAfterEqualSign) && /^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next))) {
         // for keys without value ==> argsToSet remains an empty []
-        // set user default value, if available
+        // set user default value, if available — but do not satisfy an explicit
+        // nargs requirement with defaults when the flag was provided without a
+        // value (see https://github.com/yargs/yargs-parser/issues/445).
         if (defaults[key] !== undefined) {
-          const defVal = defaults[key]
-          argsToSet = Array.isArray(defVal) ? defVal : [defVal]
+          const nargsRequiresValue = typeof nargsCount === 'number' &&
+            (isNaN(nargsCount) || nargsCount > 0)
+          if (!nargsRequiresValue) {
+            const defVal = defaults[key]
+            argsToSet = Array.isArray(defVal) ? defVal : [defVal]
+          }
         }
       } else {
         // value in --option=value is eaten as is
