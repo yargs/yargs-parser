@@ -1,6 +1,5 @@
 # yargs-parser
 
-![ci](https://github.com/yargs/yargs-parser/workflows/ci/badge.svg)
 [![NPM version](https://img.shields.io/npm/v/yargs-parser.svg)](https://www.npmjs.com/package/yargs-parser)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 ![nycrc config on GitHub](https://img.shields.io/nycrc/yargs/yargs-parser)
@@ -500,15 +499,21 @@ $ node example.js --unknown-option --known-option 2 --string-option --unknown-op
 { _: ['--unknown-option'], knownOption: 2, stringOption: '--unknown-option2' }
 ```
 
-## Supported Node.js Versions
+## Support
 
 Libraries in this ecosystem make a best effort to track
 [Node.js' release schedule](https://nodejs.org/en/about/releases/). Here's [a
 post on why we think this is important](https://medium.com/the-node-js-collection/maintainers-should-consider-following-node-js-release-schedule-ab08ed4de71a).
 
+The current version of `yargs-parser` is fully supported on Long Term Support versions of Node.js, and requires at least v20.19.0.
+
+Older major versions of `yargs-parser` receive security updates for 12 months. For more see: [Release Policy](./docs/release-policy.md).
+
+The main forum for free and community support is the project [Issues](https://github.com/yargs/yargs-parser/issues) on GitHub.
+
 ## Special Thanks
 
-The yargs project evolves from optimist and minimist. It owes its
+The yargs project evolved from optimist and minimist. It owes its
 existence to a lot of James Halliday's hard work. Thanks [substack](https://github.com/substack) **beep** **boop** \o/
 
 ## License
