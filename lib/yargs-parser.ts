@@ -421,6 +421,7 @@ export class YargsParser {
             if (
               next !== undefined &&
               (!/^(-|--)[^-]/.test(next) || next.match(negative)) &&
+              next !== '--' &&
               !checkAllAliases(key, flags.bools) &&
               !checkAllAliases(key, flags.counts)
             ) {

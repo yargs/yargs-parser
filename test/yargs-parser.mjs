@@ -1669,6 +1669,26 @@ describe('yargs-parser', function () {
     });
   });
 
+  describe('--', function () {
+    it('should stop option processing at --', function () {
+      const parsed = parser(['-a', 'AA', '--', '-b', 'BB']);
+      parsed.should.have.property('a', 'AA');
+      parsed.should.have.property('_').and.deep.equal(['-b', 'BB']);
+    });
+
+    it('should not set the value of a long option to -- if next value is --', function () {
+      const parsed = parser(['--long', '--', '-x', 'y']);
+      parsed.should.have.property('long', true);
+      parsed.should.have.property('_').and.deep.equal(['-x', 'y']);
+    });
+
+    it('should not set the value of a short option to -- if next value is --', function () {
+      const parsed = parser(['-s', '--', '-x', 'y']);
+      parsed.should.have.property('s', true);
+      parsed.should.have.property('_').and.deep.equal(['-x', 'y']);
+    });
+  });
+
   describe('count', function () {
     it('should count the number of times a boolean is present', function () {
       let parsed;
@@ -3112,6 +3132,18 @@ describe('yargs-parser', function () {
           },
         });
         result.argv.should.deep.equal({_: [-1]});
+      });
+
+      it('should populate the "--" like simple example in README if populate-- is "true"', function () {
+        // This is a regression check as was broken for a while (short option consuming following --).
+        const result = parser(['a', '-b', '--', 'x', 'y'], {
+          configuration: {
+            'populate--': true,
+          },
+        });
+        result.should.have.property('b', true);
+        result.should.have.property('_').and.deep.equal(['a']);
+        result.should.have.property('--').and.deep.equal(['x', 'y']);
       });
 
       it('should populate the "--" if populate-- is "true"', function () {
