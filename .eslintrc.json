@@ -18,6 +18,12 @@
         "@typescript-eslint/no-unsafe-function-type": "off",
         "@typescript-eslint/no-empty-object-type": "off"
       }
+    },
+    {
+      "files": ["test/**/*.mjs"],
+      "rules": {
+        "prefer-arrow-callback": "off"
+      }
     }
   ]
 }
