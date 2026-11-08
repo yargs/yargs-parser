@@ -307,6 +307,27 @@ describe('yargs-parser', function () {
     parse.should.have.property('_').and.deep.equal(['false', 7, 'foo']);
   });
 
+  it('should not use the configured default for an option given with zero narg', function () {
+    const parse = parser(['-a', 'hello', '-b', 'world'], {
+      narg: {a: 1, b: 0},
+      default: {b: false},
+      alias: {blah: ['b', 'bl']},
+    });
+    parse.should.have.property('a', 'hello');
+    parse.should.have.property('b', true).and.be.a('boolean');
+    parse.should.have.property('blah', true).and.be.a('boolean');
+    parse.should.have.property('bl', true).and.be.a('boolean');
+    parse.should.have.property('_').and.deep.equal(['world']);
+  });
+
+  it('should use the configured default for an option with zero narg that is not given', function () {
+    const parse = parser([], {
+      narg: {b: 0},
+      default: {b: false},
+    });
+    parse.should.have.property('b', false).and.be.a('boolean');
+  });
+
   it('should allow defining options as boolean in groups', function () {
     const parse = parser(['-x', '-z', 'one', 'two', 'three'], {
       boolean: ['x', 'y', 'z'],

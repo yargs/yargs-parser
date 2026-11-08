@@ -536,7 +536,10 @@ export class YargsParser {
         if (!isUndefined(argAfterEqualSign)) {
           error = Error(__('Argument unexpected for: %s', key));
         }
-        setArg(key, defaultValue(key));
+        // An option configured to take no arguments is a switch, so its value
+        // is the one implied by its type. The configured default applies when
+        // the option is absent, not when it is given without a value.
+        setArg(key, defaultForType(guessType(key)));
         return i;
       }
 
