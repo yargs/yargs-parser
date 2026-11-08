@@ -39,5 +39,16 @@ describe('string-utils', function () {
       strictEqual(looksLikeNumber('0100'), false);
       strictEqual(looksLikeNumber('apple'), false);
     });
+    it('it does not throw for values that cannot be converted to a string', () => {
+      const nullPrototype = Object.create(null);
+      nullPrototype.host = 'localhost';
+      const throwsOnToString = {
+        toString() {
+          throw new Error('nope');
+        },
+      };
+      strictEqual(looksLikeNumber(nullPrototype), false);
+      strictEqual(looksLikeNumber(throwsOnToString), false);
+    });
   });
 });

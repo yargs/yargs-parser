@@ -61,6 +61,9 @@ export function looksLikeNumber(
   if (x === null || x === undefined) return false;
   // if loaded from config, may already be a number.
   if (typeof x === 'number') return true;
+  // values returned by a coerce function are not necessarily primitives, and
+  // converting one to a string for the checks below can throw.
+  if (typeof x !== 'string') return false;
   // hexadecimal.
   if (/^0x[0-9a-f]+$/i.test(x)) return true;
   // don't treat 0123 as a number; as it drops the leading '0'.

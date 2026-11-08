@@ -3786,6 +3786,21 @@ describe('yargs-parser', function () {
       parsed.foo.should.equal(-99);
     });
 
+    it('applies coercion function that returns an object without a prototype', function () {
+      const parsed = parser(['--foo', 'postgresql://db/things'], {
+        coerce: {
+          // e.g. pg-connection-string's parse returns a null prototype
+          // object, which cannot be converted to a primitive.
+          foo: function () {
+            const connection = Object.create(null);
+            connection.host = 'db';
+            return connection;
+          },
+        },
+      });
+      parsed.foo.host.should.equal('db');
+    });
+
     it('applies coercion function to aliases', function () {
       const parsed = parser(['--foo', '99'], {
         coerce: {
