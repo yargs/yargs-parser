@@ -1,59 +1,65 @@
-const { deepStrictEqual } = require('assert')
-const puppeteer = require('puppeteer')
+const {deepStrictEqual} = require('assert');
+const puppeteer = require('puppeteer');
 
 // Runs a browser window with a given argv string and options:
-let browser
-async function parse (argv, opts) {
+let browser;
+async function parse(argv, opts) {
   if (!browser) {
     // The developer install of Chromium is blocked by apparmor changes in Ubuntu 22.04.
     // We are only running local tests and so easiest setup is to skip the sandbox.
-    browser = await puppeteer.launch({ 
-      args: ['--no-sandbox', '--disable-setuid-sandbox'] 
-  })
+    browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
   }
-  const page = await browser.newPage()
-  opts = encodeURIComponent(JSON.stringify(opts))
-  await page.goto(`http://127.0.0.1:8080/test/browser/yargs-test?argv=${encodeURIComponent(argv)}&opts=${opts}`)
-  const element = await page.$('#output')
-  return JSON.parse(await page.evaluate(element => element.textContent, element))
+  const page = await browser.newPage();
+  opts = encodeURIComponent(JSON.stringify(opts));
+  await page.goto(
+    `http://127.0.0.1:8080/test/browser/yargs-test?argv=${encodeURIComponent(argv)}&opts=${opts}`,
+  );
+  const element = await page.$('#output');
+  return JSON.parse(
+    await page.evaluate(element => element.textContent, element),
+  );
 }
 
 // The actual tests:
-async function tests () {
+async function tests() {
   {
-    const output = await parse('--hello world --x 102')
+    const output = await parse('--hello world --x 102');
     deepStrictEqual(output, {
       _: [],
       hello: 'world',
-      x: 102
-    })
-    console.info('✅ parse simple string')
+      x: 102,
+    });
+    console.info('✅ parse simple string');
   }
 
   {
     const output = await parse('--hello world --x 102', {
       alias: {
         hello: ['goodbye'],
-        x: ['example']
-      }
-    })
+        x: ['example'],
+      },
+    });
     deepStrictEqual(output, {
       _: [],
       hello: 'world',
       x: 102,
       example: 102,
-      goodbye: 'world'
-    })
-    console.info('✅ parse with aliases')
+      goodbye: 'world',
+    });
+    console.info('✅ parse with aliases');
   }
 }
 
-tests().then(() => {
-  console.info('👌all tests finished')
-  browser.close()
-}).catch((err) => {
-  console.error(err.stack)
-  console.error('❌some tests failed')
-  process.exitCode = 1
-  browser.close()
-})
+tests()
+  .then(() => {
+    console.info('👌all tests finished');
+    browser.close();
+  })
+  .catch(err => {
+    console.error(err.stack);
+    console.error('❌some tests failed');
+    process.exitCode = 1;
+    browser.close();
+  });

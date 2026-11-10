@@ -15,8 +15,10 @@ export interface Dictionary<T = any> {
  * Returns the keys of T.
  */
 export type KeyOf<T> = {
-  [K in keyof T]: string extends K ? never : number extends K ? never : K
-} extends { [_ in keyof T]: infer U } ? U : never;
+  [K in keyof T]: string extends K ? never : number extends K ? never : K;
+} extends {[_ in keyof T]: infer U}
+  ? U
+  : never;
 
 /**
  * Returns the type of a Dictionary or array values.
@@ -90,11 +92,21 @@ export interface Configuration {
   'unknown-options-as-args': boolean;
 }
 
-export type ArrayOption = string | { key: string; boolean?: boolean, string?: boolean, number?: boolean, integer?: boolean };
+export type ArrayOption =
+  | string
+  | {
+      key: string;
+      boolean?: boolean;
+      string?: boolean;
+      number?: boolean;
+      integer?: boolean;
+    };
 
 export type CoerceCallback = (arg: any) => any;
 
-export type ConfigCallback = (configPath: string) => { [key: string]: any } | Error;
+export type ConfigCallback = (
+  configPath: string,
+) => {[key: string]: any} | Error;
 
 export interface Options {
   /** An object representing the set of aliases for a key: `{ alias: { foo: ['f']} }`. */
@@ -160,7 +172,9 @@ export interface Parser {
 export type StringFlag = Dictionary<string[]>;
 export type BooleanFlag = Dictionary<boolean>;
 export type NumberFlag = Dictionary<number>;
-export type ConfigsFlag = Dictionary<string | string[] | boolean | ConfigCallback>;
+export type ConfigsFlag = Dictionary<
+  string | string[] | boolean | ConfigCallback
+>;
 export type CoercionsFlag = Dictionary<CoerceCallback>;
 export type KeysFlag = string[];
 

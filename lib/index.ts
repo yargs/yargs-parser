@@ -65,4 +65,5 @@ yargsParser.looksLikeNumber = looksLikeNumber
 export default yargsParser
 
 // special syntax to allow unqualified default export from CommonJS
+// eslint-disable-next-line prettier/prettier
 export {yargsParser as 'module.exports'};

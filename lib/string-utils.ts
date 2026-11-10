@@ -4,60 +4,66 @@
  * SPDX-License-Identifier: ISC
  */
 
-export function camelCase (str: string): string {
+export function camelCase(str: string): string {
   // Handle the case where an argument is provided as camel case, e.g., fooBar.
   // by ensuring that the string isn't already mixed case:
-  const isCamelCase = str !== str.toLowerCase() && str !== str.toUpperCase()
+  const isCamelCase = str !== str.toLowerCase() && str !== str.toUpperCase();
 
   if (!isCamelCase) {
-    str = str.toLowerCase()
+    str = str.toLowerCase();
   }
 
   if (str.indexOf('-') === -1 && str.indexOf('_') === -1) {
-    return str
+    return str;
   } else {
-    let camelcase = ''
-    let nextChrUpper = false
-    const leadingHyphens = str.match(/^-+/)
-    for (let i = leadingHyphens ? leadingHyphens[0].length : 0; i < str.length; i++) {
-      let chr = str.charAt(i)
+    let camelcase = '';
+    let nextChrUpper = false;
+    const leadingHyphens = str.match(/^-+/);
+    for (
+      let i = leadingHyphens ? leadingHyphens[0].length : 0;
+      i < str.length;
+      i++
+    ) {
+      let chr = str.charAt(i);
       if (nextChrUpper) {
-        nextChrUpper = false
-        chr = chr.toUpperCase()
+        nextChrUpper = false;
+        chr = chr.toUpperCase();
       }
       if (i !== 0 && (chr === '-' || chr === '_')) {
-        nextChrUpper = true
+        nextChrUpper = true;
       } else if (chr !== '-' && chr !== '_') {
-        camelcase += chr
+        camelcase += chr;
       }
     }
-    return camelcase
+    return camelcase;
   }
 }
 
-export function decamelize (str: string, joinString?: string): string {
-  const lowercase = str.toLowerCase()
-  joinString = joinString || '-'
-  let notCamelcase = ''
+export function decamelize(str: string, joinString?: string): string {
+  const lowercase = str.toLowerCase();
+  joinString = joinString || '-';
+  let notCamelcase = '';
   for (let i = 0; i < str.length; i++) {
-    const chrLower = lowercase.charAt(i)
-    const chrString = str.charAt(i)
+    const chrLower = lowercase.charAt(i);
+    const chrString = str.charAt(i);
     if (chrLower !== chrString && i > 0) {
-      notCamelcase += `${joinString}${lowercase.charAt(i)}`
+      notCamelcase += `${joinString}${lowercase.charAt(i)}`;
     } else {
-      notCamelcase += chrString
+      notCamelcase += chrString;
     }
   }
-  return notCamelcase
+  return notCamelcase;
 }
 
-export function looksLikeNumber (x: null | undefined | number | string): boolean {
-  if (x === null || x === undefined) return false
+export function looksLikeNumber(
+  x: null | undefined | number | string,
+): boolean {
+  if (x === null || x === undefined) return false;
   // if loaded from config, may already be a number.
-  if (typeof x === 'number') return true
+  if (typeof x === 'number') return true;
   // hexadecimal.
-  if (/^0x[0-9a-f]+$/i.test(x)) return true
+  if (/^0x[0-9a-f]+$/i.test(x)) return true;
   // don't treat 0123 as a number; as it drops the leading '0'.
-  if (/^0[^.]/.test(x)) return false
-  return /^[-]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x)
+  if (/^0[^.]/.test(x)) return false;
+  return /^[-]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x);
 }
