@@ -516,6 +516,9 @@ The main forum for free and community support is the project [Issues](https://gi
 The yargs project evolved from optimist and minimist. It owes its
 existence to a lot of James Halliday's hard work. Thanks `substack`. **beep** **boop** \o/
 
+[HeroDevs](https://www.herodevs.com) sponsored the yargs projects with a donation from
+its Open Source Sustainability Fund in 2026.
+
 ## License
 
 ISC
