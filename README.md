@@ -511,6 +511,9 @@ post on why we think this is important](https://medium.com/the-node-js-collectio
 The yargs project evolves from optimist and minimist. It owes its
 existence to a lot of James Halliday's hard work. Thanks [substack](https://github.com/substack) **beep** **boop** \o/
 
+[HeroDevs](https://www.herodevs.com) sponsored the yargs projects with a donation from
+its Open Source Sustainability Fund in 2026.
+
 ## License
 
 ISC
