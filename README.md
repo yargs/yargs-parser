@@ -514,7 +514,7 @@ The main forum for free and community support is the project [Issues](https://gi
 ## Special Thanks
 
 The yargs project evolved from optimist and minimist. It owes its
-existence to a lot of James Halliday's hard work. Thanks [substack](https://github.com/substack) **beep** **boop** \o/
+existence to a lot of James Halliday's hard work. Thanks `substack`. **beep** **boop** \o/
 
 ## License
 
