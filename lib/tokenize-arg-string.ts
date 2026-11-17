@@ -13,7 +13,7 @@ export function tokenizeArgString(argString: string | any[]): string[] {
   argString = argString.trim();
 
   let i = 0;
-  let prevC: string | null = null;
+  let prevC: string | null;
   let c: string | null = null;
   let opening: string | null = null;
   const args: string[] = [];

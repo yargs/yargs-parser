@@ -5,11 +5,9 @@ import * as fs from 'node:fs';
 import parser from '../build/lib/index.js';
 import * as path from 'path';
 import {fileURLToPath} from 'node:url';
-import {createRequire} from 'node:module';
 
 // quick port from cjs to esm
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
 
 should();
 
@@ -801,7 +799,7 @@ describe('yargs-parser', function () {
     it('outputs an error returned by the parsing function', function () {
       const argv = parser.detailed(['--settings=./package.json'], {
         config: {
-          settings: function (configPath) {
+          settings: function () {
             return Error('someone set us up the bomb');
           },
         },
@@ -813,7 +811,7 @@ describe('yargs-parser', function () {
     it('outputs an error if thrown by the parsing function', function () {
       const argv = parser.detailed(['--settings=./package.json'], {
         config: {
-          settings: function (configPath) {
+          settings: function () {
             throw Error('someone set us up the bomb');
           },
         },
@@ -1132,7 +1130,7 @@ describe('yargs-parser', function () {
         '--__proto__',
         '200',
       ]);
-      Object.keys({}.__proto__).length.should.equal(0); // eslint-disable-line
+      Object.keys({}.__proto__).length.should.equal(0);
       expect({}.foo).to.equal(undefined);
       expect({}.bar).to.equal(undefined);
     });
@@ -1247,7 +1245,7 @@ describe('yargs-parser', function () {
         boolean: ['b'],
       });
       // Assert
-      result.should.have.property('b').that.is.a('boolean').and.is.true; // eslint-disable-line
+      result.should.have.property('b').that.is.a('boolean').and.is.true;
       result.should.have.property('_').and.deep.equal([123]);
     });
 
@@ -1359,11 +1357,11 @@ describe('yargs-parser', function () {
           };
 
           it('should set true if --flag in arg', function () {
-            parser(['--flag'], opts).flag.should.be.true; // eslint-disable-line
+            parser(['--flag'], opts).flag.should.be.true;
           });
 
           it('should set false if --no-flag in arg', function () {
-            parser(['--no-flag'], opts).flag.should.be.false; // eslint-disable-line
+            parser(['--no-flag'], opts).flag.should.be.false;
           });
 
           it('should set ' + def + ' if no flag in arg', function () {
@@ -1382,11 +1380,11 @@ describe('yargs-parser', function () {
         });
 
         it('should set true if --flag in arg', function () {
-          parser(['--flag'], opts).flag.should.be.true; // eslint-disable-line
+          parser(['--flag'], opts).flag.should.be.true;
         });
 
         it('should set false if --no-flag in arg', function () {
-          parser(['--no-flag'], opts).flag.should.be.false; // eslint-disable-line
+          parser(['--no-flag'], opts).flag.should.be.false;
         });
 
         it('should not add property if no flag in arg', function () {
@@ -1499,9 +1497,9 @@ describe('yargs-parser', function () {
           const result = parser(['--some-option']);
 
           result.should.have.property('some-option').that.is.a('boolean').and.is
-            .true; // eslint-disable-line
+            .true;
           result.should.have.property('someOption').that.is.a('boolean').and.is
-            .true; // eslint-disable-line
+            .true;
         });
       }
 
@@ -1525,9 +1523,9 @@ describe('yargs-parser', function () {
         });
 
         result.should.have.property('some-option').that.is.a('boolean').and.is
-          .true; // eslint-disable-line
+          .true;
         result.should.have.property('someOption').that.is.a('boolean').and.is
-          .true; // eslint-disable-line
+          .true;
       });
 
       it('should provide defaults of options with dashes as camelCase properties', function () {
@@ -1758,13 +1756,13 @@ describe('yargs-parser', function () {
         count: 'v',
         default: {v: undefined},
       });
-      expect(parsed.v).to.be.undefined; // eslint-disable-line
+      expect(parsed.v).to.be.undefined;
 
       parsed = parser([], {
         count: 'v',
         default: {v: null},
       });
-      expect(parsed.v).to.be.null; // eslint-disable-line
+      expect(parsed.v).to.be.null;
 
       parsed = parser([], {
         count: 'v',
@@ -2385,8 +2383,8 @@ describe('yargs-parser', function () {
 
       result.eggs.should.equal('sam');
       result.ham.should.equal('iam');
-      expect(result.oneFish).to.be.undefined; // eslint-disable-line
-      expect(result.redFish).to.be.undefined; // eslint-disable-line
+      expect(result.oneFish).to.be.undefined;
+      expect(result.redFish).to.be.undefined;
     });
 
     it('should set aliases for options defined by env var', function () {
@@ -3897,7 +3895,7 @@ describe('yargs-parser', function () {
     it('populates argv.error, if an error is thrown', function () {
       const parsed = parser.detailed(['--foo', '99'], {
         coerce: {
-          foo: function (arg) {
+          foo: function () {
             throw Error('banana');
           },
         },
@@ -3920,7 +3918,7 @@ describe('yargs-parser', function () {
     // see: https://github.com/yargs/yargs-parser/issues/76
     it('only runs coercion functions once, even with aliases', function () {
       let runcount = 0;
-      const func = arg => {
+      const func = () => {
         runcount++;
         return undefined;
       };
@@ -4335,7 +4333,7 @@ describe('yargs-parser', function () {
           a: 1,
         },
       });
-      expect(parse.error).to.be.null; // eslint-disable-line
+      expect(parse.error).to.be.null;
       parse.argv.a.should.eql(['apple']);
       parse.argv._.should.eql(['banana']);
     });
@@ -4348,7 +4346,7 @@ describe('yargs-parser', function () {
           a: NaN,
         },
       });
-      expect(parse.error).to.be.null; // eslint-disable-line
+      expect(parse.error).to.be.null;
       parse.argv.a.should.eql(['apple', 'banana']);
     });
 
@@ -4393,7 +4391,7 @@ describe('yargs-parser', function () {
           a: NaN,
         },
       });
-      expect(parse.error).to.be.null; // eslint-disable-line
+      expect(parse.error).to.be.null;
       parse.argv.a.should.eql([true]);
     });
   });
