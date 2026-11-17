@@ -1,0 +1,13 @@
+build/
+coverage/
+test/tscc/
+test/fixtures/
+deno.ts
+test/deno/cliui
+.nycrc
+# Ignore JSON, Markdown, and YAML files for now, keep focus on code.
+# (Especially CHANGELOG.md, which is maintained by release-please.)
+*.json
+*.md
+*.yaml
+*.yml
